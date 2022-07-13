@@ -1,0 +1,15 @@
+./instances/test_set/208-ORTEC-VRPTW-ASYM-f80d8c50-d1-n208-k15.txt 171627 1
+./instances/test_set/208-ORTEC-VRPTW-ASYM-f80d8c50-d1-n208-k15.txt 171627 1
+./instances/test_set/208-ORTEC-VRPTW-ASYM-f80d8c50-d1-n208-k15.txt 171627 1
+./instances/test_set/208-ORTEC-VRPTW-ASYM-f80d8c50-d1-n208-k15.txt 171627 1
+./instances/test_set/208-ORTEC-VRPTW-ASYM-f80d8c50-d1-n208-k15.txt 171627 1
+./instances/test_set/208-ORTEC-VRPTW-ASYM-f80d8c50-d1-n208-k15.txt 490203 0
+./instances/test_set/208-ORTEC-VRPTW-ASYM-f80d8c50-d1-n208-k15.txt 490203 0
+./instances/test_set/208-ORTEC-VRPTW-ASYM-f80d8c50-d1-n208-k15.txt 490203 0
+./instances/test_set/208-ORTEC-VRPTW-ASYM-f80d8c50-d1-n208-k15.txt 490203 0
+./instances/test_set/208-ORTEC-VRPTW-ASYM-f80d8c50-d1-n208-k15.txt 490203 0
+./instances/test_set/252-ORTEC-VRPTW-ASYM-dd59b788-d1-n252-k18.txt 128823 1
+./instances/test_set/252-ORTEC-VRPTW-ASYM-dd59b788-d1-n252-k18.txt 128823 1
+./instances/test_set/252-ORTEC-VRPTW-ASYM-dd59b788-d1-n252-k18.txt 128823 1
+./instances/test_set/252-ORTEC-VRPTW-ASYM-dd59b788-d1-n252-k18.txt 128823 1
+./instances/test_set/252-ORTEC-VRPTW-ASYM-dd59b788-d1-n252-k18.txt 128823 1
