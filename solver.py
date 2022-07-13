@@ -1,11 +1,13 @@
 # Solver for Dynamic VRPTW, baseline strategy is to use the static solver HGS-VRPTW repeatedly
 import argparse
+import json
 import subprocess
 import sys
 import os
 import uuid
 import platform
 import numpy as np
+import _pickle as pickle
 
 import tools
 from environment import VRPEnvironment, ControllerEnvironment
@@ -117,7 +119,6 @@ def run_baseline(args, env, oracle_solution=None):
             # Select the requests to dispatch using the strategy
             # TODO improved better strategy (machine learning model?) to decide which non-must requests to dispatch
             epoch_instance_dispatch = STRATEGIES[args.strategy](epoch_instance, rng)
-
             # Run HGS with time limit and get last solution (= best solution found)
             # Note we use the same solver_seed in each epoch: this is sufficient as for the static problem
             # we will exactly use the solver_seed whereas in the dynamic problem randomness is in the instance

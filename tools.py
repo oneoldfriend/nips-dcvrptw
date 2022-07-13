@@ -324,9 +324,47 @@ def write_vrplib(filename, instance, name="problem", euclidean=False, is_vrptw=T
 
 
 def results_process(file_path):
-    raw_df = pandas.read_table(file_path, sep=" ", names=["instance", "obj", "is_static"])
+    raw_df = pandas.read_table(file_path, sep=",", names=["instance", "obj", "is_static"])
     static_df = raw_df[raw_df["is_static"] == 1]
-    print(static_df.groupby("instance").mean())
+    obj_table = []
+    for data in static_df.groupby("instance"):
+        instance_obj_list = [data[0].split(".")[0]] + list(data[1]["obj"].values)
+        obj_table.append(instance_obj_list)
+    header = ["instance"]
+    if len(obj_table) == 0:
+        return
+    for no in range(0, len(obj_table[0]) - 1):
+        header.append("#" + str(no + 1))
+    pd.DataFrame(columns=header, data=obj_table).to_csv(
+        "baseline_results/static_obj_detail.csv", index=False, encoding="utf-8")
+
+    dynamic_df = raw_df[raw_df["is_static"] == 0]
+    obj_table = []
+    for data in dynamic_df.groupby("instance"):
+        instance_obj_list = [data[0].split(".")[0]] + list(data[1]["obj"].values)
+        obj_table.append(instance_obj_list)
+    header = ["instance"]
+    if len(obj_table) == 0:
+        return
+    for no in range(0, len(obj_table[0]) - 1):
+        header.append("#" + str(no + 1))
+    pd.DataFrame(columns=header, data=obj_table).to_csv(
+        "baseline_results/dynamic_obj_detail.csv", index=False, encoding="utf-8")
 
 
-# results_process("results.txt")
+def solution_to_readable_str(solution):
+    complete_sol_str = ""
+    for key in solution:
+        routes_str = ""
+        for route in solution[key]:
+            single_route = "0-"
+            for request in route:
+                single_route = single_route + str(request) + "-"
+            single_route = single_route + "0\n"
+            routes_str += single_route
+        complete_sol_str += routes_str
+        if len(solution) > 1:
+            complete_sol_str += "------\n"
+    return complete_sol_str
+
+# results_process("baseline_results/obj_results_raw.txt")
