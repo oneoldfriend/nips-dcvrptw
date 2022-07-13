@@ -8,13 +8,13 @@ import numpy as np
 import threading
 from environment import VRPEnvironment
 
-
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--instance", help="Instance to solve")
     parser.add_argument("--instance_seed", type=int, default=1, help="Seed to use for the dynamic instance")
-    parser.add_argument("--static", action='store_true', help="Add this flag to solve the static variant of the problem (by default dynamic)")
+    parser.add_argument("--static", action='store_true',
+                        help="Add this flag to solve the static variant of the problem (by default dynamic)")
     parser.add_argument("--epoch_tlim", type=int, default=120, help="Time limit per epoch")
     parser.add_argument("--timeout", type=int, default=3600, help="Global timeout (seconds) to use")
 
@@ -25,7 +25,7 @@ if __name__ == "__main__":
         sys.exit()
 
     args = parser.parse_args(sys.argv[1:split_idx])
-    solver_cmd = sys.argv[split_idx+1:]
+    solver_cmd = sys.argv[split_idx + 1:]
 
     # Load instance
     static_instance = tools.read_vrplib(args.instance)
@@ -65,7 +65,7 @@ if __name__ == "__main__":
                 )
             else:
                 raise Exception("Invalid request")
-            
+
             response_str = tools.json_dumps_np(response)
             p.stdin.write(response_str)
             p.stdin.write('\n')
@@ -85,3 +85,9 @@ if __name__ == "__main__":
     print(f"Cost of solution: {sum(env.final_costs.values())}")
     print("Solution:")
     print(tools.json_dumps_np(env.final_solutions))
+    if args.static:
+        is_static = 1
+    else:
+        is_static = 0
+    file = open("results.txt", "a")
+    file.write(args.instance + " " + str(sum(env.final_costs.values())) + " " + str(is_static) + "\n")

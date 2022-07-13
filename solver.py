@@ -13,7 +13,6 @@ from baselines.strategies import STRATEGIES
 
 
 def solve_static_vrptw(instance, time_limit=3600, tmp_dir="tmp", seed=1):
-
     # Prevent passing empty instances to the static solver, e.g. when
     # strategy decides to not dispatch any requests for the current epoch
     if instance['coords'].shape[0] <= 1:
@@ -29,7 +28,7 @@ def solve_static_vrptw(instance, time_limit=3600, tmp_dir="tmp", seed=1):
     os.makedirs(tmp_dir, exist_ok=True)
     instance_filename = os.path.join(tmp_dir, "problem.vrptw")
     tools.write_vrplib(instance_filename, instance, is_vrptw=True)
-    
+
     executable = os.path.join('baselines', 'hgs_vrptw', 'genvrp')
     # On windows, we may have genvrp.exe
     if platform.system() == 'Windows' and os.path.isfile(executable + '.exe'):
@@ -38,9 +37,9 @@ def solve_static_vrptw(instance, time_limit=3600, tmp_dir="tmp", seed=1):
     # Call HGS solver with unlimited number of vehicles allowed and parse outputs
     # Subtract two seconds from the time limit to account for writing of the instance and delay in enforcing the time limit by HGS
     with subprocess.Popen([
-                executable, instance_filename, str(max(time_limit - 2, 1)), 
-                '-seed', str(seed), '-veh', '-1', '-useWallClockTime', '1'
-            ], stdout=subprocess.PIPE, text=True) as p:
+        executable, instance_filename, str(max(time_limit - 2, 1)),
+        '-seed', str(seed), '-veh', '-1', '-useWallClockTime', '1'
+    ], stdout=subprocess.PIPE, text=True) as p:
         routes = []
         for line in p.stdout:
             line = line.strip()
@@ -80,7 +79,8 @@ def run_oracle(args, env):
     hindsight_problem = env.get_hindsight_problem()
 
     log(f"Start computing oracle solution with {len(hindsight_problem['coords'])} requests...")
-    oracle_solution = min(solve_static_vrptw(hindsight_problem, time_limit=epoch_tlim, tmp_dir=args.tmp_dir), key=lambda x: x[1])[0]
+    oracle_solution = \
+        min(solve_static_vrptw(hindsight_problem, time_limit=epoch_tlim, tmp_dir=args.tmp_dir), key=lambda x: x[1])[0]
     oracle_cost = tools.validate_static_solution(hindsight_problem, oracle_solution)
     log(f"Found oracle solution with cost {oracle_cost}")
 
@@ -90,7 +90,6 @@ def run_oracle(args, env):
 
 
 def run_baseline(args, env, oracle_solution=None):
-
     rng = np.random.default_rng(args.solver_seed)
 
     total_reward = 0
@@ -103,12 +102,13 @@ def run_baseline(args, env, oracle_solution=None):
         epoch_instance = observation['epoch_instance']
 
         if args.verbose:
-            log(f"Epoch {static_info['start_epoch']} <= {observation['current_epoch']} <= {static_info['end_epoch']}", newline=False)
+            log(f"Epoch {static_info['start_epoch']} <= {observation['current_epoch']} <= {static_info['end_epoch']}",
+                newline=False)
             num_requests_open = len(epoch_instance['request_idx']) - 1
             num_new_requests = num_requests_open - num_requests_postponed
-            log(f" | Requests: +{num_new_requests:3d} = {num_requests_open:3d}, {epoch_instance['must_dispatch'].sum():3d}/{num_requests_open:3d} must-go...", newline=False, flush=True)
+            log(f" | Requests: +{num_new_requests:3d} = {num_requests_open:3d}, {epoch_instance['must_dispatch'].sum():3d}/{num_requests_open:3d} must-go...",
+                newline=False, flush=True)
 
-        
         if oracle_solution is not None:
             request_idx = set(epoch_instance['request_idx'])
             epoch_solution = [route for route in oracle_solution if len(request_idx.intersection(route)) == len(route)]
@@ -121,13 +121,14 @@ def run_baseline(args, env, oracle_solution=None):
             # Run HGS with time limit and get last solution (= best solution found)
             # Note we use the same solver_seed in each epoch: this is sufficient as for the static problem
             # we will exactly use the solver_seed whereas in the dynamic problem randomness is in the instance
-            solutions = list(solve_static_vrptw(epoch_instance_dispatch, time_limit=epoch_tlim, tmp_dir=args.tmp_dir, seed=args.solver_seed))
+            solutions = list(solve_static_vrptw(epoch_instance_dispatch, time_limit=epoch_tlim, tmp_dir=args.tmp_dir,
+                                                seed=args.solver_seed))
             assert len(solutions) > 0, f"No solution found during epoch {observation['current_epoch']}"
             epoch_solution, cost = solutions[-1]
 
             # Map HGS solution to indices of corresponding requests
             epoch_solution = [epoch_instance_dispatch['request_idx'][route] for route in epoch_solution]
-        
+
         if args.verbose:
             num_requests_dispatched = sum([len(route) for route in epoch_solution])
             num_requests_open = len(epoch_instance['request_idx']) - 1
@@ -138,11 +139,11 @@ def run_baseline(args, env, oracle_solution=None):
         observation, reward, done, info = env.step(epoch_solution)
         assert cost is None or reward == -cost, "Reward should be negative cost of solution"
         assert not info['error'], f"Environment error: {info['error']}"
-        
+
         total_reward += reward
 
     if args.verbose:
-        log(f"Cost of solution: {-total_reward}")
+        log(f"Cost of solution: {-total_reward}")\
 
     return total_reward
 
@@ -157,16 +158,19 @@ def log(obj, newline=True, flush=False):
 
 
 if __name__ == "__main__":
-    
+
     parser = argparse.ArgumentParser()
-    parser.add_argument("--strategy", type=str, default='greedy', help="Baseline strategy used to decide whether to dispatch routes")
+    parser.add_argument("--strategy", type=str, default='greedy',
+                        help="Baseline strategy used to decide whether to dispatch routes")
     # Note: these arguments are only for convenience during development, during testing you should use controller.py
     parser.add_argument("--instance", help="Instance to solve")
     parser.add_argument("--instance_seed", type=int, default=1, help="Seed to use for the dynamic instance")
     parser.add_argument("--solver_seed", type=int, default=1, help="Seed to use for the solver")
-    parser.add_argument("--static", action='store_true', help="Add this flag to solve the static variant of the problem (by default dynamic)")
+    parser.add_argument("--static", action='store_true',
+                        help="Add this flag to solve the static variant of the problem (by default dynamic)")
     parser.add_argument("--epoch_tlim", type=int, default=120, help="Time limit per epoch")
-    parser.add_argument("--tmp_dir", type=str, default=None, help="Provide a specific directory to use as tmp directory (useful for debugging)")
+    parser.add_argument("--tmp_dir", type=str, default=None,
+                        help="Provide a specific directory to use as tmp directory (useful for debugging)")
     parser.add_argument("--verbose", action='store_true', help="Show verbose output")
     args = parser.parse_args()
 
@@ -180,7 +184,8 @@ if __name__ == "__main__":
 
     try:
         if args.instance is not None:
-            env = VRPEnvironment(seed=args.instance_seed, instance=tools.read_vrplib(args.instance), epoch_tlim=args.epoch_tlim, is_static=args.static)
+            env = VRPEnvironment(seed=args.instance_seed, instance=tools.read_vrplib(args.instance),
+                                 epoch_tlim=args.epoch_tlim, is_static=args.static)
         else:
             assert args.strategy != "oracle", "Oracle can not run with external controller"
             # Run within external controller
