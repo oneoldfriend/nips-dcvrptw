@@ -144,8 +144,65 @@ def run_baseline(args, env, oracle_solution=None):
         total_reward += reward
 
     if args.verbose:
-        log(f"Cost of solution: {-total_reward}")\
+        log(f"Cost of solution: {-total_reward}")
+    return total_reward
 
+
+def run_ours(args, env):
+    rng = np.random.default_rng(args.solver_seed)
+
+    total_reward = 0
+    done = False
+    observation, static_info = env.reset()
+    MAX_TEMPORAL_DIS, MIN_TEMPORAL_DIS, MAX_SPATIAL_DIS, MIN_SPATIAL_DIS = tools.get_instances_preliminary_info(
+        static_info['dynamic_context'])
+    epoch_tlim = static_info['epoch_tlim']
+    num_requests_postponed = 0
+    while not done:
+        epoch_instance = observation['epoch_instance']
+
+        if args.verbose:
+            log(f"Epoch {static_info['start_epoch']} <= {observation['current_epoch']} <= {static_info['end_epoch']}",
+                newline=False)
+            num_requests_open = len(epoch_instance['request_idx']) - 1
+            num_new_requests = num_requests_open - num_requests_postponed
+            log(f" | Requests: +{num_new_requests:3d} = {num_requests_open:3d}, {epoch_instance['must_dispatch'].sum():3d}/{num_requests_open:3d} must-go...",
+                newline=False, flush=True)
+
+        # accept all requests and get complete solution first
+        epoch_instance_dispatch = STRATEGIES['greedy'](epoch_instance, rng)
+        complete_solution_list = list(
+            solve_static_vrptw(epoch_instance_dispatch, time_limit=epoch_tlim, tmp_dir=args.tmp_dir,
+                               seed=args.solver_seed))
+
+        assert len(complete_solution_list) > 0, f"No solution found during epoch {observation['current_epoch']}"
+        # get postponed requests
+        complete_solution, complete_cost = complete_solution_list[-1]
+        postponed_requests = tools.get_postpone_requests(epoch_instance, complete_solution, MAX_SPATIAL_DIS,
+                                                         MIN_SPATIAL_DIS, MAX_TEMPORAL_DIS, MIN_TEMPORAL_DIS)
+        # get real solution from assigned requests
+        # TODO for now we simply pick out the postponed requests from complete solution,
+        #  we can use HGS again for assigned requests
+        epoch_solution = tools.pick_out_requests_from_solution(complete_solution, postponed_requests)
+        epoch_cost = tools.compute_solution_driving_time(epoch_instance, epoch_solution)
+        # Map solution to indices of corresponding requests
+        epoch_solution = [epoch_instance_dispatch['request_idx'][route] for route in epoch_solution]
+
+        if args.verbose:
+            num_requests_dispatched = sum([len(route) for route in epoch_solution])
+            num_requests_open = len(epoch_instance['request_idx']) - 1
+            num_requests_postponed = num_requests_open - num_requests_dispatched
+            log(f" {num_requests_dispatched:3d}/{num_requests_open:3d} dispatched and {num_requests_postponed:3d}/{num_requests_open:3d} postponed | Routes: {len(epoch_solution):2d} with cost {epoch_cost:6d}")
+
+        # step to next state
+        observation, reward, done, info = env.step(epoch_solution)
+        assert epoch_cost is None or reward == -epoch_cost, "Reward should be negative cost of solution"
+        assert not info['error'], f"Environment error: {info['error']}"
+
+        total_reward += reward
+
+    if args.verbose:
+        log(f"Cost of solution: {-total_reward}")
     return total_reward
 
 
@@ -201,7 +258,8 @@ if __name__ == "__main__":
         if args.strategy == 'oracle':
             run_oracle(args, env)
         else:
-            run_baseline(args, env)
+            run_ours(args, env)
+            # run_baseline(args, env)
 
         if args.instance is not None:
             log(tools.json_dumps_np(env.final_solutions))

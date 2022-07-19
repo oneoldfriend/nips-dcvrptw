@@ -1,8 +1,8 @@
 import json
 import os
 import numpy as np
-import pandas
 import pandas as pd
+import math
 
 
 # https://stackoverflow.com/questions/26646362/numpy-array-is-not-json-serializable
@@ -324,7 +324,7 @@ def write_vrplib(filename, instance, name="problem", euclidean=False, is_vrptw=T
 
 
 def results_process(file_path):
-    raw_df = pandas.read_table(file_path, sep=",", names=["instance", "obj", "is_static"])
+    raw_df = pd.read_table(file_path, sep=",", names=["instance", "obj", "is_static"])
     static_df = raw_df[raw_df["is_static"] == 1]
     obj_table = []
     for data in static_df.groupby("instance"):
@@ -350,6 +350,62 @@ def results_process(file_path):
         header.append("#" + str(no + 1))
     pd.DataFrame(columns=header, data=obj_table).to_csv(
         "baseline_results/dynamic_obj_detail.csv", index=False, encoding="utf-8")
+
+
+def get_instances_preliminary_info(instance_info):
+    duration_matrix = instance_info['duration_matrix']
+    time_windows = instance_info['time_windows']
+    return np.max(np.diff(time_windows, axis=1)), np.min(np.diff(time_windows, axis=1)), duration_matrix.max(), \
+           duration_matrix[duration_matrix != 0].min()
+
+
+def calc_spatial_temporal_dis(instance, solution, max_sp_dis, min_sp_dis, max_tp_dis, min_tp_dis):
+    std_dict = {}
+    depot = 0
+    earliest_start_depot, latest_arrival_depot = instance['time_windows'][depot]
+
+    for route in solution:
+        current_time = earliest_start_depot + instance['service_times'][depot]
+        prev_stop = depot
+        for stop_idx in range(len(route)):
+            next_stop = route[stop_idx + 1] if stop_idx < len(route) - 1 else depot
+            earliest_arrival, latest_arrival = instance['time_windows'][route[stop_idx]]
+            arrival_time = current_time + instance['duration_matrix'][prev_stop, route[stop_idx]]
+            # Wait if we arrive before earliest_arrival
+            current_time = max(arrival_time, earliest_arrival)
+            current_time += instance['service_times'][route[stop_idx]]
+            if instance['must_dispatch'][route[stop_idx]]:
+                prev_stop = route[stop_idx]
+                continue
+            else:
+                sp_dis = (instance['duration_matrix'][prev_stop, route[stop_idx]] + instance['duration_matrix'][
+                    route[stop_idx], next_stop] - min_sp_dis) / (max_sp_dis - min_sp_dis)
+                if arrival_time < earliest_arrival:
+                    save_time = 2 * (arrival_time - earliest_arrival) + latest_arrival - earliest_arrival
+                else:
+                    save_time = latest_arrival - arrival_time
+                tp_dis = (max_tp_dis - save_time) / (latest_arrival - earliest_arrival)
+                std = sp_dis + tp_dis
+                std_dict[str(route[stop_idx])] = std
+                prev_stop = route[stop_idx]
+    return std_dict
+
+
+def get_postpone_requests(instance, solution, max_sp_dis, min_sp_dis, max_tp_dis, min_tp_dis):
+    std_dict = calc_spatial_temporal_dis(instance, solution, max_sp_dis, min_sp_dis, max_tp_dis, min_tp_dis)
+    sorted_std_tuple_list = sorted(std_dict.items(), key=lambda x: x[1], reverse=True)
+    sorted_requests_idx = [int(x[0]) for x in sorted_std_tuple_list]
+    # NOTE we assume that consolidation is always good, so we always postpone certain requests at every epoch
+    return sorted_requests_idx[:math.ceil(0.1 * len(sorted_requests_idx))]
+
+
+def pick_out_requests_from_solution(solution, requests):
+    for postponed_request in requests:
+        for route in solution:
+            if postponed_request in route:
+                route.remove(postponed_request)
+                continue
+    return solution
 
 
 def solution_to_readable_str(solution):
