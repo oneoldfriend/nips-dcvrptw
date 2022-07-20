@@ -378,11 +378,11 @@ def calc_value(instance, solution):
                 prev_stop = route[stop_idx]
                 continue
             else:
-                value_dict[str(route[stop_idx])] = spatial_temporal_dis_calc(instance, prev_stop, next_stop, stop_idx,
-                                                                             route, MAX_SPATIAL_DIS, MIN_SPATIAL_DIS,
-                                                                             MAX_TEMPORAL_DIS, arrival_time,
-                                                                             earliest_arrival, latest_arrival)
-                # value_dict[str(route[stop_idx])] = -save_dis_calc(instance, prev_stop, next_stop, stop_idx, route)
+                # value_dict[str(route[stop_idx])] = spatial_temporal_dis_calc(instance, prev_stop, next_stop, stop_idx,
+                #                                                              route, MAX_SPATIAL_DIS, MIN_SPATIAL_DIS,
+                #                                                              MAX_TEMPORAL_DIS, arrival_time,
+                #                                                              earliest_arrival, latest_arrival)
+                value_dict[str(route[stop_idx])] = -save_dis_calc(instance, prev_stop, next_stop, stop_idx, route)
                 prev_stop = route[stop_idx]
     return value_dict
 
@@ -458,4 +458,4 @@ def get_instance_mask(instance, postponed_requests):
 
 
 # results_process("./results/obj_results_raw.txt")
-results_statistic_output("./results/dynamic_obj_detail.csv")
+# results_statistic_output("./results/dynamic_obj_detail.csv")
