@@ -7,7 +7,7 @@ rm -rf results/dynamic/*
 instances=( $(ls -1 ./instances/*) )
 num_instances=`expr ${#instances[@]} - 1`
 
-for i in $(seq 0 1) # $num_instances)
+for i in $(seq 0 $num_instances)
 do
     echo ${instances[$i]}
     for k in $(seq 1 $running_times)
