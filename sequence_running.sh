@@ -1,9 +1,9 @@
 #!/bin/bash
 
 running_times=$1  # parallelism degree
-rm -rf baseline_results/*.*
-rm -rf baseline_results/static/*
-rm -rf baseline_results/dynamic/*
+rm -rf results/*.*
+rm -rf results/static/*
+rm -rf results/dynamic/*
 instances=( $(ls -1 ./instances/*) )
 num_instances=`expr ${#instances[@]} - 1`
 
@@ -21,5 +21,5 @@ do
     done
     wait
 done
-python -c "import tools as utils; utils.results_process(\"baseline_results/obj_results_raw.txt\")"
+python -c "import tools as utils; utils.results_process(\"results/obj_results_raw.txt\")"
 

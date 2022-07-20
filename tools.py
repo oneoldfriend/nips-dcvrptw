@@ -336,7 +336,7 @@ def results_process(file_path):
     for no in range(0, len(obj_table[0]) - 1):
         header.append("#" + str(no + 1))
     pd.DataFrame(columns=header, data=obj_table).to_csv(
-        "baseline_results/static_obj_detail.csv", index=False, encoding="utf-8")
+        "results/static_obj_detail.csv", index=False, encoding="utf-8")
 
     dynamic_df = raw_df[raw_df["is_static"] == 0]
     obj_table = []
@@ -349,7 +349,7 @@ def results_process(file_path):
     for no in range(0, len(obj_table[0]) - 1):
         header.append("#" + str(no + 1))
     pd.DataFrame(columns=header, data=obj_table).to_csv(
-        "baseline_results/dynamic_obj_detail.csv", index=False, encoding="utf-8")
+        "results/dynamic_obj_detail.csv", index=False, encoding="utf-8")
 
 
 def get_instances_preliminary_info(instance_info):
@@ -423,4 +423,4 @@ def solution_to_readable_str(solution):
             complete_sol_str += "------\n"
     return complete_sol_str
 
-# results_process("baseline_results/obj_results_raw.txt")
+# results_process("results/obj_results_raw.txt")
