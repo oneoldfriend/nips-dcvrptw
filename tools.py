@@ -331,12 +331,11 @@ def results_process(file_path):
         instance_obj_list = [data[0].split(".")[0]] + list(data[1]["obj"].values)
         obj_table.append(instance_obj_list)
     header = ["instance"]
-    if len(obj_table) == 0:
-        return
-    for no in range(0, len(obj_table[0]) - 1):
-        header.append("#" + str(no + 1))
-    pd.DataFrame(columns=header, data=obj_table).to_csv(
-        "results/static_obj_detail.csv", index=False, encoding="utf-8")
+    if len(obj_table) != 0:
+        for no in range(0, len(obj_table[0]) - 1):
+            header.append("#" + str(no + 1))
+        pd.DataFrame(columns=header, data=obj_table).to_csv(
+            "./results/static_obj_detail.csv", index=False, encoding="utf-8")
 
     dynamic_df = raw_df[raw_df["is_static"] == 0]
     obj_table = []
@@ -344,12 +343,11 @@ def results_process(file_path):
         instance_obj_list = [data[0].split(".")[0]] + list(data[1]["obj"].values)
         obj_table.append(instance_obj_list)
     header = ["instance"]
-    if len(obj_table) == 0:
-        return
-    for no in range(0, len(obj_table[0]) - 1):
-        header.append("#" + str(no + 1))
-    pd.DataFrame(columns=header, data=obj_table).to_csv(
-        "results/dynamic_obj_detail.csv", index=False, encoding="utf-8")
+    if len(obj_table) != 0:
+        for no in range(0, len(obj_table[0]) - 1):
+            header.append("#" + str(no + 1))
+        pd.DataFrame(columns=header, data=obj_table).to_csv(
+            "./results/dynamic_obj_detail.csv", index=False, encoding="utf-8")
 
 
 def get_instances_preliminary_info(instance_info):
@@ -423,4 +421,15 @@ def solution_to_readable_str(solution):
             complete_sol_str += "------\n"
     return complete_sol_str
 
-# results_process("results/obj_results_raw.txt")
+
+def results_statistic_output(results_path):
+    result_pd = pd.read_csv(results_path)
+    data_pd = result_pd.iloc[:, 1:]
+    result_pd['Min obj'] = data_pd.min(axis=1)
+    result_pd['Max obj'] = data_pd.max(axis=1)
+    result_pd['Avg obj'] = data_pd.mean(axis=1)
+    pd.concat([result_pd.iloc[:, 0], result_pd.iloc[:, -3:]], axis=1).to_csv("results/stats_results.csv", index=False)
+
+
+# results_process("./results/obj_results_raw.txt")
+# results_statistic_output("./results/dynamic_obj_detail.csv")
