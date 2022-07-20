@@ -85,14 +85,14 @@ if __name__ == "__main__":
     print(f"Cost of solution: {sum(env.final_costs.values())}")
     print("Solution:")
     print(tools.json_dumps_np(env.final_solutions))
-    # if args.static:
-    #     is_static = 1
-    #     route_res_file = open("baseline_results/static/" + args.instance.split("/")[-1], "a")
-    # else:
-    #     is_static = 0
-    #     route_res_file = open("baseline_results/dynamic/" + args.instance.split("/")[-1], "a")
+    if args.static:
+        is_static = 1
+        route_res_file = open("baseline_results/static/" + args.instance.split("/")[-1], "a")
+    else:
+        is_static = 0
+        route_res_file = open("baseline_results/dynamic/" + args.instance.split("/")[-1], "a")
     # route_res_file.write(tools.solution_to_readable_str(env.final_solutions) + "\n")
-    # file = open("baseline_results/obj_results_raw.txt", "a")
-    # file.write(args.instance.split("/")[-1] + "," + str(sum(env.final_costs.values())) + "," + str(is_static) + "\n")
-    # route_res_file.close()
-    # file.close()
+    file = open("baseline_results/obj_results_raw.txt", "a")
+    file.write(args.instance.split("/")[-1] + "," + str(sum(env.final_costs.values())) + "," + str(is_static) + "\n")
+    route_res_file.close()
+    file.close()
