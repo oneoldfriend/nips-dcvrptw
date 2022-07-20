@@ -155,8 +155,6 @@ def run_ours(args, env):
     total_reward = 0
     done = False
     observation, static_info = env.reset()
-    MAX_TEMPORAL_DIS, MIN_TEMPORAL_DIS, MAX_SPATIAL_DIS, MIN_SPATIAL_DIS = tools.get_instances_preliminary_info(
-        static_info['dynamic_context'])
     epoch_tlim = static_info['epoch_tlim']
     num_requests_postponed = 0
     while not done:
@@ -179,8 +177,7 @@ def run_ours(args, env):
         assert len(complete_solution_list) > 0, f"No solution found during epoch {observation['current_epoch']}"
         # get postponed requests
         complete_solution, complete_cost = complete_solution_list[-1]
-        postponed_requests = tools.get_postpone_requests(epoch_instance, complete_solution, MAX_SPATIAL_DIS,
-                                                         MIN_SPATIAL_DIS, MAX_TEMPORAL_DIS, MIN_TEMPORAL_DIS)
+        postponed_requests = tools.get_postpone_requests(epoch_instance, complete_solution)
         # get real solution from assigned requests
         # 1) directly get sol from complete sol
         # epoch_solution = tools.pick_out_requests_from_solution(complete_solution, postponed_requests)

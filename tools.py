@@ -357,8 +357,10 @@ def get_instances_preliminary_info(instance_info):
            duration_matrix[duration_matrix != 0].min()
 
 
-def calc_spatial_temporal_dis(instance, solution, max_sp_dis, min_sp_dis, max_tp_dis, min_tp_dis):
-    std_dict = {}
+def calc_value(instance, solution):
+    MAX_TEMPORAL_DIS, MIN_TEMPORAL_DIS, MAX_SPATIAL_DIS, MIN_SPATIAL_DIS = get_instances_preliminary_info(
+        instance)
+    value_dict = {}
     depot = 0
     earliest_start_depot, latest_arrival_depot = instance['time_windows'][depot]
 
@@ -376,22 +378,36 @@ def calc_spatial_temporal_dis(instance, solution, max_sp_dis, min_sp_dis, max_tp
                 prev_stop = route[stop_idx]
                 continue
             else:
-                sp_dis = (instance['duration_matrix'][prev_stop, route[stop_idx]] + instance['duration_matrix'][
-                    route[stop_idx], next_stop] - min_sp_dis) / (max_sp_dis - min_sp_dis)
-                if arrival_time < earliest_arrival:
-                    save_time = 2 * (arrival_time - earliest_arrival) + latest_arrival - earliest_arrival
-                else:
-                    save_time = latest_arrival - arrival_time
-                tp_dis = (max_tp_dis - save_time) / (latest_arrival - earliest_arrival)
-                std = sp_dis + tp_dis
-                std_dict[str(route[stop_idx])] = std
+                value_dict[str(route[stop_idx])] = spatial_temporal_dis_calc(instance, prev_stop, next_stop, stop_idx,
+                                                                             route, MAX_SPATIAL_DIS, MIN_SPATIAL_DIS,
+                                                                             MAX_TEMPORAL_DIS, arrival_time,
+                                                                             earliest_arrival, latest_arrival)
+                # value_dict[str(route[stop_idx])] = -save_dis_calc(instance, prev_stop, next_stop, stop_idx, route)
                 prev_stop = route[stop_idx]
-    return std_dict
+    return value_dict
 
 
-def get_postpone_requests(instance, solution, max_sp_dis, min_sp_dis, max_tp_dis, min_tp_dis):
-    std_dict = calc_spatial_temporal_dis(instance, solution, max_sp_dis, min_sp_dis, max_tp_dis, min_tp_dis)
-    sorted_std_tuple_list = sorted(std_dict.items(), key=lambda x: x[1], reverse=True)
+def spatial_temporal_dis_calc(instance, prev_stop, next_stop, stop_idx, route, max_sp_dis, min_sp_dis, max_tp_dis,
+                              arrival_time, earliest_arrival, latest_arrival):
+    sp_dis = (instance['duration_matrix'][prev_stop, route[stop_idx]] + instance['duration_matrix'][
+        route[stop_idx], next_stop] - min_sp_dis) / (max_sp_dis - min_sp_dis)
+    if arrival_time < earliest_arrival:
+        save_time = 2 * (arrival_time - earliest_arrival) + latest_arrival - earliest_arrival
+    else:
+        save_time = latest_arrival - arrival_time
+    tp_dis = (max_tp_dis - save_time) / (latest_arrival - earliest_arrival)
+    return sp_dis + tp_dis
+
+
+def save_dis_calc(instance, prev_stop, next_stop, stop_idx, route):
+    return instance['duration_matrix'][prev_stop, next_stop] - (
+            instance['duration_matrix'][prev_stop, route[stop_idx]] + instance['duration_matrix'][
+        route[stop_idx], next_stop])
+
+
+def get_postpone_requests(instance, solution):
+    value_dict = calc_value(instance, solution)
+    sorted_std_tuple_list = sorted(value_dict.items(), key=lambda x: x[1], reverse=True)
     sorted_requests_idx = [int(x[0]) for x in sorted_std_tuple_list]
     # NOTE we assume that consolidation is always good, so we always postpone certain requests at every epoch
     return sorted_requests_idx[:math.ceil(0.1 * len(sorted_requests_idx))]
@@ -442,4 +458,4 @@ def get_instance_mask(instance, postponed_requests):
 
 
 # results_process("./results/obj_results_raw.txt")
-# results_statistic_output("./results/dynamic_obj_detail.csv")
+results_statistic_output("./results/dynamic_obj_detail.csv")
