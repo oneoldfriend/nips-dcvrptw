@@ -403,6 +403,8 @@ def pick_out_requests_from_solution(solution, requests):
             if postponed_request in route:
                 route.remove(postponed_request)
                 continue
+    while [] in solution:
+        solution.remove([])
     return solution
 
 
@@ -429,6 +431,14 @@ def results_statistic_output(results_path):
     result_pd['Max obj'] = data_pd.max(axis=1)
     result_pd['Avg obj'] = data_pd.mean(axis=1)
     pd.concat([result_pd.iloc[:, 0], result_pd.iloc[:, -3:]], axis=1).to_csv("results/stats_results.csv", index=False)
+
+
+def get_instance_mask(instance, postponed_requests):
+    mask = np.ones_like(instance['must_dispatch']).astype(np.bool8)
+    mask[0] = True
+    for request in postponed_requests:
+        mask[request] = False
+    return mask
 
 
 # results_process("./results/obj_results_raw.txt")

@@ -1,1 +1,1 @@
-from ._strategies import STRATEGIES  # noqa
+from ._strategies import STRATEGIES, _filter_instance  # noqa

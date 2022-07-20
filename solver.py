@@ -1,6 +1,7 @@
 # Solver for Dynamic VRPTW, baseline strategy is to use the static solver HGS-VRPTW repeatedly
 import argparse
 import json
+import math
 import subprocess
 import sys
 import os
@@ -11,7 +12,7 @@ import _pickle as pickle
 
 import tools
 from environment import VRPEnvironment, ControllerEnvironment
-from baselines.strategies import STRATEGIES
+from baselines.strategies import STRATEGIES, _filter_instance
 
 
 def solve_static_vrptw(instance, time_limit=3600, tmp_dir="tmp", seed=1):
@@ -172,7 +173,7 @@ def run_ours(args, env):
         # accept all requests and get complete solution first
         epoch_instance_dispatch = STRATEGIES['greedy'](epoch_instance, rng)
         complete_solution_list = list(
-            solve_static_vrptw(epoch_instance_dispatch, time_limit=epoch_tlim, tmp_dir=args.tmp_dir,
+            solve_static_vrptw(epoch_instance_dispatch, time_limit=math.ceil(epoch_tlim / 2 - 2), tmp_dir=args.tmp_dir,
                                seed=args.solver_seed))
 
         assert len(complete_solution_list) > 0, f"No solution found during epoch {observation['current_epoch']}"
@@ -181,10 +182,15 @@ def run_ours(args, env):
         postponed_requests = tools.get_postpone_requests(epoch_instance, complete_solution, MAX_SPATIAL_DIS,
                                                          MIN_SPATIAL_DIS, MAX_TEMPORAL_DIS, MIN_TEMPORAL_DIS)
         # get real solution from assigned requests
-        # TODO for now we simply pick out the postponed requests from complete solution,
-        #  we can use HGS again for assigned requests
-        epoch_solution = tools.pick_out_requests_from_solution(complete_solution, postponed_requests)
-        epoch_cost = tools.compute_solution_driving_time(epoch_instance, epoch_solution)
+        # 1) directly get sol from complete sol
+        # epoch_solution = tools.pick_out_requests_from_solution(complete_solution, postponed_requests)
+        # epoch_cost = tools.compute_solution_driving_time(epoch_instance, epoch_solution)
+        # 2) mask the instance then re-solve
+        mask = tools.get_instance_mask(epoch_instance, postponed_requests)
+        epoch_instance_dispatch = _filter_instance(epoch_instance, mask)
+        epoch_solution, epoch_cost = list(
+            solve_static_vrptw(epoch_instance_dispatch, time_limit=math.ceil(epoch_tlim * 1 / 2), tmp_dir=args.tmp_dir,
+                               seed=args.solver_seed))[-1]
         # Map solution to indices of corresponding requests
         epoch_solution = [epoch_instance_dispatch['request_idx'][route] for route in epoch_solution]
 
