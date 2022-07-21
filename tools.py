@@ -357,7 +357,7 @@ def get_instances_preliminary_info(instance_info):
            duration_matrix[duration_matrix != 0].min()
 
 
-def calc_value(instance, solution):
+def calc_value(instance, solution, is_all_calc):
     MAX_TEMPORAL_DIS, MIN_TEMPORAL_DIS, MAX_SPATIAL_DIS, MIN_SPATIAL_DIS = get_instances_preliminary_info(
         instance)
     value_dict = {}
@@ -374,7 +374,7 @@ def calc_value(instance, solution):
             # Wait if we arrive before earliest_arrival
             current_time = max(arrival_time, earliest_arrival)
             current_time += instance['service_times'][route[stop_idx]]
-            if instance['must_dispatch'][route[stop_idx]]:
+            if instance['must_dispatch'][route[stop_idx]] and is_all_calc is False:
                 prev_stop = route[stop_idx]
                 continue
             else:
@@ -405,12 +405,25 @@ def save_dis_calc(instance, prev_stop, next_stop, stop_idx, route):
         route[stop_idx], next_stop])
 
 
-def get_postpone_requests(instance, solution):
-    value_dict = calc_value(instance, solution)
+def get_postpone_requests(instance, solution, next_veh_start_time):
+    complete_value_dict = calc_value(instance, solution, True)
+    after_sort_complete_dict = sorted(complete_value_dict.items(), key=lambda x: x[1], reverse=True)
+    value_dict = calc_value(instance, solution, False)
     sorted_std_tuple_list = sorted(value_dict.items(), key=lambda x: x[1], reverse=True)
     sorted_requests_idx = [int(x[0]) for x in sorted_std_tuple_list]
-    # NOTE we assume that consolidation is always good, so we always postpone certain requests at every epoch
-    return sorted_requests_idx[:math.ceil(0.1 * len(sorted_requests_idx))]
+    # 1) we assume that consolidation is always good, so we always postpone certain requests at every epoch
+    postponed_candidates = sorted_requests_idx[:math.ceil(0.1 * len(sorted_requests_idx))]
+    postponed_requests = postponed_candidates
+    # 2) we only postponed the requests with threshold
+    postponed_requests = []
+    for request in postponed_candidates:
+        next_arrive_time = next_veh_start_time + instance['duration_matrix'][0, request]
+        latest_arrive_time = instance['time_windows'][request][1]
+        if next_arrive_time > latest_arrive_time:
+            continue
+        else:
+            postponed_requests.append(request)
+    return postponed_requests
 
 
 def pick_out_requests_from_solution(solution, requests):
@@ -455,7 +468,6 @@ def get_instance_mask(instance, postponed_requests):
     for request in postponed_requests:
         mask[request] = False
     return mask
-
 
 # results_process("./results/obj_results_raw.txt")
 # results_statistic_output("./results/dynamic_obj_detail.csv")

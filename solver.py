@@ -177,7 +177,8 @@ def run_ours(args, env):
         assert len(complete_solution_list) > 0, f"No solution found during epoch {observation['current_epoch']}"
         # get postponed requests
         complete_solution, complete_cost = complete_solution_list[-1]
-        postponed_requests = tools.get_postpone_requests(epoch_instance, complete_solution)
+        postponed_requests = tools.get_postpone_requests(epoch_instance, complete_solution, (
+                observation['current_epoch'] + 1) * 3600 + 3600)
         # get real solution from assigned requests
         # 1) directly get sol from complete sol
         # epoch_solution = tools.pick_out_requests_from_solution(complete_solution, postponed_requests)
