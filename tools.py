@@ -350,7 +350,7 @@ def results_process(file_path):
             "./results/dynamic_obj_detail.csv", index=False, encoding="utf-8")
 
 
-def get_instances_preliminary_info(instance_info):
+def get_std_preliminary_info(instance_info):
     duration_matrix = instance_info['duration_matrix']
     time_windows = instance_info['time_windows']
     return np.max(np.diff(time_windows, axis=1)), np.min(np.diff(time_windows, axis=1)), duration_matrix.max(), \
@@ -358,7 +358,7 @@ def get_instances_preliminary_info(instance_info):
 
 
 def calc_value(instance, solution, is_all_calc):
-    MAX_TEMPORAL_DIS, MIN_TEMPORAL_DIS, MAX_SPATIAL_DIS, MIN_SPATIAL_DIS = get_instances_preliminary_info(
+    MAX_TEMPORAL_DIS, MIN_TEMPORAL_DIS, MAX_SPATIAL_DIS, MIN_SPATIAL_DIS = get_std_preliminary_info(
         instance)
     value_dict = {}
     depot = 0
@@ -382,7 +382,7 @@ def calc_value(instance, solution, is_all_calc):
                 #                                                              route, MAX_SPATIAL_DIS, MIN_SPATIAL_DIS,
                 #                                                              MAX_TEMPORAL_DIS, arrival_time,
                 #                                                              earliest_arrival, latest_arrival)
-                value_dict[str(route[stop_idx])] = -save_dis_calc(instance, prev_stop, next_stop, stop_idx, route)
+                value_dict[str(route[stop_idx])] = incremental_dis_calc(instance, prev_stop, next_stop, stop_idx, route)
                 prev_stop = route[stop_idx]
     return value_dict
 
@@ -399,27 +399,53 @@ def spatial_temporal_dis_calc(instance, prev_stop, next_stop, stop_idx, route, m
     return sp_dis + tp_dis
 
 
-def save_dis_calc(instance, prev_stop, next_stop, stop_idx, route):
-    return instance['duration_matrix'][prev_stop, next_stop] - (
-            instance['duration_matrix'][prev_stop, route[stop_idx]] + instance['duration_matrix'][
-        route[stop_idx], next_stop])
+def incremental_dis_calc(instance, prev_stop, next_stop, stop_idx, route):
+    return instance['duration_matrix'][prev_stop, route[stop_idx]] + instance['duration_matrix'][
+        route[stop_idx], next_stop] - instance['duration_matrix'][prev_stop, next_stop]
+
+
+def get_incremental_preliminary_info(instance):
+    sorted_duration_list = list(instance['duration_matrix'].flatten())
+    sorted_duration_list.sort()
+    stop_zero_idx = 0
+    for idx in range(len(sorted_duration_list)):
+        if sorted_duration_list[idx] > 0:
+            stop_zero_idx = idx
+            break
+    sorted_duration_list = sorted_duration_list[stop_zero_idx:]
+    max_1 = sorted_duration_list[-1]
+    max_2 = sorted_duration_list[-2]
+    min_1 = sorted_duration_list[0]
+    min_2 = sorted_duration_list[1]
+    return max_1, max_2, min_1, min_2
+
+
+def get_avg_seg_dis(instance, solution):
+    avg_seg_dis_list = []
+    for route in solution:
+        avg_seg_dis_list.append(
+            math.ceil(compute_route_driving_time(route, instance['duration_matrix']) / (len(route) + 1)))
+    return avg_seg_dis_list
 
 
 def get_postpone_requests(instance, solution, next_veh_start_time):
+    avg_seg_dis_list = get_avg_seg_dis(instance, solution)
+    avg_avg_seg_dis = math.ceil(sum(avg_seg_dis_list) / len(avg_seg_dis_list))
     complete_value_dict = calc_value(instance, solution, True)
     after_sort_complete_dict = sorted(complete_value_dict.items(), key=lambda x: x[1], reverse=True)
     value_dict = calc_value(instance, solution, False)
     sorted_std_tuple_list = sorted(value_dict.items(), key=lambda x: x[1], reverse=True)
     sorted_requests_idx = [int(x[0]) for x in sorted_std_tuple_list]
     # 1) we assume that consolidation is always good, so we always postpone certain requests at every epoch
-    postponed_candidates = sorted_requests_idx[:math.ceil(0.1 * len(sorted_requests_idx))]
-    postponed_requests = postponed_candidates
+    # postponed_candidates = sorted_requests_idx[:math.ceil(0.1 * len(sorted_requests_idx))]
+    # postponed_requests = postponed_candidates
     # 2) we only postponed the requests with threshold
+    postponed_candidates = sorted_requests_idx
     postponed_requests = []
     for request in postponed_candidates:
         next_arrive_time = next_veh_start_time + instance['duration_matrix'][0, request]
         latest_arrive_time = instance['time_windows'][request][1]
-        if next_arrive_time > latest_arrive_time:
+        if next_arrive_time > latest_arrive_time or value_dict[str(request)] < avg_avg_seg_dis:
             continue
         else:
             postponed_requests.append(request)
