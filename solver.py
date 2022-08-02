@@ -1,18 +1,22 @@
 # Solver for Dynamic VRPTW, baseline strategy is to use the static solver HGS-VRPTW repeatedly
+import os
+
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 import argparse
 import json
 import math
 import subprocess
 import sys
-import os
 import uuid
 import platform
 import numpy as np
 import _pickle as pickle
-
+import torch
 import tools
 from environment import VRPEnvironment, ControllerEnvironment
 from baselines.strategies import STRATEGIES, _filter_instance
+from learning_method.nets.encoders.gnn_encoder import GNNEncoder
+from learning_method.nets.encoders.our_model import AttentionModel
 
 
 def solve_static_vrptw(instance, time_limit=3600, tmp_dir="tmp", seed=1):
@@ -149,7 +153,7 @@ def run_baseline(args, env, oracle_solution=None):
     return total_reward
 
 
-def run_ours(args, env):
+def run_improved_heuristics(args, env):
     rng = np.random.default_rng(args.solver_seed)
 
     total_reward = 0
@@ -210,6 +214,68 @@ def run_ours(args, env):
     return total_reward
 
 
+def run_rl_with_gnn(agrs, env):
+    rng = np.random.default_rng(args.solver_seed)
+
+    total_reward = 0
+    done = False
+    observation, static_info = env.reset()
+    epoch_tlim = static_info['epoch_tlim']
+    num_requests_postponed = 0
+
+    model = AttentionModel(embedding_dim=agrs.embedding_dim,
+                           encoder_class=GNNEncoder,
+                           n_encode_layers=agrs.n_encode_layers,
+                           aggregation=agrs.aggregation,
+                           normalization=agrs.normalization,
+                           learn_norm=agrs.learn_norm,
+                           track_norm=agrs.track_norm,
+                           gated=agrs.gated)
+    model.train()
+    while not done:
+        epoch_instance = observation['epoch_instance']
+        nodes = torch.tensor(tools.get_epoch_nodes_feature(epoch_instance, static_info))
+        graph = torch.ones((len(epoch_instance['request_idx']), len(epoch_instance['request_idx'])))
+        for idx in range(len(epoch_instance['request_idx'])):
+            graph[idx][idx] = 0
+        if args.verbose:
+            log(f"Epoch {static_info['start_epoch']} <= {observation['current_epoch']} <= {static_info['end_epoch']}",
+                newline=False)
+            num_requests_open = len(epoch_instance['request_idx']) - 1
+            num_new_requests = num_requests_open - num_requests_postponed
+            log(f" | Requests: +{num_new_requests:3d} = {num_requests_open:3d}, {epoch_instance['must_dispatch'].sum():3d}/{num_requests_open:3d} must-go...",
+                newline=False, flush=True)
+        nodes = torch.unsqueeze(nodes, 0).to(torch.float32)
+        graph = torch.unsqueeze(graph, 0).to(torch.long)
+        print(nodes)
+        print(graph)
+        output = model(nodes, graph)
+        assignments_results = tools.get_assignment_results(output, epoch_instance['must_dispatch'])
+        epoch_instance_dispatch = _filter_instance(epoch_instance, assignments_results)
+        epoch_solution, epoch_cost = list(
+            solve_static_vrptw(epoch_instance_dispatch, time_limit=math.ceil(epoch_tlim * 1 / 2), tmp_dir=args.tmp_dir,
+                               seed=args.solver_seed))[-1]
+        # Map solution to indices of corresponding requests
+        epoch_solution = [epoch_instance_dispatch['request_idx'][route] for route in epoch_solution]
+
+        if args.verbose:
+            num_requests_dispatched = sum([len(route) for route in epoch_solution])
+            num_requests_open = len(epoch_instance['request_idx']) - 1
+            num_requests_postponed = num_requests_open - num_requests_dispatched
+            log(f" {num_requests_dispatched:3d}/{num_requests_open:3d} dispatched and {num_requests_postponed:3d}/{num_requests_open:3d} postponed | Routes: {len(epoch_solution):2d} with cost {epoch_cost:6d}")
+
+        # step to next state
+        observation, reward, done, info = env.step(epoch_solution)
+        assert epoch_cost is None or reward == -epoch_cost, "Reward should be negative cost of solution"
+        assert not info['error'], f"Environment error: {info['error']}"
+
+        total_reward += reward
+
+    if args.verbose:
+        log(f"Cost of solution: {-total_reward}")
+    return total_reward
+
+
 def log(obj, newline=True, flush=False):
     # Write logs to stderr since program uses stdout to communicate with controller
     sys.stderr.write(str(obj))
@@ -234,6 +300,29 @@ if __name__ == "__main__":
     parser.add_argument("--tmp_dir", type=str, default=None,
                         help="Provide a specific directory to use as tmp directory (useful for debugging)")
     parser.add_argument("--verbose", action='store_true', help="Show verbose output")
+
+    # model
+    parser.add_argument('--embedding_dim', type=int, default=128,
+                        help='Dimension of input embedding')
+    parser.add_argument('--hidden_dim', type=int, default=128,
+                        help='Dimension of hidden layers in Enc/Dec')
+    parser.add_argument('--n_encode_layers', type=int, default=3,
+                        help='Number of layers in the encoder/critic network')
+    parser.add_argument('--aggregation', default='max',
+                        help="Neighborhood aggregation function: 'sum'/'mean'/'max'")
+    parser.add_argument('--aggregation_graph', default='mean',
+                        help="Graph embedding aggregation function: 'sum'/'mean'/'max'")
+    parser.add_argument('--normalization', default='layer',
+                        help="Normalization type: 'batch'/'layer'/None")
+    parser.add_argument('--learn_norm', action='store_true',
+                        help="Enable learnable affine transformation during normalization")
+    parser.add_argument('--track_norm', action='store_true',
+                        help="Enable tracking batch statistics during normalization")
+    parser.add_argument('--gated', action='store_true',
+                        help="Enable edge gating during neighborhood aggregation")
+    parser.add_argument('--n_heads', type=int, default=8,
+                        help="Number of attention heads")
+
     args = parser.parse_args()
 
     if args.tmp_dir is None:
@@ -262,7 +351,7 @@ if __name__ == "__main__":
         if args.strategy == 'oracle':
             run_oracle(args, env)
         else:
-            run_ours(args, env)
+            run_rl_with_gnn(args, env)
             # run_baseline(args, env)
 
         if args.instance is not None:

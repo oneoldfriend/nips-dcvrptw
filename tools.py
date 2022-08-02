@@ -437,18 +437,18 @@ def get_postpone_requests(instance, solution, next_veh_start_time):
     sorted_std_tuple_list = sorted(value_dict.items(), key=lambda x: x[1], reverse=True)
     sorted_requests_idx = [int(x[0]) for x in sorted_std_tuple_list]
     # 1) we assume that consolidation is always good, so we always postpone certain requests at every epoch
-    # postponed_candidates = sorted_requests_idx[:math.ceil(0.1 * len(sorted_requests_idx))]
-    # postponed_requests = postponed_candidates
+    postponed_candidates = sorted_requests_idx[:math.ceil(0.1 * len(sorted_requests_idx))]
+    postponed_requests = postponed_candidates
     # 2) we only postponed the requests with threshold
-    postponed_candidates = sorted_requests_idx
-    postponed_requests = []
-    for request in postponed_candidates:
-        next_arrive_time = next_veh_start_time + instance['duration_matrix'][0, request]
-        latest_arrive_time = instance['time_windows'][request][1]
-        if next_arrive_time > latest_arrive_time or value_dict[str(request)] < avg_avg_seg_dis:
-            continue
-        else:
-            postponed_requests.append(request)
+    # postponed_candidates = sorted_requests_idx
+    # postponed_requests = []
+    # for request in postponed_candidates:
+    #     next_arrive_time = next_veh_start_time + instance['duration_matrix'][0, request]
+    #     latest_arrive_time = instance['time_windows'][request][1]
+    #     if next_arrive_time > latest_arrive_time or value_dict[str(request)] < avg_avg_seg_dis:
+    #         continue
+    #     else:
+    #         postponed_requests.append(request)
     return postponed_requests
 
 
@@ -494,6 +494,30 @@ def get_instance_mask(instance, postponed_requests):
     for request in postponed_requests:
         mask[request] = False
     return mask
+
+
+def get_epoch_nodes_feature(instance, static_info):
+    coords_max = static_info['dynamic_context']['coords'].max()
+    coords_min = static_info['dynamic_context']['coords'].min()
+    tw_max = static_info['dynamic_context']['time_windows'].max()
+    tw_min = static_info['dynamic_context']['time_windows'].min()
+    capacity = static_info['dynamic_context']['capacity']
+    st_max = static_info['dynamic_context']['service_times'].max()
+    nodes = []
+    for idx in range(len(instance["request_idx"])):
+        nodes.append(
+            [instance['coords'][idx][0] / coords_max, instance['coords'][idx][1] / coords_max,
+             instance['time_windows'][idx][0] / tw_max, instance['time_windows'][idx][1] / tw_max,
+             instance['service_times'][idx] / st_max, instance['demands'][idx] / capacity,
+             int(instance['must_dispatch'][idx]) if idx > 0 else 1])
+    return nodes
+
+
+def get_assignment_results(probs, must_go_mask):
+    sample = np.random.rand(len(probs))
+    assignments = sample >= probs or must_go_mask
+    assignments[0] = True
+    return assignments
 
 # results_process("./results/obj_results_raw.txt")
 # results_statistic_output("./results/dynamic_obj_detail.csv")

@@ -1,4 +1,5 @@
 # Controller has an environment and tests it against a dynamic solver program
+import os
 import subprocess
 import argparse
 import tools
@@ -7,6 +8,8 @@ import sys
 import numpy as np
 import threading
 from environment import VRPEnvironment
+
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 if __name__ == "__main__":
 
