@@ -36,15 +36,17 @@ class AttentionModel(nn.Module):
                                            learn_norm=learn_norm,
                                            track_norm=track_norm,
                                            gated=gated)
-        self.value_head = nn.Sequential(
-            nn.Linear(embedding_dim, embedding_dim),
-            nn.ReLU(),
-            nn.Linear(embedding_dim, 1),
+        self.hidden_layer = nn.Sequential(
+            nn.Linear(embedding_dim, embedding_dim / 2),
             nn.Sigmoid()
         )
+        self.value_head = nn.Sequential(nn.Linear(embedding_dim / 2, 1), nn.ReLu())
 
     def forward(self, nodes, graph):
         # Embed input batch of graph using GNN (B x V x H)
         nodes = self.init_embed(nodes)
         embeddings = self.embedder(nodes, graph)
-        return self.value_head(embeddings)
+        flow = self.hidden_layer(embeddings)
+        graph_embedding = torch.mean(flow, dim=-2)
+        node_likelyhood = torch.mean(flow, dim=-1)
+        return self.value_head(graph_embedding), node_likelyhood
