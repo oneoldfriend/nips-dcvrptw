@@ -36,7 +36,7 @@ class GNNLayer(nn.Module):
         self.track_norm = track_norm
         self.gated = gated
         assert self.gated, "Use gating with GCN, pass the `--gated` flag"
-        
+
         self.U = nn.Linear(hidden_dim, hidden_dim, bias=True)
         self.V = nn.Linear(hidden_dim, hidden_dim, bias=True)
         self.A = nn.Linear(hidden_dim, hidden_dim, bias=True)
@@ -52,7 +52,7 @@ class GNNLayer(nn.Module):
             "layer": nn.LayerNorm(hidden_dim, elementwise_affine=learn_norm),
             "batch": nn.BatchNorm1d(hidden_dim, affine=learn_norm, track_running_stats=track_norm)
         }.get(self.norm, None)
-        
+
     def forward(self, h, e, graph):
         """
         Args:
@@ -84,12 +84,12 @@ class GNNLayer(nn.Module):
 
         # Normalize node features
         h = self.norm_h(
-            h.view(batch_size*num_nodes, hidden_dim)
+            h.view(batch_size * num_nodes, hidden_dim)
         ).view(batch_size, num_nodes, hidden_dim) if self.norm_h else h
-        
+
         # Normalize edge features
         e = self.norm_e(
-            e.view(batch_size*num_nodes*num_nodes, hidden_dim)
+            e.view(batch_size * num_nodes * num_nodes, hidden_dim)
         ).view(batch_size, num_nodes, num_nodes, hidden_dim) if self.norm_e else e
 
         # Apply non-linearity
@@ -113,25 +113,26 @@ class GNNLayer(nn.Module):
         """
         # Perform feature-wise gating mechanism
         Vh = gates * Vh  # B x V x V x H
-        
+        exd_graph = graph.unsqueeze(-1)
+        exd_graph = exd_graph.expand_as(Vh)
         # Enforce graph structure through masking
-        Vh[graph.unsqueeze(-1).expand_as(Vh)] = 0
-        
+        Vh = Vh * exd_graph.to(torch.float32)
+
         if self.aggregation == "mean":
-            return torch.sum(Vh, dim=2) / torch.sum(1-graph, dim=2).unsqueeze(-1).type_as(Vh)
-        
+            return torch.sum(Vh, dim=2) / torch.sum(1 - graph, dim=2).unsqueeze(-1).type_as(Vh)
+
         elif self.aggregation == "max":
             return torch.max(Vh, dim=2)[0]
-        
+
         else:
             return torch.sum(Vh, dim=2)
-        
+
 
 class GNNEncoder(nn.Module):
     """Configurable GNN Encoder
     """
-    
-    def __init__(self, n_layers, hidden_dim, aggregation="sum", norm="layer", 
+
+    def __init__(self, n_layers, hidden_dim, aggregation="sum", norm="layer",
                  learn_norm=True, track_norm=False, gated=True, *args, **kwargs):
         super(GNNEncoder, self).__init__()
 
@@ -139,7 +140,7 @@ class GNNEncoder(nn.Module):
 
         self.layers = nn.ModuleList([
             GNNLayer(hidden_dim, aggregation, norm, learn_norm, track_norm, gated)
-                for _ in range(n_layers)
+            for _ in range(n_layers)
         ])
 
     def forward(self, x, graph):

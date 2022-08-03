@@ -18,6 +18,8 @@ from baselines.strategies import STRATEGIES, _filter_instance
 from learning_method.nets.encoders.gnn_encoder import GNNEncoder
 from learning_method.nets.encoders.our_model import AttentionModel
 
+learning_rate = 1e-10
+
 
 def solve_static_vrptw(instance, time_limit=3600, tmp_dir="tmp", seed=1):
     # Prevent passing empty instances to the static solver, e.g. when
@@ -46,7 +48,7 @@ def solve_static_vrptw(instance, time_limit=3600, tmp_dir="tmp", seed=1):
     with subprocess.Popen([
         executable, instance_filename, str(max(time_limit - 2, 1)),
         '-seed', str(seed), '-veh', '-1', '-useWallClockTime', '1'
-    ], stdout=subprocess.PIPE, text=True) as p:
+    ], stdout=subprocess.PIPE, universal_newlines=True) as p:
         routes = []
         for line in p.stdout:
             line = line.strip()
@@ -232,24 +234,31 @@ def run_rl_with_gnn(agrs, env):
                            track_norm=agrs.track_norm,
                            gated=agrs.gated)
     model.train()
+    loss_func = torch.nn.MSELoss()
+    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+    trace = []
+    optimizer.zero_grad()
     while not done:
         epoch_instance = observation['epoch_instance']
-        nodes = torch.tensor(tools.get_epoch_nodes_feature(epoch_instance, static_info))
-        graph = torch.ones((len(epoch_instance['request_idx']), len(epoch_instance['request_idx'])))
-        for idx in range(len(epoch_instance['request_idx'])):
-            graph[idx][idx] = 0
-        if args.verbose:
-            log(f"Epoch {static_info['start_epoch']} <= {observation['current_epoch']} <= {static_info['end_epoch']}",
-                newline=False)
-            num_requests_open = len(epoch_instance['request_idx']) - 1
-            num_new_requests = num_requests_open - num_requests_postponed
-            log(f" | Requests: +{num_new_requests:3d} = {num_requests_open:3d}, {epoch_instance['must_dispatch'].sum():3d}/{num_requests_open:3d} must-go...",
-                newline=False, flush=True)
-        nodes = torch.unsqueeze(nodes, 0).to(torch.float32)
-        graph = torch.unsqueeze(graph, 0).to(torch.long)
-        print(nodes)
-        print(graph)
-        output = model(nodes, graph)
+        if len(epoch_instance['request_idx']) - 1 > 0:
+            nodes_feature = tools.get_epoch_nodes_feature(epoch_instance, static_info)
+            nodes = torch.tensor(nodes_feature)
+            graph = torch.ones((len(epoch_instance['request_idx']), len(epoch_instance['request_idx'])))
+            for idx in range(len(epoch_instance['request_idx'])):
+                graph[idx][idx] = 0
+            if args.verbose:
+                log(f"Epoch {static_info['start_epoch']} <= {observation['current_epoch']} <= {static_info['end_epoch']}",
+                    newline=False)
+                num_requests_open = len(epoch_instance['request_idx']) - 1
+                num_new_requests = num_requests_open - num_requests_postponed
+                log(f" | Requests: +{num_new_requests:3d} = {num_requests_open:3d}, {epoch_instance['must_dispatch'].sum():3d}/{num_requests_open:3d} must-go...",
+                    newline=False, flush=True)
+            nodes = torch.unsqueeze(nodes, 0).to(torch.float32)
+            graph = torch.unsqueeze(graph, 0).to(torch.long)
+            output = model(nodes, graph)
+            trace.append(output)
+        else:
+            output = []
         assignments_results = tools.get_assignment_results(output, epoch_instance['must_dispatch'])
         epoch_instance_dispatch = _filter_instance(epoch_instance, assignments_results)
         epoch_solution, epoch_cost = list(
@@ -266,13 +275,16 @@ def run_rl_with_gnn(agrs, env):
 
         # step to next state
         observation, reward, done, info = env.step(epoch_solution)
+        print(reward, epoch_cost)
         assert epoch_cost is None or reward == -epoch_cost, "Reward should be negative cost of solution"
         assert not info['error'], f"Environment error: {info['error']}"
 
         total_reward += reward
-
     if args.verbose:
         log(f"Cost of solution: {-total_reward}")
+    loss = loss_func(torch.tensor(total_reward).double(), torch.tensor(0).double())
+    loss.backward()
+    optimizer.step()
     return total_reward
 
 

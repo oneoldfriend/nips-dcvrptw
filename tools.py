@@ -4,8 +4,10 @@ import numpy as np
 import pandas as pd
 import math
 
-
 # https://stackoverflow.com/questions/26646362/numpy-array-is-not-json-serializable
+import torch
+
+
 class NumpyJSONEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, np.integer):
@@ -514,8 +516,10 @@ def get_epoch_nodes_feature(instance, static_info):
 
 
 def get_assignment_results(probs, must_go_mask):
+    probs = probs.reshape(-1).detach().numpy()
     sample = np.random.rand(len(probs))
-    assignments = sample >= probs or must_go_mask
+    sample_assignments = sample <= probs
+    assignments = sample_assignments | must_go_mask
     assignments[0] = True
     return assignments
 
