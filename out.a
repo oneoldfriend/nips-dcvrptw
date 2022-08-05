@@ -1,0 +1,562 @@
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  55/100 dispatched and  45/100 postponed | Routes:  3 with cost  31436
+Epoch 0 <= 1 <= 7 | Requests: +100 = 145,   5/145 must-go...  76/145 dispatched and  69/145 postponed | Routes:  4 with cost  37962
+Epoch 0 <= 2 <= 7 | Requests: + 92 = 161,  24/161 must-go...  96/161 dispatched and  65/161 postponed | Routes:  9 with cost  57751
+Epoch 0 <= 3 <= 7 | Requests: + 79 = 144,  25/144 must-go...  75/144 dispatched and  69/144 postponed | Routes:  8 with cost  51556
+Epoch 0 <= 4 <= 7 | Requests: + 59 = 128,  35/128 must-go...  82/128 dispatched and  46/128 postponed | Routes: 13 with cost  68673
+Epoch 0 <= 5 <= 7 | Requests: + 51 =  97,  30/ 97 must-go...  58/ 97 dispatched and  39/ 97 postponed | Routes: 10 with cost  55405
+Epoch 0 <= 6 <= 7 | Requests: + 33 =  72,  53/ 72 must-go...  65/ 72 dispatched and   7/ 72 postponed | Routes: 15 with cost  77870
+Epoch 0 <= 7 <= 7 | Requests: +  5 =  12,  12/ 12 must-go...  12/ 12 dispatched and   0/ 12 postponed | Routes:  9 with cost  31888
+Cost of solution: 412541
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  52/100 dispatched and  48/100 postponed | Routes:  3 with cost  29240
+Epoch 0 <= 1 <= 7 | Requests: +100 = 148,  18/148 must-go...  88/148 dispatched and  60/148 postponed | Routes:  6 with cost  49024
+Epoch 0 <= 2 <= 7 | Requests: + 90 = 150,  21/150 must-go...  90/150 dispatched and  60/150 postponed | Routes:  7 with cost  51296
+Epoch 0 <= 3 <= 7 | Requests: + 84 = 144,  28/144 must-go...  84/144 dispatched and  60/144 postponed | Routes: 10 with cost  62265
+Epoch 0 <= 4 <= 7 | Requests: + 64 = 124,  25/124 must-go...  77/124 dispatched and  47/124 postponed | Routes:  8 with cost  51972
+Epoch 0 <= 5 <= 7 | Requests: + 46 =  93,  32/ 93 must-go...  63/ 93 dispatched and  30/ 93 postponed | Routes: 10 with cost  58982
+Epoch 0 <= 6 <= 7 | Requests: + 34 =  64,  44/ 64 must-go...  51/ 64 dispatched and  13/ 64 postponed | Routes: 16 with cost  82051
+Epoch 0 <= 7 <= 7 | Requests: + 10 =  23,  23/ 23 must-go...  23/ 23 dispatched and   0/ 23 postponed | Routes: 17 with cost  60392
+Cost of solution: 445222
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  53/100 dispatched and  47/100 postponed | Routes:  3 with cost  28734
+Epoch 0 <= 1 <= 7 | Requests: +100 = 147,  16/147 must-go...  73/147 dispatched and  74/147 postponed | Routes:  6 with cost  44238
+Epoch 0 <= 2 <= 7 | Requests: + 93 = 167,  30/167 must-go...  87/167 dispatched and  80/167 postponed | Routes: 12 with cost  64675
+Epoch 0 <= 3 <= 7 | Requests: + 79 = 159,  28/159 must-go... 102/159 dispatched and  57/159 postponed | Routes: 10 with cost  64973
+Epoch 0 <= 4 <= 7 | Requests: + 62 = 119,  28/119 must-go...  79/119 dispatched and  40/119 postponed | Routes:  9 with cost  54517
+Epoch 0 <= 5 <= 7 | Requests: + 50 =  90,  21/ 90 must-go...  65/ 90 dispatched and  25/ 90 postponed | Routes:  9 with cost  52952
+Epoch 0 <= 6 <= 7 | Requests: + 39 =  64,  43/ 64 must-go...  54/ 64 dispatched and  10/ 64 postponed | Routes: 14 with cost  73347
+Epoch 0 <= 7 <= 7 | Requests: + 11 =  21,  21/ 21 must-go...  21/ 21 dispatched and   0/ 21 postponed | Routes: 16 with cost  53942
+Cost of solution: 437378
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  49/100 dispatched and  51/100 postponed | Routes:  3 with cost  27163
+Epoch 0 <= 1 <= 7 | Requests: +100 = 151,  13/151 must-go...  81/151 dispatched and  70/151 postponed | Routes:  5 with cost  42414
+Epoch 0 <= 2 <= 7 | Requests: + 93 = 163,  27/163 must-go... 109/163 dispatched and  54/163 postponed | Routes:  9 with cost  57714
+Epoch 0 <= 3 <= 7 | Requests: + 76 = 130,  17/130 must-go...  75/130 dispatched and  55/130 postponed | Routes:  6 with cost  43936
+Epoch 0 <= 4 <= 7 | Requests: + 70 = 125,  26/125 must-go...  77/125 dispatched and  48/125 postponed | Routes:  9 with cost  56438
+Epoch 0 <= 5 <= 7 | Requests: + 52 = 100,  21/100 must-go...  57/100 dispatched and  43/100 postponed | Routes:  8 with cost  47381
+Epoch 0 <= 6 <= 7 | Requests: + 33 =  76,  51/ 76 must-go...  67/ 76 dispatched and   9/ 76 postponed | Routes: 15 with cost  78928
+Epoch 0 <= 7 <= 7 | Requests: + 10 =  19,  19/ 19 must-go...  19/ 19 dispatched and   0/ 19 postponed | Routes: 11 with cost  40122
+Cost of solution: 394096
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  44/100 dispatched and  56/100 postponed | Routes:  3 with cost  28034
+Epoch 0 <= 1 <= 7 | Requests: +100 = 156,  14/156 must-go...  81/156 dispatched and  75/156 postponed | Routes:  5 with cost  43081
+Epoch 0 <= 2 <= 7 | Requests: + 90 = 165,  29/165 must-go...  98/165 dispatched and  67/165 postponed | Routes: 10 with cost  63940
+Epoch 0 <= 3 <= 7 | Requests: + 71 = 138,  24/138 must-go...  80/138 dispatched and  58/138 postponed | Routes:  8 with cost  53950
+Epoch 0 <= 4 <= 7 | Requests: + 63 = 121,  25/121 must-go...  67/121 dispatched and  54/121 postponed | Routes:  7 with cost  47340
+Epoch 0 <= 5 <= 7 | Requests: + 46 = 100,  35/100 must-go...  73/100 dispatched and  27/100 postponed | Routes: 13 with cost  65193
+Epoch 0 <= 6 <= 7 | Requests: + 33 =  60,  44/ 60 must-go...  51/ 60 dispatched and   9/ 60 postponed | Routes: 12 with cost  62254
+Epoch 0 <= 7 <= 7 | Requests: + 12 =  21,  21/ 21 must-go...  21/ 21 dispatched and   0/ 21 postponed | Routes: 20 with cost  66215
+Cost of solution: 430007
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  57/100 dispatched and  43/100 postponed | Routes:  3 with cost  33546
+Epoch 0 <= 1 <= 7 | Requests: +100 = 143,  12/143 must-go...  77/143 dispatched and  66/143 postponed | Routes:  6 with cost  46163
+Epoch 0 <= 2 <= 7 | Requests: + 87 = 153,  24/153 must-go...  85/153 dispatched and  68/153 postponed | Routes:  7 with cost  49284
+Epoch 0 <= 3 <= 7 | Requests: + 69 = 137,  22/137 must-go...  85/137 dispatched and  52/137 postponed | Routes:  8 with cost  53871
+Epoch 0 <= 4 <= 7 | Requests: + 65 = 117,  30/117 must-go...  77/117 dispatched and  40/117 postponed | Routes:  9 with cost  57302
+Epoch 0 <= 5 <= 7 | Requests: + 54 =  94,  32/ 94 must-go...  62/ 94 dispatched and  32/ 94 postponed | Routes: 13 with cost  64170
+Epoch 0 <= 6 <= 7 | Requests: + 32 =  64,  46/ 64 must-go...  56/ 64 dispatched and   8/ 64 postponed | Routes: 13 with cost  67302
+Epoch 0 <= 7 <= 7 | Requests: + 11 =  19,  19/ 19 must-go...  19/ 19 dispatched and   0/ 19 postponed | Routes: 12 with cost  42352
+Cost of solution: 413990
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  50/100 dispatched and  50/100 postponed | Routes:  3 with cost  30801
+Epoch 0 <= 1 <= 7 | Requests: +100 = 150,  17/150 must-go...  78/150 dispatched and  72/150 postponed | Routes:  5 with cost  43317
+Epoch 0 <= 2 <= 7 | Requests: + 88 = 160,  23/160 must-go...  89/160 dispatched and  71/160 postponed | Routes:  7 with cost  47495
+Epoch 0 <= 3 <= 7 | Requests: + 79 = 150,  32/150 must-go...  98/150 dispatched and  52/150 postponed | Routes: 11 with cost  65104
+Epoch 0 <= 4 <= 7 | Requests: + 69 = 121,  35/121 must-go...  83/121 dispatched and  38/121 postponed | Routes: 13 with cost  69965
+Epoch 0 <= 5 <= 7 | Requests: + 52 =  90,  30/ 90 must-go...  58/ 90 dispatched and  32/ 90 postponed | Routes: 10 with cost  57392
+Epoch 0 <= 6 <= 7 | Requests: + 34 =  66,  48/ 66 must-go...  56/ 66 dispatched and  10/ 66 postponed | Routes: 14 with cost  73769
+Epoch 0 <= 7 <= 7 | Requests: + 12 =  22,  22/ 22 must-go...  22/ 22 dispatched and   0/ 22 postponed | Routes: 18 with cost  63550
+Cost of solution: 451393
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  49/100 dispatched and  51/100 postponed | Routes:  3 with cost  27777
+Epoch 0 <= 1 <= 7 | Requests: +100 = 151,  15/151 must-go...  83/151 dispatched and  68/151 postponed | Routes:  6 with cost  44705
+Epoch 0 <= 2 <= 7 | Requests: + 88 = 156,  20/156 must-go...  92/156 dispatched and  64/156 postponed | Routes:  7 with cost  51291
+Epoch 0 <= 3 <= 7 | Requests: + 83 = 147,  28/147 must-go...  86/147 dispatched and  61/147 postponed | Routes:  9 with cost  57928
+Epoch 0 <= 4 <= 7 | Requests: + 64 = 125,  25/125 must-go...  66/125 dispatched and  59/125 postponed | Routes:  9 with cost  54150
+Epoch 0 <= 5 <= 7 | Requests: + 46 = 105,  34/105 must-go...  63/105 dispatched and  42/105 postponed | Routes: 10 with cost  57096
+Epoch 0 <= 6 <= 7 | Requests: + 37 =  79,  54/ 79 must-go...  65/ 79 dispatched and  14/ 79 postponed | Routes: 15 with cost  82561
+Epoch 0 <= 7 <= 7 | Requests: + 11 =  25,  25/ 25 must-go...  25/ 25 dispatched and   0/ 25 postponed | Routes: 18 with cost  60533
+Cost of solution: 436041
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  44/100 dispatched and  56/100 postponed | Routes:  3 with cost  27341
+Epoch 0 <= 1 <= 7 | Requests: +100 = 156,  18/156 must-go...  87/156 dispatched and  69/156 postponed | Routes:  6 with cost  48965
+Epoch 0 <= 2 <= 7 | Requests: + 88 = 157,  25/157 must-go...  95/157 dispatched and  62/157 postponed | Routes:  9 with cost  59119
+Epoch 0 <= 3 <= 7 | Requests: + 77 = 139,  22/139 must-go...  83/139 dispatched and  56/139 postponed | Routes:  7 with cost  50915
+Epoch 0 <= 4 <= 7 | Requests: + 65 = 121,  30/121 must-go...  79/121 dispatched and  42/121 postponed | Routes: 11 with cost  63758
+Epoch 0 <= 5 <= 7 | Requests: + 47 =  89,  24/ 89 must-go...  61/ 89 dispatched and  28/ 89 postponed | Routes:  9 with cost  49646
+Epoch 0 <= 6 <= 7 | Requests: + 21 =  49,  36/ 49 must-go...  43/ 49 dispatched and   6/ 49 postponed | Routes: 11 with cost  56300
+Epoch 0 <= 7 <= 7 | Requests: + 13 =  19,  19/ 19 must-go...  19/ 19 dispatched and   0/ 19 postponed | Routes: 17 with cost  56900
+Cost of solution: 412944
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  55/100 dispatched and  45/100 postponed | Routes:  3 with cost  32744
+Epoch 0 <= 1 <= 7 | Requests: +100 = 145,  21/145 must-go...  81/145 dispatched and  64/145 postponed | Routes:  7 with cost  50198
+Epoch 0 <= 2 <= 7 | Requests: + 93 = 157,  21/157 must-go... 106/157 dispatched and  51/157 postponed | Routes:  8 with cost  54521
+Epoch 0 <= 3 <= 7 | Requests: + 84 = 135,  30/135 must-go...  86/135 dispatched and  49/135 postponed | Routes:  9 with cost  63342
+Epoch 0 <= 4 <= 7 | Requests: + 62 = 111,  31/111 must-go...  73/111 dispatched and  38/111 postponed | Routes: 12 with cost  66673
+Epoch 0 <= 5 <= 7 | Requests: + 54 =  92,  27/ 92 must-go...  63/ 92 dispatched and  29/ 92 postponed | Routes: 10 with cost  56713
+Epoch 0 <= 6 <= 7 | Requests: + 28 =  57,  45/ 57 must-go...  51/ 57 dispatched and   6/ 57 postponed | Routes: 13 with cost  73062
+Epoch 0 <= 7 <= 7 | Requests: +  9 =  15,  15/ 15 must-go...  15/ 15 dispatched and   0/ 15 postponed | Routes: 12 with cost  40457
+Cost of solution: 437710
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  44/100 dispatched and  56/100 postponed | Routes:  3 with cost  26574
+Epoch 0 <= 1 <= 7 | Requests: +100 = 156,  19/156 must-go...  88/156 dispatched and  68/156 postponed | Routes:  6 with cost  48791
+Epoch 0 <= 2 <= 7 | Requests: + 98 = 166,  23/166 must-go...  97/166 dispatched and  69/166 postponed | Routes:  9 with cost  58598
+Epoch 0 <= 3 <= 7 | Requests: + 75 = 144,  32/144 must-go...  96/144 dispatched and  48/144 postponed | Routes: 10 with cost  59510
+Epoch 0 <= 4 <= 7 | Requests: + 70 = 118,  24/118 must-go...  72/118 dispatched and  46/118 postponed | Routes:  9 with cost  52442
+Epoch 0 <= 5 <= 7 | Requests: + 54 = 100,  31/100 must-go...  71/100 dispatched and  29/100 postponed | Routes:  9 with cost  51955
+Epoch 0 <= 6 <= 7 | Requests: + 30 =  59,  45/ 59 must-go...  53/ 59 dispatched and   6/ 59 postponed | Routes: 13 with cost  68200
+Epoch 0 <= 7 <= 7 | Requests: + 11 =  17,  17/ 17 must-go...  17/ 17 dispatched and   0/ 17 postponed | Routes: 14 with cost  47030
+Cost of solution: 413100
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  49/100 dispatched and  51/100 postponed | Routes:  3 with cost  29917
+Epoch 0 <= 1 <= 7 | Requests: +100 = 151,  10/151 must-go...  77/151 dispatched and  74/151 postponed | Routes:  5 with cost  40452
+Epoch 0 <= 2 <= 7 | Requests: + 92 = 166,  36/166 must-go...  99/166 dispatched and  67/166 postponed | Routes: 11 with cost  68526
+Epoch 0 <= 3 <= 7 | Requests: + 74 = 141,  21/141 must-go...  90/141 dispatched and  51/141 postponed | Routes:  8 with cost  54754
+Epoch 0 <= 4 <= 7 | Requests: + 61 = 112,  24/112 must-go...  64/112 dispatched and  48/112 postponed | Routes:  8 with cost  51257
+Epoch 0 <= 5 <= 7 | Requests: + 42 =  90,  21/ 90 must-go...  55/ 90 dispatched and  35/ 90 postponed | Routes:  8 with cost  45865
+Epoch 0 <= 6 <= 7 | Requests: + 38 =  73,  53/ 73 must-go...  63/ 73 dispatched and  10/ 73 postponed | Routes: 14 with cost  76037
+Epoch 0 <= 7 <= 7 | Requests: + 12 =  22,  22/ 22 must-go...  22/ 22 dispatched and   0/ 22 postponed | Routes: 18 with cost  63876
+Cost of solution: 430684
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  54/100 dispatched and  46/100 postponed | Routes:  3 with cost  30843
+Epoch 0 <= 1 <= 7 | Requests: +100 = 146,  14/146 must-go...  88/146 dispatched and  58/146 postponed | Routes:  5 with cost  43267
+Epoch 0 <= 2 <= 7 | Requests: + 83 = 141,  18/141 must-go...  76/141 dispatched and  65/141 postponed | Routes:  7 with cost  47765
+Epoch 0 <= 3 <= 7 | Requests: + 74 = 139,  27/139 must-go...  88/139 dispatched and  51/139 postponed | Routes:  9 with cost  55249
+Epoch 0 <= 4 <= 7 | Requests: + 57 = 108,  24/108 must-go...  67/108 dispatched and  41/108 postponed | Routes:  8 with cost  47723
+Epoch 0 <= 5 <= 7 | Requests: + 51 =  92,  25/ 92 must-go...  57/ 92 dispatched and  35/ 92 postponed | Routes:  9 with cost  52001
+Epoch 0 <= 6 <= 7 | Requests: + 36 =  71,  54/ 71 must-go...  63/ 71 dispatched and   8/ 71 postponed | Routes: 16 with cost  87206
+Epoch 0 <= 7 <= 7 | Requests: + 11 =  19,  19/ 19 must-go...  19/ 19 dispatched and   0/ 19 postponed | Routes: 18 with cost  60116
+Cost of solution: 424170
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  50/100 dispatched and  50/100 postponed | Routes:  3 with cost  28162
+Epoch 0 <= 1 <= 7 | Requests: +100 = 150,  11/150 must-go...  77/150 dispatched and  73/150 postponed | Routes:  5 with cost  43824
+Epoch 0 <= 2 <= 7 | Requests: + 90 = 163,  30/163 must-go... 103/163 dispatched and  60/163 postponed | Routes: 10 with cost  63238
+Epoch 0 <= 3 <= 7 | Requests: + 81 = 141,  20/141 must-go...  85/141 dispatched and  56/141 postponed | Routes:  7 with cost  50861
+Epoch 0 <= 4 <= 7 | Requests: + 54 = 110,  18/110 must-go...  68/110 dispatched and  42/110 postponed | Routes:  7 with cost  44834
+Epoch 0 <= 5 <= 7 | Requests: + 51 =  93,  21/ 93 must-go...  58/ 93 dispatched and  35/ 93 postponed | Routes:  8 with cost  48065
+Epoch 0 <= 6 <= 7 | Requests: + 28 =  63,  47/ 63 must-go...  55/ 63 dispatched and   8/ 63 postponed | Routes: 13 with cost  67552
+Epoch 0 <= 7 <= 7 | Requests: +  8 =  16,  16/ 16 must-go...  16/ 16 dispatched and   0/ 16 postponed | Routes: 15 with cost  48644
+Cost of solution: 395180
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  52/100 dispatched and  48/100 postponed | Routes:  3 with cost  28033
+Epoch 0 <= 1 <= 7 | Requests: +100 = 148,   8/148 must-go...  79/148 dispatched and  69/148 postponed | Routes:  5 with cost  41252
+Epoch 0 <= 2 <= 7 | Requests: + 95 = 164,  21/164 must-go...  97/164 dispatched and  67/164 postponed | Routes:  7 with cost  51247
+Epoch 0 <= 3 <= 7 | Requests: + 74 = 141,  28/141 must-go...  80/141 dispatched and  61/141 postponed | Routes:  9 with cost  55051
+Epoch 0 <= 4 <= 7 | Requests: + 64 = 125,  38/125 must-go...  84/125 dispatched and  41/125 postponed | Routes: 14 with cost  74155
+Epoch 0 <= 5 <= 7 | Requests: + 41 =  82,  23/ 82 must-go...  62/ 82 dispatched and  20/ 82 postponed | Routes: 10 with cost  53913
+Epoch 0 <= 6 <= 7 | Requests: + 28 =  48,  33/ 48 must-go...  43/ 48 dispatched and   5/ 48 postponed | Routes: 10 with cost  51544
+Epoch 0 <= 7 <= 7 | Requests: + 12 =  17,  17/ 17 must-go...  17/ 17 dispatched and   0/ 17 postponed | Routes: 15 with cost  50438
+Cost of solution: 405633
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  43/100 dispatched and  57/100 postponed | Routes:  3 with cost  27258
+Epoch 0 <= 1 <= 7 | Requests: +100 = 157,  15/157 must-go...  81/157 dispatched and  76/157 postponed | Routes:  5 with cost  43826
+Epoch 0 <= 2 <= 7 | Requests: + 91 = 167,  24/167 must-go... 100/167 dispatched and  67/167 postponed | Routes:  7 with cost  51229
+Epoch 0 <= 3 <= 7 | Requests: + 70 = 137,  28/137 must-go...  83/137 dispatched and  54/137 postponed | Routes:  9 with cost  56515
+Epoch 0 <= 4 <= 7 | Requests: + 75 = 129,  24/129 must-go...  73/129 dispatched and  56/129 postponed | Routes:  8 with cost  52720
+Epoch 0 <= 5 <= 7 | Requests: + 49 = 105,  38/105 must-go...  69/105 dispatched and  36/105 postponed | Routes: 11 with cost  61818
+Epoch 0 <= 6 <= 7 | Requests: + 43 =  79,  57/ 79 must-go...  68/ 79 dispatched and  11/ 79 postponed | Routes: 16 with cost  85437
+Epoch 0 <= 7 <= 7 | Requests: + 12 =  23,  23/ 23 must-go...  23/ 23 dispatched and   0/ 23 postponed | Routes: 15 with cost  54303
+Cost of solution: 433106
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  56/100 dispatched and  44/100 postponed | Routes:  3 with cost  32183
+Epoch 0 <= 1 <= 7 | Requests: +100 = 144,  15/144 must-go...  83/144 dispatched and  61/144 postponed | Routes:  5 with cost  41777
+Epoch 0 <= 2 <= 7 | Requests: + 95 = 156,  26/156 must-go... 100/156 dispatched and  56/156 postponed | Routes:  9 with cost  59469
+Epoch 0 <= 3 <= 7 | Requests: + 71 = 127,  28/127 must-go...  75/127 dispatched and  52/127 postponed | Routes:  9 with cost  53114
+Epoch 0 <= 4 <= 7 | Requests: + 69 = 121,  31/121 must-go...  81/121 dispatched and  40/121 postponed | Routes: 10 with cost  60189
+Epoch 0 <= 5 <= 7 | Requests: + 48 =  88,  25/ 88 must-go...  64/ 88 dispatched and  24/ 88 postponed | Routes:  9 with cost  53595
+Epoch 0 <= 6 <= 7 | Requests: + 40 =  64,  40/ 64 must-go...  51/ 64 dispatched and  13/ 64 postponed | Routes: 13 with cost  67450
+Epoch 0 <= 7 <= 7 | Requests: +  8 =  21,  21/ 21 must-go...  21/ 21 dispatched and   0/ 21 postponed | Routes: 13 with cost  48640
+Cost of solution: 416417
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  55/100 dispatched and  45/100 postponed | Routes:  3 with cost  29453
+Epoch 0 <= 1 <= 7 | Requests: +100 = 145,  15/145 must-go...  85/145 dispatched and  60/145 postponed | Routes:  6 with cost  46070
+Epoch 0 <= 2 <= 7 | Requests: + 92 = 152,  14/152 must-go...  78/152 dispatched and  74/152 postponed | Routes:  5 with cost  43034
+Epoch 0 <= 3 <= 7 | Requests: + 82 = 156,  28/156 must-go...  93/156 dispatched and  63/156 postponed | Routes: 10 with cost  60717
+Epoch 0 <= 4 <= 7 | Requests: + 63 = 126,  22/126 must-go...  70/126 dispatched and  56/126 postponed | Routes:  8 with cost  50690
+Epoch 0 <= 5 <= 7 | Requests: + 44 = 100,  31/100 must-go...  74/100 dispatched and  26/100 postponed | Routes: 11 with cost  61790
+Epoch 0 <= 6 <= 7 | Requests: + 31 =  57,  40/ 57 must-go...  47/ 57 dispatched and  10/ 57 postponed | Routes: 12 with cost  60736
+Epoch 0 <= 7 <= 7 | Requests: + 16 =  26,  26/ 26 must-go...  26/ 26 dispatched and   0/ 26 postponed | Routes: 19 with cost  67154
+Cost of solution: 419644
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  53/100 dispatched and  47/100 postponed | Routes:  3 with cost  26499
+Epoch 0 <= 1 <= 7 | Requests: +100 = 147,  12/147 must-go...  82/147 dispatched and  65/147 postponed | Routes:  5 with cost  41911
+Epoch 0 <= 2 <= 7 | Requests: + 92 = 157,  25/157 must-go... 100/157 dispatched and  57/157 postponed | Routes:  8 with cost  55915
+Epoch 0 <= 3 <= 7 | Requests: + 83 = 140,  21/140 must-go...  81/140 dispatched and  59/140 postponed | Routes:  7 with cost  48277
+Epoch 0 <= 4 <= 7 | Requests: + 61 = 120,  32/120 must-go...  73/120 dispatched and  47/120 postponed | Routes: 13 with cost  66599
+Epoch 0 <= 5 <= 7 | Requests: + 48 =  95,  32/ 95 must-go...  74/ 95 dispatched and  21/ 95 postponed | Routes: 11 with cost  62200
+Epoch 0 <= 6 <= 7 | Requests: + 37 =  58,  41/ 58 must-go...  50/ 58 dispatched and   8/ 58 postponed | Routes: 12 with cost  65609
+Epoch 0 <= 7 <= 7 | Requests: + 12 =  20,  20/ 20 must-go...  20/ 20 dispatched and   0/ 20 postponed | Routes: 13 with cost  46955
+Cost of solution: 413965
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  53/100 dispatched and  47/100 postponed | Routes:  3 with cost  28670
+Epoch 0 <= 1 <= 7 | Requests: +100 = 147,  17/147 must-go...  73/147 dispatched and  74/147 postponed | Routes:  6 with cost  44807
+Epoch 0 <= 2 <= 7 | Requests: + 88 = 162,  23/162 must-go...  95/162 dispatched and  67/162 postponed | Routes:  9 with cost  55694
+Epoch 0 <= 3 <= 7 | Requests: + 80 = 147,  25/147 must-go...  85/147 dispatched and  62/147 postponed | Routes:  9 with cost  56004
+Epoch 0 <= 4 <= 7 | Requests: + 62 = 124,  38/124 must-go...  77/124 dispatched and  47/124 postponed | Routes: 11 with cost  67135
+Epoch 0 <= 5 <= 7 | Requests: + 49 =  96,  35/ 96 must-go...  70/ 96 dispatched and  26/ 96 postponed | Routes: 11 with cost  61345
+Epoch 0 <= 6 <= 7 | Requests: + 42 =  68,  51/ 68 must-go...  61/ 68 dispatched and   7/ 68 postponed | Routes: 15 with cost  75666
+Epoch 0 <= 7 <= 7 | Requests: + 10 =  17,  17/ 17 must-go...  17/ 17 dispatched and   0/ 17 postponed | Routes: 15 with cost  50703
+Cost of solution: 440024
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  49/100 dispatched and  51/100 postponed | Routes:  3 with cost  26672
+Epoch 0 <= 1 <= 7 | Requests: +100 = 151,  12/151 must-go...  82/151 dispatched and  69/151 postponed | Routes:  5 with cost  40971
+Epoch 0 <= 2 <= 7 | Requests: + 90 = 159,  24/159 must-go...  86/159 dispatched and  73/159 postponed | Routes:  8 with cost  54517
+Epoch 0 <= 3 <= 7 | Requests: + 80 = 153,  26/153 must-go...  79/153 dispatched and  74/153 postponed | Routes:  9 with cost  55595
+Epoch 0 <= 4 <= 7 | Requests: + 61 = 135,  32/135 must-go...  82/135 dispatched and  53/135 postponed | Routes: 11 with cost  64476
+Epoch 0 <= 5 <= 7 | Requests: + 40 =  93,  32/ 93 must-go...  63/ 93 dispatched and  30/ 93 postponed | Routes:  9 with cost  54605
+Epoch 0 <= 6 <= 7 | Requests: + 37 =  67,  48/ 67 must-go...  52/ 67 dispatched and  15/ 67 postponed | Routes: 14 with cost  74052
+Epoch 0 <= 7 <= 7 | Requests: + 10 =  25,  25/ 25 must-go...  25/ 25 dispatched and   0/ 25 postponed | Routes: 20 with cost  64387
+Cost of solution: 435275
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  50/100 dispatched and  50/100 postponed | Routes:  3 with cost  29233
+Epoch 0 <= 1 <= 7 | Requests: +100 = 150,  15/150 must-go...  81/150 dispatched and  69/150 postponed | Routes:  5 with cost  43489
+Epoch 0 <= 2 <= 7 | Requests: + 88 = 157,  24/157 must-go...  97/157 dispatched and  60/157 postponed | Routes:  7 with cost  54037
+Epoch 0 <= 3 <= 7 | Requests: + 84 = 144,  32/144 must-go...  92/144 dispatched and  52/144 postponed | Routes: 10 with cost  61048
+Epoch 0 <= 4 <= 7 | Requests: + 68 = 120,  28/120 must-go...  77/120 dispatched and  43/120 postponed | Routes: 10 with cost  59438
+Epoch 0 <= 5 <= 7 | Requests: + 48 =  91,  31/ 91 must-go...  65/ 91 dispatched and  26/ 91 postponed | Routes: 12 with cost  64384
+Epoch 0 <= 6 <= 7 | Requests: + 24 =  50,  32/ 50 must-go...  43/ 50 dispatched and   7/ 50 postponed | Routes: 11 with cost  60352
+Epoch 0 <= 7 <= 7 | Requests: +  9 =  16,  16/ 16 must-go...  16/ 16 dispatched and   0/ 16 postponed | Routes: 13 with cost  46516
+Cost of solution: 418497
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  55/100 dispatched and  45/100 postponed | Routes:  3 with cost  28949
+Epoch 0 <= 1 <= 7 | Requests: +100 = 145,  16/145 must-go...  82/145 dispatched and  63/145 postponed | Routes:  6 with cost  44489
+Epoch 0 <= 2 <= 7 | Requests: + 92 = 155,  26/155 must-go...  92/155 dispatched and  63/155 postponed | Routes:  9 with cost  58650
+Epoch 0 <= 3 <= 7 | Requests: + 68 = 131,  25/131 must-go...  70/131 dispatched and  61/131 postponed | Routes:  8 with cost  55074
+Epoch 0 <= 4 <= 7 | Requests: + 59 = 120,  31/120 must-go...  69/120 dispatched and  51/120 postponed | Routes: 11 with cost  59216
+Epoch 0 <= 5 <= 7 | Requests: + 49 = 100,  30/100 must-go...  67/100 dispatched and  33/100 postponed | Routes: 13 with cost  62487
+Epoch 0 <= 6 <= 7 | Requests: + 21 =  54,  41/ 54 must-go...  46/ 54 dispatched and   8/ 54 postponed | Routes: 12 with cost  63279
+Epoch 0 <= 7 <= 7 | Requests: +  8 =  16,  16/ 16 must-go...  16/ 16 dispatched and   0/ 16 postponed | Routes: 13 with cost  44627
+Cost of solution: 416771
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  47/100 dispatched and  53/100 postponed | Routes:  3 with cost  26443
+Epoch 0 <= 1 <= 7 | Requests: +100 = 153,  12/153 must-go...  87/153 dispatched and  66/153 postponed | Routes:  5 with cost  42879
+Epoch 0 <= 2 <= 7 | Requests: + 92 = 158,  27/158 must-go... 109/158 dispatched and  49/158 postponed | Routes:  8 with cost  56993
+Epoch 0 <= 3 <= 7 | Requests: + 70 = 119,  20/119 must-go...  71/119 dispatched and  48/119 postponed | Routes:  7 with cost  44962
+Epoch 0 <= 4 <= 7 | Requests: + 63 = 111,  23/111 must-go...  61/111 dispatched and  50/111 postponed | Routes:  8 with cost  52038
+Epoch 0 <= 5 <= 7 | Requests: + 44 =  94,  31/ 94 must-go...  63/ 94 dispatched and  31/ 94 postponed | Routes: 10 with cost  60489
+Epoch 0 <= 6 <= 7 | Requests: + 37 =  68,  38/ 68 must-go...  53/ 68 dispatched and  15/ 68 postponed | Routes: 13 with cost  65706
+Epoch 0 <= 7 <= 7 | Requests: + 12 =  27,  27/ 27 must-go...  27/ 27 dispatched and   0/ 27 postponed | Routes: 21 with cost  72962
+Cost of solution: 422472
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  56/100 dispatched and  44/100 postponed | Routes:  3 with cost  28018
+Epoch 0 <= 1 <= 7 | Requests: +100 = 144,  12/144 must-go...  84/144 dispatched and  60/144 postponed | Routes:  5 with cost  44163
+Epoch 0 <= 2 <= 7 | Requests: + 91 = 151,  23/151 must-go... 102/151 dispatched and  49/151 postponed | Routes:  8 with cost  57007
+Epoch 0 <= 3 <= 7 | Requests: + 74 = 123,  21/123 must-go...  68/123 dispatched and  55/123 postponed | Routes:  8 with cost  50913
+Epoch 0 <= 4 <= 7 | Requests: + 70 = 125,  28/125 must-go...  73/125 dispatched and  52/125 postponed | Routes:  9 with cost  54496
+Epoch 0 <= 5 <= 7 | Requests: + 48 = 100,  24/100 must-go...  66/100 dispatched and  34/100 postponed | Routes:  9 with cost  51884
+Epoch 0 <= 6 <= 7 | Requests: + 35 =  69,  50/ 69 must-go...  59/ 69 dispatched and  10/ 69 postponed | Routes: 14 with cost  73159
+Epoch 0 <= 7 <= 7 | Requests: + 10 =  20,  20/ 20 must-go...  20/ 20 dispatched and   0/ 20 postponed | Routes: 17 with cost  58232
+Cost of solution: 417872
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  53/100 dispatched and  47/100 postponed | Routes:  3 with cost  28955
+Epoch 0 <= 1 <= 7 | Requests: +100 = 147,  14/147 must-go...  87/147 dispatched and  60/147 postponed | Routes:  5 with cost  43249
+Epoch 0 <= 2 <= 7 | Requests: + 86 = 146,  17/146 must-go...  72/146 dispatched and  74/146 postponed | Routes:  7 with cost  46803
+Epoch 0 <= 3 <= 7 | Requests: + 80 = 154,  32/154 must-go...  91/154 dispatched and  63/154 postponed | Routes: 10 with cost  61622
+Epoch 0 <= 4 <= 7 | Requests: + 56 = 119,  28/119 must-go...  80/119 dispatched and  39/119 postponed | Routes: 13 with cost  69309
+Epoch 0 <= 5 <= 7 | Requests: + 49 =  88,  20/ 88 must-go...  50/ 88 dispatched and  38/ 88 postponed | Routes:  8 with cost  46981
+Epoch 0 <= 6 <= 7 | Requests: + 30 =  68,  48/ 68 must-go...  60/ 68 dispatched and   8/ 68 postponed | Routes: 13 with cost  67663
+Epoch 0 <= 7 <= 7 | Requests: +  7 =  15,  15/ 15 must-go...  15/ 15 dispatched and   0/ 15 postponed | Routes: 10 with cost  36495
+Cost of solution: 401077
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  49/100 dispatched and  51/100 postponed | Routes:  3 with cost  29541
+Epoch 0 <= 1 <= 7 | Requests: +100 = 151,  16/151 must-go...  86/151 dispatched and  65/151 postponed | Routes:  6 with cost  47910
+Epoch 0 <= 2 <= 7 | Requests: + 85 = 150,  30/150 must-go...  84/150 dispatched and  66/150 postponed | Routes: 11 with cost  61868
+Epoch 0 <= 3 <= 7 | Requests: + 71 = 137,  26/137 must-go...  83/137 dispatched and  54/137 postponed | Routes:  8 with cost  51932
+Epoch 0 <= 4 <= 7 | Requests: + 58 = 112,  25/112 must-go...  74/112 dispatched and  38/112 postponed | Routes: 10 with cost  56701
+Epoch 0 <= 5 <= 7 | Requests: + 42 =  80,  24/ 80 must-go...  51/ 80 dispatched and  29/ 80 postponed | Routes:  9 with cost  49702
+Epoch 0 <= 6 <= 7 | Requests: + 37 =  66,  41/ 66 must-go...  53/ 66 dispatched and  13/ 66 postponed | Routes: 14 with cost  75400
+Epoch 0 <= 7 <= 7 | Requests: + 11 =  24,  24/ 24 must-go...  24/ 24 dispatched and   0/ 24 postponed | Routes: 19 with cost  65736
+Cost of solution: 438790
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  47/100 dispatched and  53/100 postponed | Routes:  3 with cost  28101
+Epoch 0 <= 1 <= 7 | Requests: +100 = 153,  12/153 must-go...  95/153 dispatched and  58/153 postponed | Routes:  6 with cost  48229
+Epoch 0 <= 2 <= 7 | Requests: + 95 = 153,  28/153 must-go...  83/153 dispatched and  70/153 postponed | Routes:  9 with cost  55043
+Epoch 0 <= 3 <= 7 | Requests: + 76 = 146,  37/146 must-go...  86/146 dispatched and  60/146 postponed | Routes: 11 with cost  66925
+Epoch 0 <= 4 <= 7 | Requests: + 64 = 124,  34/124 must-go...  76/124 dispatched and  48/124 postponed | Routes: 10 with cost  58559
+Epoch 0 <= 5 <= 7 | Requests: + 44 =  92,  27/ 92 must-go...  63/ 92 dispatched and  29/ 92 postponed | Routes:  8 with cost  48752
+Epoch 0 <= 6 <= 7 | Requests: + 43 =  72,  49/ 72 must-go...  57/ 72 dispatched and  15/ 72 postponed | Routes: 14 with cost  73448
+Epoch 0 <= 7 <= 7 | Requests: + 14 =  29,  29/ 29 must-go...  29/ 29 dispatched and   0/ 29 postponed | Routes: 22 with cost  78427
+Cost of solution: 457484
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  49/100 dispatched and  51/100 postponed | Routes:  3 with cost  30296
+Epoch 0 <= 1 <= 7 | Requests: +100 = 151,  21/151 must-go...  89/151 dispatched and  62/151 postponed | Routes:  7 with cost  51299
+Epoch 0 <= 2 <= 7 | Requests: + 90 = 152,  20/152 must-go...  91/152 dispatched and  61/152 postponed | Routes:  7 with cost  49991
+Epoch 0 <= 3 <= 7 | Requests: + 77 = 138,  29/138 must-go...  83/138 dispatched and  55/138 postponed | Routes:  8 with cost  54427
+Epoch 0 <= 4 <= 7 | Requests: + 56 = 111,  22/111 must-go...  65/111 dispatched and  46/111 postponed | Routes:  8 with cost  44789
+Epoch 0 <= 5 <= 7 | Requests: + 50 =  96,  28/ 96 must-go...  54/ 96 dispatched and  42/ 96 postponed | Routes:  9 with cost  51078
+Epoch 0 <= 6 <= 7 | Requests: + 36 =  78,  55/ 78 must-go...  70/ 78 dispatched and   8/ 78 postponed | Routes: 16 with cost  82773
+Epoch 0 <= 7 <= 7 | Requests: +  5 =  13,  13/ 13 must-go...  13/ 13 dispatched and   0/ 13 postponed | Routes: 11 with cost  36547
+Cost of solution: 401200
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  51/100 dispatched and  49/100 postponed | Routes:  3 with cost  26495
+Epoch 0 <= 1 <= 7 | Requests: +100 = 149,  13/149 must-go...  86/149 dispatched and  63/149 postponed | Routes:  5 with cost  43721
+Epoch 0 <= 2 <= 7 | Requests: + 91 = 154,  24/154 must-go...  85/154 dispatched and  69/154 postponed | Routes:  7 with cost  45915
+Epoch 0 <= 3 <= 7 | Requests: + 75 = 144,  26/144 must-go...  80/144 dispatched and  64/144 postponed | Routes:  9 with cost  56607
+Epoch 0 <= 4 <= 7 | Requests: + 70 = 134,  33/134 must-go...  85/134 dispatched and  49/134 postponed | Routes: 11 with cost  63710
+Epoch 0 <= 5 <= 7 | Requests: + 43 =  92,  26/ 92 must-go...  57/ 92 dispatched and  35/ 92 postponed | Routes:  8 with cost  46859
+Epoch 0 <= 6 <= 7 | Requests: + 31 =  66,  47/ 66 must-go...  56/ 66 dispatched and  10/ 66 postponed | Routes: 14 with cost  71445
+Epoch 0 <= 7 <= 7 | Requests: +  7 =  17,  17/ 17 must-go...  17/ 17 dispatched and   0/ 17 postponed | Routes: 11 with cost  40946
+Cost of solution: 395698
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  48/100 dispatched and  52/100 postponed | Routes:  3 with cost  27979
+Epoch 0 <= 1 <= 7 | Requests: +100 = 152,  17/152 must-go...  80/152 dispatched and  72/152 postponed | Routes:  6 with cost  45377
+Epoch 0 <= 2 <= 7 | Requests: + 90 = 162,  22/162 must-go...  96/162 dispatched and  66/162 postponed | Routes:  8 with cost  54804
+Epoch 0 <= 3 <= 7 | Requests: + 75 = 141,  23/141 must-go...  88/141 dispatched and  53/141 postponed | Routes:  8 with cost  52780
+Epoch 0 <= 4 <= 7 | Requests: + 62 = 115,  31/115 must-go...  75/115 dispatched and  40/115 postponed | Routes: 12 with cost  62593
+Epoch 0 <= 5 <= 7 | Requests: + 51 =  91,  34/ 91 must-go...  64/ 91 dispatched and  27/ 91 postponed | Routes: 12 with cost  63860
+Epoch 0 <= 6 <= 7 | Requests: + 31 =  58,  36/ 58 must-go...  43/ 58 dispatched and  15/ 58 postponed | Routes: 10 with cost  53471
+Epoch 0 <= 7 <= 7 | Requests: + 15 =  30,  30/ 30 must-go...  30/ 30 dispatched and   0/ 30 postponed | Routes: 26 with cost  87740
+Cost of solution: 448604
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  50/100 dispatched and  50/100 postponed | Routes:  3 with cost  29492
+Epoch 0 <= 1 <= 7 | Requests: +100 = 150,  18/150 must-go...  79/150 dispatched and  71/150 postponed | Routes:  6 with cost  49494
+Epoch 0 <= 2 <= 7 | Requests: + 88 = 159,  32/159 must-go...  89/159 dispatched and  70/159 postponed | Routes:  9 with cost  60914
+Epoch 0 <= 3 <= 7 | Requests: + 75 = 145,  38/145 must-go...  89/145 dispatched and  56/145 postponed | Routes: 13 with cost  71507
+Epoch 0 <= 4 <= 7 | Requests: + 64 = 120,  37/120 must-go...  80/120 dispatched and  40/120 postponed | Routes: 13 with cost  71354
+Epoch 0 <= 5 <= 7 | Requests: + 46 =  86,  32/ 86 must-go...  53/ 86 dispatched and  33/ 86 postponed | Routes: 13 with cost  63045
+Epoch 0 <= 6 <= 7 | Requests: + 30 =  63,  41/ 63 must-go...  50/ 63 dispatched and  13/ 63 postponed | Routes: 12 with cost  63234
+Epoch 0 <= 7 <= 7 | Requests: + 10 =  23,  23/ 23 must-go...  23/ 23 dispatched and   0/ 23 postponed | Routes: 20 with cost  66429
+Cost of solution: 475469
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  54/100 dispatched and  46/100 postponed | Routes:  3 with cost  30932
+Epoch 0 <= 1 <= 7 | Requests: +100 = 146,  12/146 must-go...  78/146 dispatched and  68/146 postponed | Routes:  5 with cost  42221
+Epoch 0 <= 2 <= 7 | Requests: + 95 = 163,  24/163 must-go... 100/163 dispatched and  63/163 postponed | Routes:  8 with cost  57905
+Epoch 0 <= 3 <= 7 | Requests: + 77 = 140,  30/140 must-go...  95/140 dispatched and  45/140 postponed | Routes: 10 with cost  57106
+Epoch 0 <= 4 <= 7 | Requests: + 56 = 101,  26/101 must-go...  57/101 dispatched and  44/101 postponed | Routes:  9 with cost  53952
+Epoch 0 <= 5 <= 7 | Requests: + 51 =  95,  33/ 95 must-go...  73/ 95 dispatched and  22/ 95 postponed | Routes: 11 with cost  64963
+Epoch 0 <= 6 <= 7 | Requests: + 31 =  53,  37/ 53 must-go...  45/ 53 dispatched and   8/ 53 postponed | Routes: 10 with cost  52645
+Epoch 0 <= 7 <= 7 | Requests: +  7 =  15,  15/ 15 must-go...  15/ 15 dispatched and   0/ 15 postponed | Routes: 13 with cost  42885
+Cost of solution: 402609
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  52/100 dispatched and  48/100 postponed | Routes:  3 with cost  30438
+Epoch 0 <= 1 <= 7 | Requests: +100 = 148,  13/148 must-go...  77/148 dispatched and  71/148 postponed | Routes:  5 with cost  42602
+Epoch 0 <= 2 <= 7 | Requests: + 88 = 159,  24/159 must-go...  87/159 dispatched and  72/159 postponed | Routes:  8 with cost  56747
+Epoch 0 <= 3 <= 7 | Requests: + 72 = 144,  22/144 must-go...  83/144 dispatched and  61/144 postponed | Routes:  9 with cost  55434
+Epoch 0 <= 4 <= 7 | Requests: + 70 = 131,  28/131 must-go...  76/131 dispatched and  55/131 postponed | Routes:  9 with cost  55796
+Epoch 0 <= 5 <= 7 | Requests: + 47 = 102,  40/102 must-go...  66/102 dispatched and  36/102 postponed | Routes: 11 with cost  60280
+Epoch 0 <= 6 <= 7 | Requests: + 42 =  78,  52/ 78 must-go...  65/ 78 dispatched and  13/ 78 postponed | Routes: 15 with cost  79427
+Epoch 0 <= 7 <= 7 | Requests: + 18 =  31,  31/ 31 must-go...  31/ 31 dispatched and   0/ 31 postponed | Routes: 24 with cost  82289
+Cost of solution: 463013
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  44/100 dispatched and  56/100 postponed | Routes:  3 with cost  24394
+Epoch 0 <= 1 <= 7 | Requests: +100 = 156,  11/156 must-go...  94/156 dispatched and  62/156 postponed | Routes:  6 with cost  47563
+Epoch 0 <= 2 <= 7 | Requests: + 97 = 159,  28/159 must-go...  94/159 dispatched and  65/159 postponed | Routes:  9 with cost  58106
+Epoch 0 <= 3 <= 7 | Requests: + 78 = 143,  27/143 must-go...  86/143 dispatched and  57/143 postponed | Routes:  9 with cost  53716
+Epoch 0 <= 4 <= 7 | Requests: + 48 = 105,  20/105 must-go...  54/105 dispatched and  51/105 postponed | Routes:  6 with cost  40011
+Epoch 0 <= 5 <= 7 | Requests: + 51 = 102,  33/102 must-go...  72/102 dispatched and  30/102 postponed | Routes: 11 with cost  61727
+Epoch 0 <= 6 <= 7 | Requests: + 27 =  57,  34/ 57 must-go...  52/ 57 dispatched and   5/ 57 postponed | Routes: 12 with cost  60733
+Epoch 0 <= 7 <= 7 | Requests: + 13 =  18,  18/ 18 must-go...  18/ 18 dispatched and   0/ 18 postponed | Routes: 17 with cost  55208
+Cost of solution: 401458
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  63/100 dispatched and  37/100 postponed | Routes:  4 with cost  33049
+Epoch 0 <= 1 <= 7 | Requests: +100 = 137,  11/137 must-go...  82/137 dispatched and  55/137 postponed | Routes:  4 with cost  39866
+Epoch 0 <= 2 <= 7 | Requests: + 91 = 146,  26/146 must-go...  91/146 dispatched and  55/146 postponed | Routes: 10 with cost  60074
+Epoch 0 <= 3 <= 7 | Requests: + 75 = 130,  27/130 must-go...  74/130 dispatched and  56/130 postponed | Routes:  8 with cost  50521
+Epoch 0 <= 4 <= 7 | Requests: + 68 = 124,  25/124 must-go...  79/124 dispatched and  45/124 postponed | Routes:  8 with cost  52533
+Epoch 0 <= 5 <= 7 | Requests: + 51 =  96,  27/ 96 must-go...  59/ 96 dispatched and  37/ 96 postponed | Routes:  8 with cost  50852
+Epoch 0 <= 6 <= 7 | Requests: + 28 =  65,  49/ 65 must-go...  57/ 65 dispatched and   8/ 65 postponed | Routes: 14 with cost  76834
+Epoch 0 <= 7 <= 7 | Requests: + 11 =  19,  19/ 19 must-go...  19/ 19 dispatched and   0/ 19 postponed | Routes: 15 with cost  51563
+Cost of solution: 415292
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  57/100 dispatched and  43/100 postponed | Routes:  4 with cost  31483
+Epoch 0 <= 1 <= 7 | Requests: +100 = 143,   9/143 must-go...  79/143 dispatched and  64/143 postponed | Routes:  5 with cost  41005
+Epoch 0 <= 2 <= 7 | Requests: + 93 = 157,  23/157 must-go...  88/157 dispatched and  69/157 postponed | Routes:  7 with cost  50452
+Epoch 0 <= 3 <= 7 | Requests: + 78 = 147,  28/147 must-go...  82/147 dispatched and  65/147 postponed | Routes:  8 with cost  55714
+Epoch 0 <= 4 <= 7 | Requests: + 63 = 128,  25/128 must-go...  82/128 dispatched and  46/128 postponed | Routes: 11 with cost  62141
+Epoch 0 <= 5 <= 7 | Requests: + 46 =  92,  30/ 92 must-go...  59/ 92 dispatched and  33/ 92 postponed | Routes:  9 with cost  53788
+Epoch 0 <= 6 <= 7 | Requests: + 29 =  62,  43/ 62 must-go...  53/ 62 dispatched and   9/ 62 postponed | Routes: 12 with cost  64831
+Epoch 0 <= 7 <= 7 | Requests: +  6 =  15,  15/ 15 must-go...  15/ 15 dispatched and   0/ 15 postponed | Routes: 13 with cost  44960
+Cost of solution: 404374
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  42/100 dispatched and  58/100 postponed | Routes:  3 with cost  25800
+Epoch 0 <= 1 <= 7 | Requests: +100 = 158,  16/158 must-go...  89/158 dispatched and  69/158 postponed | Routes:  6 with cost  48687
+Epoch 0 <= 2 <= 7 | Requests: + 90 = 159,  29/159 must-go...  92/159 dispatched and  67/159 postponed | Routes:  9 with cost  59391
+Epoch 0 <= 3 <= 7 | Requests: + 77 = 144,  29/144 must-go...  92/144 dispatched and  52/144 postponed | Routes:  9 with cost  60049
+Epoch 0 <= 4 <= 7 | Requests: + 63 = 115,  32/115 must-go...  71/115 dispatched and  44/115 postponed | Routes: 11 with cost  61428
+Epoch 0 <= 5 <= 7 | Requests: + 46 =  90,  25/ 90 must-go...  58/ 90 dispatched and  32/ 90 postponed | Routes:  9 with cost  53705
+Epoch 0 <= 6 <= 7 | Requests: + 34 =  66,  47/ 66 must-go...  58/ 66 dispatched and   8/ 66 postponed | Routes: 12 with cost  63604
+Epoch 0 <= 7 <= 7 | Requests: +  8 =  16,  16/ 16 must-go...  16/ 16 dispatched and   0/ 16 postponed | Routes: 14 with cost  48227
+Cost of solution: 420891
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  48/100 dispatched and  52/100 postponed | Routes:  3 with cost  30918
+Epoch 0 <= 1 <= 7 | Requests: +100 = 152,  15/152 must-go...  90/152 dispatched and  62/152 postponed | Routes:  6 with cost  49680
+Epoch 0 <= 2 <= 7 | Requests: + 88 = 150,  26/150 must-go...  87/150 dispatched and  63/150 postponed | Routes:  7 with cost  49607
+Epoch 0 <= 3 <= 7 | Requests: + 86 = 149,  29/149 must-go...  91/149 dispatched and  58/149 postponed | Routes:  9 with cost  58936
+Epoch 0 <= 4 <= 7 | Requests: + 54 = 112,  28/112 must-go...  69/112 dispatched and  43/112 postponed | Routes:  9 with cost  51773
+Epoch 0 <= 5 <= 7 | Requests: + 52 =  95,  23/ 95 must-go...  61/ 95 dispatched and  34/ 95 postponed | Routes:  9 with cost  50091
+Epoch 0 <= 6 <= 7 | Requests: + 30 =  64,  44/ 64 must-go...  54/ 64 dispatched and  10/ 64 postponed | Routes: 13 with cost  69610
+Epoch 0 <= 7 <= 7 | Requests: + 11 =  21,  21/ 21 must-go...  21/ 21 dispatched and   0/ 21 postponed | Routes: 17 with cost  60238
+Cost of solution: 420853
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  47/100 dispatched and  53/100 postponed | Routes:  3 with cost  26929
+Epoch 0 <= 1 <= 7 | Requests: +100 = 153,  24/153 must-go...  85/153 dispatched and  68/153 postponed | Routes:  8 with cost  55151
+Epoch 0 <= 2 <= 7 | Requests: + 94 = 162,  21/162 must-go...  89/162 dispatched and  73/162 postponed | Routes:  8 with cost  51413
+Epoch 0 <= 3 <= 7 | Requests: + 80 = 153,  24/153 must-go...  93/153 dispatched and  60/153 postponed | Routes:  8 with cost  57008
+Epoch 0 <= 4 <= 7 | Requests: + 73 = 133,  29/133 must-go...  85/133 dispatched and  48/133 postponed | Routes: 11 with cost  65103
+Epoch 0 <= 5 <= 7 | Requests: + 46 =  94,  31/ 94 must-go...  64/ 94 dispatched and  30/ 94 postponed | Routes:  9 with cost  52282
+Epoch 0 <= 6 <= 7 | Requests: + 32 =  62,  43/ 62 must-go...  51/ 62 dispatched and  11/ 62 postponed | Routes: 12 with cost  61208
+Epoch 0 <= 7 <= 7 | Requests: + 12 =  23,  23/ 23 must-go...  23/ 23 dispatched and   0/ 23 postponed | Routes: 18 with cost  65348
+Cost of solution: 434442
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  53/100 dispatched and  47/100 postponed | Routes:  3 with cost  29456
+Epoch 0 <= 1 <= 7 | Requests: +100 = 147,  13/147 must-go...  75/147 dispatched and  72/147 postponed | Routes:  6 with cost  44121
+Epoch 0 <= 2 <= 7 | Requests: + 90 = 162,  26/162 must-go...  87/162 dispatched and  75/162 postponed | Routes:  8 with cost  50046
+Epoch 0 <= 3 <= 7 | Requests: + 75 = 150,  28/150 must-go...  98/150 dispatched and  52/150 postponed | Routes:  8 with cost  56640
+Epoch 0 <= 4 <= 7 | Requests: + 70 = 122,  33/122 must-go...  79/122 dispatched and  43/122 postponed | Routes: 10 with cost  60690
+Epoch 0 <= 5 <= 7 | Requests: + 54 =  97,  34/ 97 must-go...  58/ 97 dispatched and  39/ 97 postponed | Routes: 10 with cost  58292
+Epoch 0 <= 6 <= 7 | Requests: + 40 =  79,  54/ 79 must-go...  64/ 79 dispatched and  15/ 79 postponed | Routes: 16 with cost  85708
+Epoch 0 <= 7 <= 7 | Requests: + 11 =  26,  26/ 26 must-go...  26/ 26 dispatched and   0/ 26 postponed | Routes: 22 with cost  76957
+Cost of solution: 461910
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  47/100 dispatched and  53/100 postponed | Routes:  3 with cost  28371
+Epoch 0 <= 1 <= 7 | Requests: +100 = 153,  15/153 must-go...  79/153 dispatched and  74/153 postponed | Routes:  5 with cost  42237
+Epoch 0 <= 2 <= 7 | Requests: + 88 = 162,  28/162 must-go... 105/162 dispatched and  57/162 postponed | Routes:  9 with cost  58554
+Epoch 0 <= 3 <= 7 | Requests: + 80 = 137,  25/137 must-go...  80/137 dispatched and  57/137 postponed | Routes:  8 with cost  54428
+Epoch 0 <= 4 <= 7 | Requests: + 57 = 114,  29/114 must-go...  70/114 dispatched and  44/114 postponed | Routes: 10 with cost  57933
+Epoch 0 <= 5 <= 7 | Requests: + 47 =  91,  35/ 91 must-go...  62/ 91 dispatched and  29/ 91 postponed | Routes: 12 with cost  64845
+Epoch 0 <= 6 <= 7 | Requests: + 40 =  69,  50/ 69 must-go...  58/ 69 dispatched and  11/ 69 postponed | Routes: 14 with cost  74724
+Epoch 0 <= 7 <= 7 | Requests: +  7 =  18,  18/ 18 must-go...  18/ 18 dispatched and   0/ 18 postponed | Routes: 14 with cost  47739
+Cost of solution: 428831
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  45/100 dispatched and  55/100 postponed | Routes:  3 with cost  25743
+Epoch 0 <= 1 <= 7 | Requests: +100 = 155,  16/155 must-go...  93/155 dispatched and  62/155 postponed | Routes:  6 with cost  49677
+Epoch 0 <= 2 <= 7 | Requests: + 91 = 153,  17/153 must-go...  85/153 dispatched and  68/153 postponed | Routes:  6 with cost  46212
+Epoch 0 <= 3 <= 7 | Requests: + 73 = 141,  18/141 must-go...  76/141 dispatched and  65/141 postponed | Routes:  7 with cost  47600
+Epoch 0 <= 4 <= 7 | Requests: + 60 = 125,  32/125 must-go...  81/125 dispatched and  44/125 postponed | Routes: 11 with cost  62781
+Epoch 0 <= 5 <= 7 | Requests: + 40 =  84,  29/ 84 must-go...  56/ 84 dispatched and  28/ 84 postponed | Routes:  9 with cost  51940
+Epoch 0 <= 6 <= 7 | Requests: + 33 =  61,  42/ 61 must-go...  49/ 61 dispatched and  12/ 61 postponed | Routes: 12 with cost  62381
+Epoch 0 <= 7 <= 7 | Requests: +  8 =  20,  20/ 20 must-go...  20/ 20 dispatched and   0/ 20 postponed | Routes: 14 with cost  50566
+Cost of solution: 396900
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  54/100 dispatched and  46/100 postponed | Routes:  3 with cost  30400
+Epoch 0 <= 1 <= 7 | Requests: +100 = 146,  15/146 must-go...  76/146 dispatched and  70/146 postponed | Routes:  5 with cost  39988
+Epoch 0 <= 2 <= 7 | Requests: + 90 = 160,  25/160 must-go...  93/160 dispatched and  67/160 postponed | Routes:  8 with cost  57129
+Epoch 0 <= 3 <= 7 | Requests: + 79 = 146,  34/146 must-go...  84/146 dispatched and  62/146 postponed | Routes: 10 with cost  62190
+Epoch 0 <= 4 <= 7 | Requests: + 70 = 132,  32/132 must-go...  82/132 dispatched and  50/132 postponed | Routes: 10 with cost  59751
+Epoch 0 <= 5 <= 7 | Requests: + 54 = 104,  30/104 must-go...  61/104 dispatched and  43/104 postponed | Routes:  9 with cost  52463
+Epoch 0 <= 6 <= 7 | Requests: + 30 =  73,  43/ 73 must-go...  60/ 73 dispatched and  13/ 73 postponed | Routes: 13 with cost  66217
+Epoch 0 <= 7 <= 7 | Requests: + 15 =  28,  28/ 28 must-go...  28/ 28 dispatched and   0/ 28 postponed | Routes: 24 with cost  83225
+Cost of solution: 451363
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  46/100 dispatched and  54/100 postponed | Routes:  3 with cost  28021
+Epoch 0 <= 1 <= 7 | Requests: +100 = 154,  18/154 must-go...  88/154 dispatched and  66/154 postponed | Routes:  6 with cost  47403
+Epoch 0 <= 2 <= 7 | Requests: + 91 = 157,  32/157 must-go...  91/157 dispatched and  66/157 postponed | Routes:  9 with cost  59041
+Epoch 0 <= 3 <= 7 | Requests: + 69 = 135,  24/135 must-go...  81/135 dispatched and  54/135 postponed | Routes:  8 with cost  53628
+Epoch 0 <= 4 <= 7 | Requests: + 60 = 114,  22/114 must-go...  63/114 dispatched and  51/114 postponed | Routes:  8 with cost  46814
+Epoch 0 <= 5 <= 7 | Requests: + 51 = 102,  32/102 must-go...  67/102 dispatched and  35/102 postponed | Routes: 10 with cost  57473
+Epoch 0 <= 6 <= 7 | Requests: + 31 =  66,  32/ 66 must-go...  53/ 66 dispatched and  13/ 66 postponed | Routes: 12 with cost  62165
+Epoch 0 <= 7 <= 7 | Requests: + 17 =  30,  30/ 30 must-go...  30/ 30 dispatched and   0/ 30 postponed | Routes: 26 with cost  88527
+Cost of solution: 443072
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  51/100 dispatched and  49/100 postponed | Routes:  3 with cost  29763
+Epoch 0 <= 1 <= 7 | Requests: +100 = 149,  12/149 must-go...  79/149 dispatched and  70/149 postponed | Routes:  5 with cost  40363
+Epoch 0 <= 2 <= 7 | Requests: + 98 = 168,  33/168 must-go...  87/168 dispatched and  81/168 postponed | Routes: 12 with cost  62836
+Epoch 0 <= 3 <= 7 | Requests: + 73 = 154,  24/154 must-go...  82/154 dispatched and  72/154 postponed | Routes:  7 with cost  49160
+Epoch 0 <= 4 <= 7 | Requests: + 61 = 133,  33/133 must-go...  81/133 dispatched and  52/133 postponed | Routes:  9 with cost  54434
+Epoch 0 <= 5 <= 7 | Requests: + 46 =  98,  32/ 98 must-go...  70/ 98 dispatched and  28/ 98 postponed | Routes: 11 with cost  61228
+Epoch 0 <= 6 <= 7 | Requests: + 35 =  63,  45/ 63 must-go...  57/ 63 dispatched and   6/ 63 postponed | Routes: 14 with cost  72691
+Epoch 0 <= 7 <= 7 | Requests: +  8 =  14,  14/ 14 must-go...  14/ 14 dispatched and   0/ 14 postponed | Routes:  9 with cost  31659
+Cost of solution: 402134
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  47/100 dispatched and  53/100 postponed | Routes:  3 with cost  26081
+Epoch 0 <= 1 <= 7 | Requests: +100 = 153,  13/153 must-go...  91/153 dispatched and  62/153 postponed | Routes:  5 with cost  44795
+Epoch 0 <= 2 <= 7 | Requests: + 93 = 155,  34/155 must-go...  91/155 dispatched and  64/155 postponed | Routes: 10 with cost  61446
+Epoch 0 <= 3 <= 7 | Requests: + 68 = 132,  28/132 must-go...  86/132 dispatched and  46/132 postponed | Routes:  8 with cost  53533
+Epoch 0 <= 4 <= 7 | Requests: + 62 = 108,  27/108 must-go...  59/108 dispatched and  49/108 postponed | Routes:  9 with cost  53488
+Epoch 0 <= 5 <= 7 | Requests: + 46 =  95,  23/ 95 must-go...  65/ 95 dispatched and  30/ 95 postponed | Routes:  8 with cost  48359
+Epoch 0 <= 6 <= 7 | Requests: + 27 =  57,  40/ 57 must-go...  50/ 57 dispatched and   7/ 57 postponed | Routes: 11 with cost  58178
+Epoch 0 <= 7 <= 7 | Requests: +  7 =  14,  14/ 14 must-go...  14/ 14 dispatched and   0/ 14 postponed | Routes: 14 with cost  46275
+Cost of solution: 392155
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  48/100 dispatched and  52/100 postponed | Routes:  3 with cost  26089
+Epoch 0 <= 1 <= 7 | Requests: +100 = 152,  18/152 must-go...  85/152 dispatched and  67/152 postponed | Routes:  7 with cost  47801
+Epoch 0 <= 2 <= 7 | Requests: + 91 = 158,  22/158 must-go...  89/158 dispatched and  69/158 postponed | Routes:  7 with cost  47860
+Epoch 0 <= 3 <= 7 | Requests: + 79 = 148,  26/148 must-go...  82/148 dispatched and  66/148 postponed | Routes:  9 with cost  54235
+Epoch 0 <= 4 <= 7 | Requests: + 63 = 129,  31/129 must-go...  69/129 dispatched and  60/129 postponed | Routes: 14 with cost  69691
+Epoch 0 <= 5 <= 7 | Requests: + 47 = 107,  30/107 must-go...  71/107 dispatched and  36/107 postponed | Routes: 10 with cost  55880
+Epoch 0 <= 6 <= 7 | Requests: + 36 =  72,  55/ 72 must-go...  61/ 72 dispatched and  11/ 72 postponed | Routes: 15 with cost  78599
+Epoch 0 <= 7 <= 7 | Requests: +  8 =  19,  19/ 19 must-go...  19/ 19 dispatched and   0/ 19 postponed | Routes: 12 with cost  42029
+Cost of solution: 422184
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  43/100 dispatched and  57/100 postponed | Routes:  3 with cost  26665
+Epoch 0 <= 1 <= 7 | Requests: +100 = 157,  10/157 must-go...  76/157 dispatched and  81/157 postponed | Routes:  5 with cost  40885
+Epoch 0 <= 2 <= 7 | Requests: + 86 = 167,  20/167 must-go...  96/167 dispatched and  71/167 postponed | Routes:  7 with cost  51780
+Epoch 0 <= 3 <= 7 | Requests: + 75 = 146,  30/146 must-go... 100/146 dispatched and  46/146 postponed | Routes:  9 with cost  63952
+Epoch 0 <= 4 <= 7 | Requests: + 65 = 111,  16/111 must-go...  62/111 dispatched and  49/111 postponed | Routes:  6 with cost  41734
+Epoch 0 <= 5 <= 7 | Requests: + 43 =  92,  26/ 92 must-go...  64/ 92 dispatched and  28/ 92 postponed | Routes: 11 with cost  59615
+Epoch 0 <= 6 <= 7 | Requests: + 38 =  66,  42/ 66 must-go...  55/ 66 dispatched and  11/ 66 postponed | Routes: 13 with cost  67465
+Epoch 0 <= 7 <= 7 | Requests: +  7 =  18,  18/ 18 must-go...  18/ 18 dispatched and   0/ 18 postponed | Routes: 16 with cost  56811
+Cost of solution: 408907
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  52/100 dispatched and  48/100 postponed | Routes:  3 with cost  30645
+Epoch 0 <= 1 <= 7 | Requests: +100 = 148,   7/148 must-go...  75/148 dispatched and  73/148 postponed | Routes:  5 with cost  40112
+Epoch 0 <= 2 <= 7 | Requests: + 92 = 165,  22/165 must-go...  93/165 dispatched and  72/165 postponed | Routes:  8 with cost  52864
+Epoch 0 <= 3 <= 7 | Requests: + 78 = 150,  20/150 must-go...  82/150 dispatched and  68/150 postponed | Routes:  7 with cost  48687
+Epoch 0 <= 4 <= 7 | Requests: + 58 = 126,  28/126 must-go...  84/126 dispatched and  42/126 postponed | Routes: 10 with cost  60993
+Epoch 0 <= 5 <= 7 | Requests: + 54 =  96,  34/ 96 must-go...  67/ 96 dispatched and  29/ 96 postponed | Routes: 14 with cost  72988
+Epoch 0 <= 6 <= 7 | Requests: + 34 =  63,  36/ 63 must-go...  48/ 63 dispatched and  15/ 63 postponed | Routes: 11 with cost  58519
+Epoch 0 <= 7 <= 7 | Requests: + 10 =  25,  25/ 25 must-go...  25/ 25 dispatched and   0/ 25 postponed | Routes: 19 with cost  65465
+Cost of solution: 430273
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  53/100 dispatched and  47/100 postponed | Routes:  3 with cost  30925
+Epoch 0 <= 1 <= 7 | Requests: +100 = 147,  10/147 must-go...  75/147 dispatched and  72/147 postponed | Routes:  5 with cost  40205
+Epoch 0 <= 2 <= 7 | Requests: + 95 = 167,  26/167 must-go...  97/167 dispatched and  70/167 postponed | Routes:  9 with cost  55633
+Epoch 0 <= 3 <= 7 | Requests: + 76 = 146,  30/146 must-go...  86/146 dispatched and  60/146 postponed | Routes:  8 with cost  53641
+Epoch 0 <= 4 <= 7 | Requests: + 64 = 124,  42/124 must-go...  83/124 dispatched and  41/124 postponed | Routes: 18 with cost  87833
+Epoch 0 <= 5 <= 7 | Requests: + 51 =  92,  26/ 92 must-go...  57/ 92 dispatched and  35/ 92 postponed | Routes:  8 with cost  48480
+Epoch 0 <= 6 <= 7 | Requests: + 36 =  71,  55/ 71 must-go...  65/ 71 dispatched and   6/ 71 postponed | Routes: 16 with cost  83777
+Epoch 0 <= 7 <= 7 | Requests: + 13 =  19,  19/ 19 must-go...  19/ 19 dispatched and   0/ 19 postponed | Routes: 14 with cost  48617
+Cost of solution: 449111
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  50/100 dispatched and  50/100 postponed | Routes:  3 with cost  27343
+Epoch 0 <= 1 <= 7 | Requests: +100 = 150,  14/150 must-go...  77/150 dispatched and  73/150 postponed | Routes:  5 with cost  42608
+Epoch 0 <= 2 <= 7 | Requests: + 94 = 167,  24/167 must-go... 101/167 dispatched and  66/167 postponed | Routes:  8 with cost  53123
+Epoch 0 <= 3 <= 7 | Requests: + 70 = 136,  30/136 must-go...  99/136 dispatched and  37/136 postponed | Routes:  9 with cost  61315
+Epoch 0 <= 4 <= 7 | Requests: + 63 = 100,  25/100 must-go...  69/100 dispatched and  31/100 postponed | Routes:  8 with cost  50152
+Epoch 0 <= 5 <= 7 | Requests: + 44 =  75,  21/ 75 must-go...  45/ 75 dispatched and  30/ 75 postponed | Routes:  7 with cost  39979
+Epoch 0 <= 6 <= 7 | Requests: + 37 =  67,  45/ 67 must-go...  55/ 67 dispatched and  12/ 67 postponed | Routes: 13 with cost  70096
+Epoch 0 <= 7 <= 7 | Requests: +  9 =  21,  21/ 21 must-go...  21/ 21 dispatched and   0/ 21 postponed | Routes: 17 with cost  58428
+Cost of solution: 403044
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  46/100 dispatched and  54/100 postponed | Routes:  3 with cost  27772
+Epoch 0 <= 1 <= 7 | Requests: +100 = 154,  22/154 must-go...  76/154 dispatched and  78/154 postponed | Routes:  7 with cost  49270
+Epoch 0 <= 2 <= 7 | Requests: + 90 = 168,  28/168 must-go...  97/168 dispatched and  71/168 postponed | Routes:  9 with cost  61961
+Epoch 0 <= 3 <= 7 | Requests: + 73 = 144,  35/144 must-go...  88/144 dispatched and  56/144 postponed | Routes: 10 with cost  61430
+Epoch 0 <= 4 <= 7 | Requests: + 58 = 114,  24/114 must-go...  68/114 dispatched and  46/114 postponed | Routes:  8 with cost  50320
+Epoch 0 <= 5 <= 7 | Requests: + 45 =  91,  30/ 91 must-go...  59/ 91 dispatched and  32/ 91 postponed | Routes:  9 with cost  53985
+Epoch 0 <= 6 <= 7 | Requests: + 40 =  72,  52/ 72 must-go...  61/ 72 dispatched and  11/ 72 postponed | Routes: 15 with cost  78361
+Epoch 0 <= 7 <= 7 | Requests: + 13 =  24,  24/ 24 must-go...  24/ 24 dispatched and   0/ 24 postponed | Routes: 20 with cost  69162
+Cost of solution: 452261
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  49/100 dispatched and  51/100 postponed | Routes:  3 with cost  30366
+Epoch 0 <= 1 <= 7 | Requests: +100 = 151,  21/151 must-go...  91/151 dispatched and  60/151 postponed | Routes:  7 with cost  52060
+Epoch 0 <= 2 <= 7 | Requests: + 90 = 150,  17/150 must-go...  87/150 dispatched and  63/150 postponed | Routes:  6 with cost  45464
+Epoch 0 <= 3 <= 7 | Requests: + 77 = 140,  27/140 must-go...  78/140 dispatched and  62/140 postponed | Routes:  9 with cost  56329
+Epoch 0 <= 4 <= 7 | Requests: + 68 = 130,  24/130 must-go...  75/130 dispatched and  55/130 postponed | Routes: 11 with cost  57218
+Epoch 0 <= 5 <= 7 | Requests: + 43 =  98,  29/ 98 must-go...  67/ 98 dispatched and  31/ 98 postponed | Routes: 11 with cost  63480
+Epoch 0 <= 6 <= 7 | Requests: + 36 =  67,  49/ 67 must-go...  58/ 67 dispatched and   9/ 67 postponed | Routes: 14 with cost  71868
+Epoch 0 <= 7 <= 7 | Requests: + 11 =  20,  20/ 20 must-go...  20/ 20 dispatched and   0/ 20 postponed | Routes: 20 with cost  66459
+Cost of solution: 443244
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  58/100 dispatched and  42/100 postponed | Routes:  3 with cost  31213
+Epoch 0 <= 1 <= 7 | Requests: +100 = 142,   7/142 must-go...  75/142 dispatched and  67/142 postponed | Routes:  4 with cost  38741
+Epoch 0 <= 2 <= 7 | Requests: + 94 = 161,  19/161 must-go...  95/161 dispatched and  66/161 postponed | Routes:  7 with cost  51023
+Epoch 0 <= 3 <= 7 | Requests: + 58 = 124,  20/124 must-go...  69/124 dispatched and  55/124 postponed | Routes:  6 with cost  45761
+Epoch 0 <= 4 <= 7 | Requests: + 61 = 116,  28/116 must-go...  68/116 dispatched and  48/116 postponed | Routes:  9 with cost  56405
+Epoch 0 <= 5 <= 7 | Requests: + 48 =  96,  32/ 96 must-go...  64/ 96 dispatched and  32/ 96 postponed | Routes: 11 with cost  57949
+Epoch 0 <= 6 <= 7 | Requests: + 40 =  72,  47/ 72 must-go...  64/ 72 dispatched and   8/ 72 postponed | Routes: 14 with cost  71516
+Epoch 0 <= 7 <= 7 | Requests: +  7 =  15,  15/ 15 must-go...  15/ 15 dispatched and   0/ 15 postponed | Routes: 12 with cost  40618
+Cost of solution: 393226
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  47/100 dispatched and  53/100 postponed | Routes:  3 with cost  26929
+Epoch 0 <= 1 <= 7 | Requests: +100 = 153,  14/153 must-go...  91/153 dispatched and  62/153 postponed | Routes:  6 with cost  46287
+Epoch 0 <= 2 <= 7 | Requests: + 92 = 154,  33/154 must-go...  90/154 dispatched and  64/154 postponed | Routes: 10 with cost  61364
+Epoch 0 <= 3 <= 7 | Requests: + 83 = 147,  24/147 must-go...  80/147 dispatched and  67/147 postponed | Routes:  9 with cost  55890
+Epoch 0 <= 4 <= 7 | Requests: + 53 = 120,  25/120 must-go...  73/120 dispatched and  47/120 postponed | Routes:  9 with cost  54397
+Epoch 0 <= 5 <= 7 | Requests: + 55 = 102,  42/102 must-go...  76/102 dispatched and  26/102 postponed | Routes: 13 with cost  68739
+Epoch 0 <= 6 <= 7 | Requests: + 34 =  60,  35/ 60 must-go...  48/ 60 dispatched and  12/ 60 postponed | Routes: 11 with cost  56008
+Epoch 0 <= 7 <= 7 | Requests: +  3 =  15,  15/ 15 must-go...  15/ 15 dispatched and   0/ 15 postponed | Routes: 11 with cost  39076
+Cost of solution: 408690
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  45/100 dispatched and  55/100 postponed | Routes:  3 with cost  26402
+Epoch 0 <= 1 <= 7 | Requests: +100 = 155,  11/155 must-go...  83/155 dispatched and  72/155 postponed | Routes:  6 with cost  46879
+Epoch 0 <= 2 <= 7 | Requests: + 87 = 159,  22/159 must-go...  99/159 dispatched and  60/159 postponed | Routes:  7 with cost  51576
+Epoch 0 <= 3 <= 7 | Requests: + 72 = 132,  27/132 must-go...  88/132 dispatched and  44/132 postponed | Routes:  8 with cost  53984
+Epoch 0 <= 4 <= 7 | Requests: + 67 = 111,  24/111 must-go...  70/111 dispatched and  41/111 postponed | Routes:  8 with cost  48357
+Epoch 0 <= 5 <= 7 | Requests: + 52 =  93,  31/ 93 must-go...  66/ 93 dispatched and  27/ 93 postponed | Routes: 10 with cost  60782
+Epoch 0 <= 6 <= 7 | Requests: + 36 =  63,  50/ 63 must-go...  56/ 63 dispatched and   7/ 63 postponed | Routes: 13 with cost  68073
+Epoch 0 <= 7 <= 7 | Requests: + 14 =  21,  21/ 21 must-go...  21/ 21 dispatched and   0/ 21 postponed | Routes: 18 with cost  62117
+Cost of solution: 418170
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  56/100 dispatched and  44/100 postponed | Routes:  3 with cost  30650
+Epoch 0 <= 1 <= 7 | Requests: +100 = 144,  14/144 must-go...  72/144 dispatched and  72/144 postponed | Routes:  6 with cost  42203
+Epoch 0 <= 2 <= 7 | Requests: + 94 = 166,  17/166 must-go...  85/166 dispatched and  81/166 postponed | Routes:  7 with cost  52094
+Epoch 0 <= 3 <= 7 | Requests: + 81 = 162,  22/162 must-go...  93/162 dispatched and  69/162 postponed | Routes:  8 with cost  54001
+Epoch 0 <= 4 <= 7 | Requests: + 56 = 125,  30/125 must-go...  88/125 dispatched and  37/125 postponed | Routes: 10 with cost  61407
+Epoch 0 <= 5 <= 7 | Requests: + 43 =  80,  22/ 80 must-go...  57/ 80 dispatched and  23/ 80 postponed | Routes:  9 with cost  53713
+Epoch 0 <= 6 <= 7 | Requests: + 33 =  56,  40/ 56 must-go...  45/ 56 dispatched and  11/ 56 postponed | Routes: 10 with cost  55270
+Epoch 0 <= 7 <= 7 | Requests: +  8 =  19,  19/ 19 must-go...  19/ 19 dispatched and   0/ 19 postponed | Routes: 12 with cost  43395
+Cost of solution: 392733
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  50/100 dispatched and  50/100 postponed | Routes:  3 with cost  27937
+Epoch 0 <= 1 <= 7 | Requests: +100 = 150,  16/150 must-go...  90/150 dispatched and  60/150 postponed | Routes:  5 with cost  44318
+Epoch 0 <= 2 <= 7 | Requests: + 98 = 158,  28/158 must-go...  91/158 dispatched and  67/158 postponed | Routes:  9 with cost  57800
+Epoch 0 <= 3 <= 7 | Requests: + 76 = 143,  27/143 must-go...  96/143 dispatched and  47/143 postponed | Routes: 10 with cost  63069
+Epoch 0 <= 4 <= 7 | Requests: + 58 = 105,  24/105 must-go...  62/105 dispatched and  43/105 postponed | Routes:  8 with cost  48595
+Epoch 0 <= 5 <= 7 | Requests: + 47 =  90,  30/ 90 must-go...  56/ 90 dispatched and  34/ 90 postponed | Routes: 10 with cost  55869
+Epoch 0 <= 6 <= 7 | Requests: + 29 =  63,  46/ 63 must-go...  54/ 63 dispatched and   9/ 63 postponed | Routes: 13 with cost  68303
+Epoch 0 <= 7 <= 7 | Requests: + 10 =  19,  19/ 19 must-go...  19/ 19 dispatched and   0/ 19 postponed | Routes: 15 with cost  50632
+Cost of solution: 416523
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  46/100 dispatched and  54/100 postponed | Routes:  3 with cost  29248
+Epoch 0 <= 1 <= 7 | Requests: +100 = 154,  11/154 must-go...  78/154 dispatched and  76/154 postponed | Routes:  5 with cost  41767
+Epoch 0 <= 2 <= 7 | Requests: + 89 = 165,  20/165 must-go...  95/165 dispatched and  70/165 postponed | Routes:  7 with cost  52825
+Epoch 0 <= 3 <= 7 | Requests: + 74 = 144,  26/144 must-go...  85/144 dispatched and  59/144 postponed | Routes:  8 with cost  55738
+Epoch 0 <= 4 <= 7 | Requests: + 67 = 126,  24/126 must-go...  78/126 dispatched and  48/126 postponed | Routes:  8 with cost  50708
+Epoch 0 <= 5 <= 7 | Requests: + 41 =  89,  31/ 89 must-go...  60/ 89 dispatched and  29/ 89 postponed | Routes:  9 with cost  52007
+Epoch 0 <= 6 <= 7 | Requests: + 33 =  62,  38/ 62 must-go...  47/ 62 dispatched and  15/ 62 postponed | Routes: 11 with cost  59349
+Epoch 0 <= 7 <= 7 | Requests: + 13 =  28,  28/ 28 must-go...  28/ 28 dispatched and   0/ 28 postponed | Routes: 20 with cost  69064
+Cost of solution: 410706
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  45/100 dispatched and  55/100 postponed | Routes:  3 with cost  27518
+Epoch 0 <= 1 <= 7 | Requests: +100 = 155,  19/155 must-go...  87/155 dispatched and  68/155 postponed | Routes:  6 with cost  48817
+Epoch 0 <= 2 <= 7 | Requests: + 89 = 157,  23/157 must-go...  98/157 dispatched and  59/157 postponed | Routes:  8 with cost  52847
+Epoch 0 <= 3 <= 7 | Requests: + 76 = 135,  25/135 must-go...  72/135 dispatched and  63/135 postponed | Routes:  7 with cost  49234
+Epoch 0 <= 4 <= 7 | Requests: + 59 = 122,  30/122 must-go...  76/122 dispatched and  46/122 postponed | Routes: 10 with cost  60933
+Epoch 0 <= 5 <= 7 | Requests: + 47 =  93,  32/ 93 must-go...  55/ 93 dispatched and  38/ 93 postponed | Routes:  9 with cost  53053
+Epoch 0 <= 6 <= 7 | Requests: + 32 =  70,  46/ 70 must-go...  60/ 70 dispatched and  10/ 70 postponed | Routes: 15 with cost  79187
+Epoch 0 <= 7 <= 7 | Requests: +  7 =  17,  17/ 17 must-go...  17/ 17 dispatched and   0/ 17 postponed | Routes: 12 with cost  42702
+Cost of solution: 414291
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  46/100 dispatched and  54/100 postponed | Routes:  3 with cost  29106
+Epoch 0 <= 1 <= 7 | Requests: +100 = 154,  11/154 must-go...  78/154 dispatched and  76/154 postponed | Routes:  5 with cost  41476
+Epoch 0 <= 2 <= 7 | Requests: + 94 = 170,  31/170 must-go...  99/170 dispatched and  71/170 postponed | Routes: 11 with cost  66443
+Epoch 0 <= 3 <= 7 | Requests: + 83 = 154,  33/154 must-go...  93/154 dispatched and  61/154 postponed | Routes:  9 with cost  60000
+Epoch 0 <= 4 <= 7 | Requests: + 59 = 120,  28/120 must-go...  80/120 dispatched and  40/120 postponed | Routes: 11 with cost  62126
+Epoch 0 <= 5 <= 7 | Requests: + 47 =  87,  23/ 87 must-go...  59/ 87 dispatched and  28/ 87 postponed | Routes: 12 with cost  55231
+Epoch 0 <= 6 <= 7 | Requests: + 25 =  53,  40/ 53 must-go...  46/ 53 dispatched and   7/ 53 postponed | Routes: 11 with cost  59996
+Epoch 0 <= 7 <= 7 | Requests: + 11 =  18,  18/ 18 must-go...  18/ 18 dispatched and   0/ 18 postponed | Routes: 14 with cost  50510
+Cost of solution: 424888
+Epoch 0 <= 0 <= 7 | Requests: +100 = 100,   0/100 must-go...  50/100 dispatched and  50/100 postponed | Routes:  3 with cost  27351
+Epoch 0 <= 1 <= 7 | Requests: +100 = 150,   6/150 must-go...  77/150 dispatched and  73/150 postponed | Routes:  4 with cost  37105
+Epoch 0 <= 2 <= 7 | Requests: + 92 = 165,  26/165 must-go...  94/165 dispatched and  71/165 postponed | Routes:  9 with cost  59019
+Epoch 0 <= 3 <= 7 | Requests: + 76 = 147,  27/147 must-go...

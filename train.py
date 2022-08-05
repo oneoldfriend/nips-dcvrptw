@@ -59,7 +59,7 @@ def eval_on_test_instances(model, model_name):
             file.close()
 
 
-def episodes_train(model, env):
+def episodes_train(model, env, args):
     pred_batch = []
     epoch_reward = []
     total_reward = 0
@@ -91,7 +91,7 @@ def episodes_train(model, env):
         assignments_results = tools.get_assignment_results(nodes_prob, epoch_instance['must_dispatch'])
         epoch_instance_dispatch = _filter_instance(epoch_instance, assignments_results)
         epoch_solution, epoch_cost = list(
-            solve_static_vrptw(epoch_instance_dispatch, time_limit=epoch_tlim))[-1]
+            solve_static_vrptw(epoch_instance_dispatch, time_limit=epoch_tlim, tmp_dir=args.tmp_dir))[-1]
         # Map solution to indices of corresponding requests
         epoch_solution = [epoch_instance_dispatch['request_idx'][route] for route in epoch_solution]
 
@@ -171,7 +171,7 @@ if __name__ == "__main__":
     else:
         # If tmp dir is manually provided, don't clean it up (for debugging)
         cleanup_tmp_dir = False
-    training_instances = os.listdir("./dataset/training/")
+    training_instances = os.listdir("./dataset/training")
     model = AttentionModel(encoder_class={"gnn": GNNEncoder}.get(args.encoder),
                            embedding_dim=args.embedding_dim,
                            n_encode_layers=args.n_encode_layers,
@@ -187,9 +187,10 @@ if __name__ == "__main__":
         for episode_no in range(args.max_episodes):
             optimizer.zero_grad()
             env = VRPEnvironment(seed=episode_no,
-                                 instance=tools.read_vrplib("./dataset/training/" + random.choice(training_instances)),
+                                 instance=tools.read_vrplib(
+                                     "./dataset/training/" + random.choice(training_instances)),
                                  epoch_tlim=args.epoch_tlim, is_static=False)
-            episodes_train(model, env)
+            episodes_train(model, env, args)
             if (episode_no + 1) % 200 == 0:
                 torch.save(model.state_dict(), "./models/" + training_config + str(episode_no))
                 eval_on_test_instances(model, training_config + str(episode_no))

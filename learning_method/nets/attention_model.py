@@ -87,7 +87,7 @@ class AttentionModel(nn.Module):
         """
 
         super(AttentionModel, self).__init__()
-        
+
         self.problem = problem
         self.embedding_dim = embedding_dim
         self.encoder_class = encoder_class
@@ -105,13 +105,13 @@ class AttentionModel(nn.Module):
         self.mask_graph = mask_graph
         self.checkpoint_encoder = checkpoint_encoder
         self.shrink_size = shrink_size
-        
+
         # Extra logging updates self variables with batch statistics (without returning them)
         self.extra_logging = extra_logging
-        
+
         self.decode_type = None
         self.temp = 1.0
-        
+
         self.allow_partial = problem.NAME == 'sdvrp'
         self.is_vrp = problem.NAME == 'cvrp' or problem.NAME == 'sdvrp'
         self.is_orienteering = problem.NAME == 'op'
@@ -130,11 +130,11 @@ class AttentionModel(nn.Module):
 
             # Special embedding projection for depot node
             self.init_embed_depot = nn.Linear(2, embedding_dim)
-            
-            if self.is_vrp and self.allow_partial:  
+
+            if self.is_vrp and self.allow_partial:
                 # Need to include the demand if split delivery allowed
                 self.project_node_step = nn.Linear(1, 3 * embedding_dim, bias=False)
-        
+
         else:  # TSP
             assert problem.NAME in ("tsp", "tspsl"), "Unsupported problem: {}".format(problem.NAME)
 
@@ -144,16 +144,16 @@ class AttentionModel(nn.Module):
             # Learned input symbols for first action
             self.W_placeholder = nn.Parameter(torch.Tensor(2 * embedding_dim))
             self.W_placeholder.data.uniform_(-1, 1)  # Placeholder should be in range of activations
-        
+
         # Input embedding layer
-        self.init_embed = nn.Linear(node_dim, embedding_dim, bias=True)        
-        
+        self.init_embed = nn.Linear(node_dim, embedding_dim, bias=True)
+
         # Encoder model
-        self.embedder = self.encoder_class(n_layers=n_encode_layers, 
+        self.embedder = self.encoder_class(n_layers=n_encode_layers,
                                            n_heads=n_heads,
-                                           hidden_dim=embedding_dim, 
-                                           aggregation=aggregation, 
-                                           norm=normalization, 
+                                           hidden_dim=embedding_dim,
+                                           aggregation=aggregation,
+                                           norm=normalization,
                                            learn_norm=learn_norm,
                                            track_norm=track_norm,
                                            gated=gated)
@@ -187,51 +187,51 @@ class AttentionModel(nn.Module):
             embeddings = checkpoint(self.embedder, self._init_embed(nodes), graph)
         else:
             embeddings = self.embedder(self._init_embed(nodes), graph)
-        
+
         if self.extra_logging:
             self.embeddings_batch = embeddings
 
         # Supervised learning
         if self.problem.NAME == 'tspsl' and supervised:
             assert targets is not None, "Pass targets during training in supervised mode"
-            
+
             # Run inner function
             _log_p, pi = self._inner(nodes, graph, embeddings, supervised=supervised, targets=targets)
-            
+
             if self.extra_logging:
                 self.log_p_batch = _log_p
                 self.log_p_sel_batch = _log_p.gather(2, pi.unsqueeze(-1)).squeeze(-1)
-            
+
             # Get predicted costs
             cost, mask = self.problem.get_costs(nodes, pi)
-            
+
             # Compute NLL loss
             logits = _log_p.permute(0, 2, 1)  # B x V x output_vocab -> B x output_vocab x V
             # Set -inf values to -1000 for handling NLL loss
-            logits[logits == -float(np.inf)] = -1000  
+            logits[logits == -float(np.inf)] = -1000
             loss = nn.NLLLoss(reduction='mean')(logits, targets)
-            
+
             if return_pi:
-                return cost, loss, pi 
+                return cost, loss, pi
             return cost, loss
-        
+
         # Reinforcement learning or inference
         else:
             # Run inner function
             _log_p, pi = self._inner(nodes, graph, embeddings)
-            
+
             if self.extra_logging:
                 self.log_p_batch = _log_p
                 self.log_p_sel_batch = _log_p.gather(2, pi.unsqueeze(-1)).squeeze(-1)
-            
+
             # Get predicted costs
             cost, mask = self.problem.get_costs(nodes, pi)
-            
+
             # Log likelihood is calculated within the model since 
             # returning it per action does not work well with DataParallel 
             # (since sequences can be of different lengths)
             ll = self._calc_log_likelihood(_log_p, pi, mask)
-            
+
             if return_pi:
                 return cost, ll, pi
             return cost, ll
@@ -280,7 +280,7 @@ class AttentionModel(nn.Module):
         return flat_parent[feas_ind], flat_action[feas_ind], flat_score[feas_ind]
 
     def _calc_log_likelihood(self, _log_p, a, mask):
-        
+
         # Get log_p corresponding to selected actions
         log_p = _log_p.gather(2, a.unsqueeze(-1)).squeeze(-1)
 
@@ -296,9 +296,9 @@ class AttentionModel(nn.Module):
     def _init_embed(self, nodes):
         if self.is_vrp or self.is_orienteering or self.is_pctsp:
             if self.is_vrp:
-                features = ('demand', )
+                features = ('demand',)
             elif self.is_orienteering:
-                features = ('prize', )
+                features = ('prize',)
             else:
                 assert self.is_pctsp
                 features = ('deterministic_prize', 'penalty')
@@ -312,13 +312,13 @@ class AttentionModel(nn.Module):
                 ),
                 1
             )
-        
+
         return self.init_embed(nodes)
 
     def _inner(self, nodes, graph, embeddings, supervised=False, targets=None):
         outputs = []
         sequences = []
-        
+
         # Create problem state for masking (tracks which nodes have been visited)
         state = self.problem.make_state(nodes, graph)
 
@@ -345,17 +345,17 @@ class AttentionModel(nn.Module):
 
             # Get log probabilities of next action
             log_p, mask = self._get_log_p(fixed, state)
-            
+
             # Select the indices of the next nodes in the sequences
             if self.problem.NAME == 'tspsl' and supervised:
                 # Teacher-forcing during training in supervised mode
                 t_idx = torch.LongTensor([i]).to(nodes.device)
                 selected = targets.index_select(dim=-1, index=t_idx).view(batch_size)
-            
+
             else:
                 selected = self._select_node(
                     log_p.exp()[:, 0, :], mask[:, 0, :])  # Squeeze out steps dimension
-            
+
             # Update problem state
             state = state.update(selected)
 
@@ -385,7 +385,7 @@ class AttentionModel(nn.Module):
             # Need to unpack tuple into arguments
             lambda input: self._inner(*input),
             # Don't need embeddings as input to get_costs
-            lambda input, pi: self.problem.get_costs(input[0], pi),  
+            lambda input, pi: self.problem.get_costs(input[0], pi),
             # Pack input with embeddings (additional input)
             (input, graph, self.embedder(self._init_embed(input), graph)),
             batch_rep, iter_rep
@@ -410,7 +410,7 @@ class AttentionModel(nn.Module):
 
         else:
             assert False, "Unknown decode type"
-        
+
         return selected
 
     def _precompute(self, embeddings, num_steps=1):
@@ -423,7 +423,7 @@ class AttentionModel(nn.Module):
             graph_embed = embeddings.mean(1)
         else:  # Default: dissable graph embedding
             graph_embed = embeddings.sum(1) * 0.0
-        
+
         # fixed context = (batch_size, 1, embed_dim) to make broadcastable with parallel timesteps
         fixed_context = self.project_fixed_context(graph_embed)[:, None, :]
 
@@ -460,10 +460,10 @@ class AttentionModel(nn.Module):
 
         # Compute keys and values for the nodes
         glimpse_K, glimpse_V, logit_K = self._get_attention_node_data(fixed, state)
-        
+
         # Compute the mask, for masking next action based on previous actions
         mask = state.get_mask()
-        
+
         graph_mask = None
         if self.mask_graph:
             # Compute the graph mask, for masking next action based on graph structure 
@@ -507,8 +507,8 @@ class AttentionModel(nn.Module):
                             embeddings,
                             1,
                             current_node.contiguous()
-                                .view(batch_size, num_steps, 1)
-                                .expand(batch_size, num_steps, embeddings.size(-1))
+                            .view(batch_size, num_steps, 1)
+                            .expand(batch_size, num_steps, embeddings.size(-1))
                         ).view(batch_size, num_steps, embeddings.size(-1)),
                         self.problem.VEHICLE_CAPACITY - state.used_capacity[:, :, None]
                     ),
@@ -521,8 +521,8 @@ class AttentionModel(nn.Module):
                         embeddings,
                         1,
                         current_node.contiguous()
-                            .view(batch_size, num_steps, 1)
-                            .expand(batch_size, num_steps, embeddings.size(-1))
+                        .view(batch_size, num_steps, 1)
+                        .expand(batch_size, num_steps, embeddings.size(-1))
                     ).view(batch_size, num_steps, embeddings.size(-1)),
                     (
                         state.get_remaining_length()[:, :, None]
@@ -533,7 +533,7 @@ class AttentionModel(nn.Module):
                 -1
             )
         else:  # TSP
-        
+
             if num_steps == 1:  # We need to special case if we have only 1 step, may be the first or not
                 if state.i.item() == 0:
                     # First and only step, ignore prev_a (this is a placeholder)
@@ -541,9 +541,10 @@ class AttentionModel(nn.Module):
                 else:
                     return embeddings.gather(
                         1,
-                        torch.cat((state.first_a, current_node), 1)[:, :, None].expand(batch_size, 2, embeddings.size(-1))
+                        torch.cat((state.first_a, current_node), 1)[:, :, None].expand(batch_size, 2,
+                                                                                       embeddings.size(-1))
                     ).view(batch_size, 1, -1)
-            
+
             # More than one step, assume always starting with first
             embeddings_per_step = embeddings.gather(
                 1,
@@ -565,7 +566,7 @@ class AttentionModel(nn.Module):
 
         # Compute the glimpse, rearrange dimensions to (n_heads, batch_size, num_steps, 1, key_size)
         glimpse_Q = query.view(batch_size, num_steps, self.n_heads, 1, key_size).permute(2, 0, 1, 3, 4)
-        
+
         # Batch matrix multiplication to compute compatibilities (n_heads, batch_size, num_steps, graph_size)
         compatibility = torch.matmul(glimpse_Q, glimpse_K.transpose(-2, -1)) / math.sqrt(glimpse_Q.size(-1))
         if self.mask_inner:
@@ -587,10 +588,10 @@ class AttentionModel(nn.Module):
         # Batch matrix multiplication to compute logits (batch_size, num_steps, graph_size)
         # logits = 'compatibility'
         logits = torch.matmul(final_Q, logit_K.transpose(-2, -1)).squeeze(-2) / math.sqrt(final_Q.size(-1))
-        
+
         # From the logits compute the probabilities by masking the graph, clipping, and masking visited
         if self.mask_logits and self.mask_graph:
-            logits[graph_mask] = -1e10 
+            logits[graph_mask] = -1e10
         if self.tanh_clipping > 0:
             logits = torch.tanh(logits) * self.tanh_clipping
         if self.mask_logits:
