@@ -440,17 +440,17 @@ def get_postpone_requests(instance, solution, next_veh_start_time):
     sorted_requests_idx = [int(x[0]) for x in sorted_std_tuple_list]
     # 1) we assume that consolidation is always good, so we always postpone certain requests at every epoch
     postponed_candidates = sorted_requests_idx[:math.ceil(0.1 * len(sorted_requests_idx))]
-    postponed_requests = postponed_candidates
-    # 2) we only postponed the requests with threshold
+    # postponed_requests = postponed_candidates
+    # 2) we apply filter rule to avoid postponing requests that are deemed as must-go requests
     # postponed_candidates = sorted_requests_idx
-    # postponed_requests = []
-    # for request in postponed_candidates:
-    #     next_arrive_time = next_veh_start_time + instance['duration_matrix'][0, request]
-    #     latest_arrive_time = instance['time_windows'][request][1]
-    #     if next_arrive_time > latest_arrive_time or value_dict[str(request)] < avg_avg_seg_dis:
-    #         continue
-    #     else:
-    #         postponed_requests.append(request)
+    postponed_requests = []
+    for request in postponed_candidates:
+        next_arrive_time = next_veh_start_time + instance['duration_matrix'][0, request]
+        latest_arrive_time = instance['time_windows'][request][1]
+        if next_arrive_time > latest_arrive_time:  # or value_dict[str(request)] < avg_avg_seg_dis:
+            continue
+        else:
+            postponed_requests.append(request)
     return postponed_requests
 
 

@@ -177,8 +177,7 @@ def run_improved_heuristics(args, env):
         # accept all requests and get complete solution first
         epoch_instance_dispatch = STRATEGIES['greedy'](epoch_instance, rng)
         complete_solution_list = list(
-            solve_static_vrptw(epoch_instance_dispatch, time_limit=math.ceil(epoch_tlim / 2 - 2), tmp_dir=args.tmp_dir,
-                               seed=args.solver_seed))
+            solve_static_vrptw(epoch_instance_dispatch, time_limit=math.ceil(epoch_tlim / 2 - 2)))
 
         assert len(complete_solution_list) > 0, f"No solution found during epoch {observation['current_epoch']}"
         # get postponed requests
@@ -193,8 +192,7 @@ def run_improved_heuristics(args, env):
         mask = tools.get_instance_mask(epoch_instance, postponed_requests)
         epoch_instance_dispatch = _filter_instance(epoch_instance, mask)
         epoch_solution, epoch_cost = list(
-            solve_static_vrptw(epoch_instance_dispatch, time_limit=math.ceil(epoch_tlim * 1 / 2), tmp_dir=args.tmp_dir,
-                               seed=args.solver_seed))[-1]
+            solve_static_vrptw(epoch_instance_dispatch, time_limit=math.ceil(epoch_tlim * 1 / 2)))[-1]
         # Map solution to indices of corresponding requests
         epoch_solution = [epoch_instance_dispatch['request_idx'][route] for route in epoch_solution]
 
@@ -216,28 +214,24 @@ def run_improved_heuristics(args, env):
     return total_reward
 
 
-def run_rl_with_gnn(agrs, env):
-    rng = np.random.default_rng(args.solver_seed)
-
+def run_learning_model(args, env):
+    param = args.model.split('_')
+    model = AttentionModel(encoder_class={"gnn": GNNEncoder}.get(param[0]),
+                           embedding_dim=int(param[1]),
+                           n_encode_layers=int(param[2]),
+                           aggregation=param[3],
+                           normalization=param[4],
+                           learn_norm=bool(param[5]),
+                           track_norm=bool(param[6]),
+                           gated=bool(param[7]))
+    state_dict = torch.load("./models/" + args.model)
+    model.load_state_dict(state_dict)
+    model.eval()
     total_reward = 0
     done = False
     observation, static_info = env.reset()
     epoch_tlim = static_info['epoch_tlim']
     num_requests_postponed = 0
-
-    model = AttentionModel(embedding_dim=agrs.embedding_dim,
-                           encoder_class=GNNEncoder,
-                           n_encode_layers=agrs.n_encode_layers,
-                           aggregation=agrs.aggregation,
-                           normalization=agrs.normalization,
-                           learn_norm=agrs.learn_norm,
-                           track_norm=agrs.track_norm,
-                           gated=agrs.gated)
-    model.train()
-    loss_func = torch.nn.MSELoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
-    trace = []
-    optimizer.zero_grad()
     while not done:
         epoch_instance = observation['epoch_instance']
         if len(epoch_instance['request_idx']) - 1 > 0:
@@ -255,15 +249,13 @@ def run_rl_with_gnn(agrs, env):
                     newline=False, flush=True)
             nodes = torch.unsqueeze(nodes, 0).to(torch.float32)
             graph = torch.unsqueeze(graph, 0).to(torch.long)
-            output = model(nodes, graph)
-            trace.append(output)
+            pred_val, nodes_prob = model(nodes, graph)
         else:
-            output = []
-        assignments_results = tools.get_assignment_results(output, epoch_instance['must_dispatch'])
+            nodes_prob = []
+        assignments_results = tools.get_assignment_results(nodes_prob, epoch_instance['must_dispatch'])
         epoch_instance_dispatch = _filter_instance(epoch_instance, assignments_results)
         epoch_solution, epoch_cost = list(
-            solve_static_vrptw(epoch_instance_dispatch, time_limit=math.ceil(epoch_tlim * 1 / 2), tmp_dir=args.tmp_dir,
-                               seed=args.solver_seed))[-1]
+            solve_static_vrptw(epoch_instance_dispatch, time_limit=epoch_tlim))[-1]
         # Map solution to indices of corresponding requests
         epoch_solution = [epoch_instance_dispatch['request_idx'][route] for route in epoch_solution]
 
@@ -275,16 +267,11 @@ def run_rl_with_gnn(agrs, env):
 
         # step to next state
         observation, reward, done, info = env.step(epoch_solution)
-        print(reward, epoch_cost)
         assert epoch_cost is None or reward == -epoch_cost, "Reward should be negative cost of solution"
         assert not info['error'], f"Environment error: {info['error']}"
-
         total_reward += reward
     if args.verbose:
         log(f"Cost of solution: {-total_reward}")
-    loss = loss_func(torch.tensor(total_reward).double(), torch.tensor(0).double())
-    loss.backward()
-    optimizer.step()
     return total_reward
 
 
@@ -312,28 +299,8 @@ if __name__ == "__main__":
     parser.add_argument("--tmp_dir", type=str, default=None,
                         help="Provide a specific directory to use as tmp directory (useful for debugging)")
     parser.add_argument("--verbose", action='store_true', help="Show verbose output")
-
-    # model
-    parser.add_argument('--embedding_dim', type=int, default=128,
-                        help='Dimension of input embedding')
-    parser.add_argument('--hidden_dim', type=int, default=128,
-                        help='Dimension of hidden layers in Enc/Dec')
-    parser.add_argument('--n_encode_layers', type=int, default=3,
-                        help='Number of layers in the encoder/critic network')
-    parser.add_argument('--aggregation', default='max',
-                        help="Neighborhood aggregation function: 'sum'/'mean'/'max'")
-    parser.add_argument('--aggregation_graph', default='mean',
-                        help="Graph embedding aggregation function: 'sum'/'mean'/'max'")
-    parser.add_argument('--normalization', default='layer',
-                        help="Normalization type: 'batch'/'layer'/None")
-    parser.add_argument('--learn_norm', action='store_true',
-                        help="Enable learnable affine transformation during normalization")
-    parser.add_argument('--track_norm', action='store_true',
-                        help="Enable tracking batch statistics during normalization")
-    parser.add_argument('--gated', action='store_true',
-                        help="Enable edge gating during neighborhood aggregation")
-    parser.add_argument('--n_heads', type=int, default=8,
-                        help="Number of attention heads")
+    parser.add_argument("--model", type=str, default=None,
+                        help="Name of model file")
 
     args = parser.parse_args()
 
@@ -347,8 +314,8 @@ if __name__ == "__main__":
 
     try:
         if args.instance is not None:
-            env = VRPEnvironment(seed=args.instance_seed, instance=tools.read_vrplib(args.instance),
-                                 epoch_tlim=args.epoch_tlim, is_static=args.static)
+            env = VRPEnvironment(instance=tools.read_vrplib(args.instance), epoch_tlim=args.epoch_tlim,
+                                 is_static=args.static)
         else:
             assert args.strategy != "oracle", "Oracle can not run with external controller"
             # Run within external controller
@@ -363,8 +330,10 @@ if __name__ == "__main__":
         if args.strategy == 'oracle':
             run_oracle(args, env)
         else:
-            run_rl_with_gnn(args, env)
+            # run_rl_with_gnn(args, env)
             # run_baseline(args, env)
+            # run_improved_heuristics(args, env)
+            run_learning_model(args, env)
 
         if args.instance is not None:
             log(tools.json_dumps_np(env.final_solutions))

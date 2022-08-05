@@ -43,15 +43,15 @@ class GNNLayer(nn.Module):
         self.B = nn.Linear(hidden_dim, hidden_dim, bias=True)
         self.C = nn.Linear(hidden_dim, hidden_dim, bias=True)
 
-        self.norm_h = {
-            "layer": nn.LayerNorm(hidden_dim, elementwise_affine=learn_norm),
-            "batch": nn.BatchNorm1d(hidden_dim, affine=learn_norm, track_running_stats=track_norm)
-        }.get(self.norm, None)
-
-        self.norm_e = {
-            "layer": nn.LayerNorm(hidden_dim, elementwise_affine=learn_norm),
-            "batch": nn.BatchNorm1d(hidden_dim, affine=learn_norm, track_running_stats=track_norm)
-        }.get(self.norm, None)
+        # self.norm_h = {
+        #     "layer": nn.LayerNorm(hidden_dim, elementwise_affine=learn_norm),
+        #     "batch": nn.BatchNorm1d(hidden_dim, affine=learn_norm, track_running_stats=track_norm)
+        # }.get(self.norm, None)
+        #
+        # self.norm_e = {
+        #     "layer": nn.LayerNorm(hidden_dim, elementwise_affine=learn_norm),
+        #     "batch": nn.BatchNorm1d(hidden_dim, affine=learn_norm, track_running_stats=track_norm)
+        # }.get(self.norm, None)
 
     def forward(self, h, e, graph):
         """
@@ -83,14 +83,14 @@ class GNNLayer(nn.Module):
         h = Uh + self.aggregate(Vh, graph, gates)  # B x V x H
 
         # Normalize node features
-        h = self.norm_h(
-            h.view(batch_size * num_nodes, hidden_dim)
-        ).view(batch_size, num_nodes, hidden_dim) if self.norm_h else h
-
-        # Normalize edge features
-        e = self.norm_e(
-            e.view(batch_size * num_nodes * num_nodes, hidden_dim)
-        ).view(batch_size, num_nodes, num_nodes, hidden_dim) if self.norm_e else e
+        # h = self.norm_h(
+        #     h.view(batch_size * num_nodes, hidden_dim)
+        # ).view(batch_size, num_nodes, hidden_dim) if self.norm_h else h
+        #
+        # # Normalize edge features
+        # e = self.norm_e(
+        #     e.view(batch_size * num_nodes * num_nodes, hidden_dim)
+        # ).view(batch_size, num_nodes, num_nodes, hidden_dim) if self.norm_e else e
 
         # Apply non-linearity
         h = F.relu(h)
