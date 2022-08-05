@@ -19,7 +19,7 @@ from solver import solve_static_vrptw
 learning_rate = 1e-10
 
 
-def eval_on_test_instances(model):
+def eval_on_test_instances(model, model_name):
     test_instances = os.listdir("./dataset/test/")
     for instance in test_instances:
         for no_episode in range(5):
@@ -54,7 +54,9 @@ def eval_on_test_instances(model):
                 assert not info['error'], f"Environment error: {info['error']}"
 
                 total_reward += reward
-            print(instance, no_episode, total_reward)
+            file = open("results/obj_results_raw.txt", "a")
+            file.write(model_name + "," + str(sum(env.final_costs.values())) + "\n")
+            file.close()
 
 
 def episodes_train(model, env):
@@ -188,9 +190,9 @@ if __name__ == "__main__":
                                  instance=tools.read_vrplib("./dataset/training/" + random.choice(training_instances)),
                                  epoch_tlim=args.epoch_tlim, is_static=False)
             episodes_train(model, env)
-            if (episode_no + 1) % 100 == 0:
+            if (episode_no + 1) % 200 == 0:
                 torch.save(model.state_dict(), "./models/" + training_config + str(episode_no))
-                eval_on_test_instances(model)
+                eval_on_test_instances(model, training_config + str(episode_no))
 
     finally:
         if cleanup_tmp_dir:
