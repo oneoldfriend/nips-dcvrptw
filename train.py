@@ -1,13 +1,12 @@
 # Solver for Dynamic VRPTW, baseline strategy is to use the static solver HGS-VRPTW repeatedly
 import os
+import time
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 import random
 import argparse
-import subprocess
 import sys
 import uuid
-import platform
 import torch
 import tools
 from environment import VRPEnvironment
@@ -15,55 +14,70 @@ from baselines.strategies import _filter_instance
 from learning_method.nets.encoders.gnn_encoder import GNNEncoder
 from learning_method.nets.encoders.our_model import AttentionModel
 from solver import solve_static_vrptw
+import threading
 
 learning_rate = 1e-10
 
 
-def eval_on_test_instances(model, model_name):
+def episode_eval(model, model_name, args, instance):
+    env = VRPEnvironment(instance=tools.read_vrplib("./dataset/test/" + instance),
+                         epoch_tlim=60, is_static=False)
+    total_reward = 0
+    done = False
+    observation, static_info = env.reset()
+    epoch_tlim = static_info['epoch_tlim']
+    while not done:
+        epoch_instance = observation['epoch_instance']
+        if len(epoch_instance['request_idx']) - 1 > 0:
+            nodes_feature = tools.get_epoch_nodes_feature(epoch_instance, static_info)
+            nodes = torch.tensor(nodes_feature)
+            graph = torch.ones((len(epoch_instance['request_idx']), len(epoch_instance['request_idx'])))
+            for idx in range(len(epoch_instance['request_idx'])):
+                graph[idx][idx] = 0
+            nodes = torch.unsqueeze(nodes, 0).to(torch.float32)
+            graph = torch.unsqueeze(graph, 0).to(torch.long)
+            pred_val, nodes_prob = model(nodes, graph)
+        else:
+            nodes_prob = []
+        assignments_results = tools.get_assignment_results(nodes_prob, epoch_instance['must_dispatch'], args)
+        epoch_instance_dispatch = _filter_instance(epoch_instance, assignments_results)
+        tmp_dir = os.path.join("tmp", str(uuid.uuid4()))
+        epoch_solution, epoch_cost = list(solve_static_vrptw(epoch_instance_dispatch, time_limit=epoch_tlim,
+                                                             tmp_dir=tmp_dir))[-1]
+        tools.cleanup_tmp_dir(tmp_dir)
+        # Map solution to indices of corresponding requests
+        epoch_solution = [epoch_instance_dispatch['request_idx'][route] for route in epoch_solution]
+        # step to next state
+        observation, reward, done, info = env.step(epoch_solution)
+        assert epoch_cost is None or reward == -epoch_cost, "Reward should be negative cost of solution"
+        assert not info['error'], f"Environment error: {info['error']}"
+
+        total_reward += reward
+    file = open("results/obj_results_raw.txt", "a")
+    file.write(model_name + "," + str(sum(env.final_costs.values())) + "\n")
+    file.close()
+
+
+def eval_on_test_set(model, model_name, args):
     test_instances = os.listdir("./dataset/test/")
     for instance in test_instances:
+        print("evaluating " + model_name + " on " + instance + "...")
+        thread_pool = []
         for no_episode in range(5):
-            env = VRPEnvironment(instance=tools.read_vrplib("./dataset/test/" + instance),
-                                 epoch_tlim=60, is_static=False)
-            total_reward = 0
-            done = False
-            observation, static_info = env.reset()
-            epoch_tlim = static_info['epoch_tlim']
-            while not done:
-                epoch_instance = observation['epoch_instance']
-                if len(epoch_instance['request_idx']) - 1 > 0:
-                    nodes_feature = tools.get_epoch_nodes_feature(epoch_instance, static_info)
-                    nodes = torch.tensor(nodes_feature)
-                    graph = torch.ones((len(epoch_instance['request_idx']), len(epoch_instance['request_idx'])))
-                    for idx in range(len(epoch_instance['request_idx'])):
-                        graph[idx][idx] = 0
-                    nodes = torch.unsqueeze(nodes, 0).to(torch.float32)
-                    graph = torch.unsqueeze(graph, 0).to(torch.long)
-                    pred_val, nodes_prob = model(nodes, graph)
-                else:
-                    nodes_prob = []
-                assignments_results = tools.get_assignment_results(nodes_prob, epoch_instance['must_dispatch'])
-                epoch_instance_dispatch = _filter_instance(epoch_instance, assignments_results)
-                epoch_solution, epoch_cost = list(
-                    solve_static_vrptw(epoch_instance_dispatch, time_limit=epoch_tlim))[-1]
-                # Map solution to indices of corresponding requests
-                epoch_solution = [epoch_instance_dispatch['request_idx'][route] for route in epoch_solution]
-                # step to next state
-                observation, reward, done, info = env.step(epoch_solution)
-                assert epoch_cost is None or reward == -epoch_cost, "Reward should be negative cost of solution"
-                assert not info['error'], f"Environment error: {info['error']}"
-
-                total_reward += reward
-            file = open("results/obj_results_raw.txt", "a")
-            file.write(model_name + "," + str(sum(env.final_costs.values())) + "\n")
-            file.close()
+            t = threading.Thread(target=episode_eval, args=(model, model_name, args, instance))
+            thread_pool.append(t)
+            t.start()
 
 
-def episodes_train(model, env, args):
+def episode_train(model, args, training_instances, loss_func, optimizer):
     pred_batch = []
     epoch_reward = []
     total_reward = 0
     done = False
+    env = VRPEnvironment(seed=episode_no,
+                         instance=tools.read_vrplib(
+                             "./dataset/training/" + random.choice(training_instances)),
+                         epoch_tlim=args.epoch_tlim, is_static=False)
     observation, static_info = env.reset()
     epoch_tlim = static_info['epoch_tlim']
     num_requests_postponed = 0
@@ -88,7 +102,7 @@ def episodes_train(model, env, args):
             pred_batch.append(pred_val)
         else:
             nodes_prob = []
-        assignments_results = tools.get_assignment_results(nodes_prob, epoch_instance['must_dispatch'])
+        assignments_results = tools.sample_assignment(nodes_prob, epoch_instance['must_dispatch'], args)
         epoch_instance_dispatch = _filter_instance(epoch_instance, assignments_results)
         epoch_solution, epoch_cost = list(
             solve_static_vrptw(epoch_instance_dispatch, time_limit=epoch_tlim, tmp_dir=args.tmp_dir))[-1]
@@ -159,11 +173,16 @@ if __name__ == "__main__":
                         help="Number of attention heads")
     parser.add_argument('--alias', default='',
                         help="Denote the model trained")
+    parser.add_argument('--policy', default='greedy',
+                        help="Decode policy for evaluation")
+    parser.add_argument('--eval_threshold', type=float, default=1.0,
+                        help="Threshold for greedy policy")
 
     args = parser.parse_args()
     training_config = args.encoder + "_" + str(args.embedding_dim) + "_" + str(
         args.n_encode_layers) + "_" + args.aggregation + "_" + args.normalization + "_" + str(
-        args.learn_norm) + "_" + str(args.track_norm) + "_" + str(args.gated) + "_" + args.alias + "_"
+        args.learn_norm) + "_" + str(args.track_norm) + "_" + str(args.gated) + "_" + args.policy + "_" + str(
+        args.eval_threshold) + "_" + args.alias + "_"
     if args.tmp_dir is None:
         # Generate random tmp directory
         args.tmp_dir = os.path.join("tmp", str(uuid.uuid4()))
@@ -186,15 +205,11 @@ if __name__ == "__main__":
     try:
         for episode_no in range(args.max_episodes):
             optimizer.zero_grad()
-            env = VRPEnvironment(seed=episode_no,
-                                 instance=tools.read_vrplib(
-                                     "./dataset/training/" + random.choice(training_instances)),
-                                 epoch_tlim=args.epoch_tlim, is_static=False)
-            episodes_train(model, env, args)
-            if (episode_no + 1) % 200 == 0:
+            episode_train(model, args, training_instances, loss_func, optimizer)
+            if (episode_no + 1) % 1 == 0:
                 torch.save(model.state_dict(), "./models/" + training_config + str(episode_no))
-                eval_on_test_instances(model, training_config + str(episode_no))
-
+                eval_on_test_set(model, training_config + str(episode_no), args)
+        time.sleep(600)
     finally:
         if cleanup_tmp_dir:
             tools.cleanup_tmp_dir(args.tmp_dir)

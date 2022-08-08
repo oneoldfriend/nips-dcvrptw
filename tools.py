@@ -515,13 +515,28 @@ def get_epoch_nodes_feature(instance, static_info):
     return nodes
 
 
-def get_assignment_results(probs, must_go_mask):
+def sample_assignment(probs, must_go_mask, args):
     probs = probs.reshape(-1).detach().numpy()
-    sample = np.random.rand(len(probs))
-    sample_assignments = sample <= probs
-    assignments = sample_assignments | must_go_mask
+    assignments = np.random.rand(len(probs)) <= probs
+    assignments = assignments | must_go_mask
     assignments[0] = True
     return assignments
+
+
+def greedy_assignment(probs, must_go_mask, args):
+    probs = probs.reshape(-1).detach().numpy()
+    threshold = np.random.rand(len(probs))
+    for idx in range(len(threshold)):
+        threshold[idx] = args.eval_threshold
+    assignments = threshold <= probs
+    assignments = assignments | must_go_mask
+    assignments[0] = True
+    return assignments
+
+
+def get_assignment_results(probs, must_go_mask, args):
+    return {"sampling": sample_assignment,
+            "greedy": greedy_assignment}.get(args.policy)(probs, must_go_mask, args)
 
 # results_process("./results/obj_results_raw.txt")
 # results_statistic_output("./results/dynamic_obj_detail.csv")
