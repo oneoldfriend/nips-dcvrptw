@@ -218,7 +218,7 @@ if __name__ == "__main__":
         for episode_no in range(args.max_episodes):
             optimizer.zero_grad()
             episode_train(model, args, training_instances, loss_func, optimizer)
-            if (episode_no + 1) % 1 == 0:
+            if (episode_no + 1) % 100 == 0:
                 torch.save(model.state_dict(), "./models/" + training_config + str(episode_no))
                 eval_on_test_set(training_config + str(episode_no), args)
     finally:
