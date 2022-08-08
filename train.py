@@ -32,7 +32,7 @@ def episode_eval(model_name, args, instance):
     model.load_state_dict(state_dict)
     model.eval()
     env = VRPEnvironment(instance=tools.read_vrplib("./dataset/test/" + instance),
-                         epoch_tlim=60, is_static=False)
+                         epoch_tlim=6, is_static=False)
     total_reward = 0
     done = False
     observation, static_info = env.reset()
@@ -78,6 +78,7 @@ def eval_on_test_set(model_name, args):
             t = threading.Thread(target=episode_eval, args=(model_name, args, instance))
             thread_pool.append(t)
             t.start()
+    time.sleep(60)
 
 
 def episode_train(model, args, training_instances, loss_func, optimizer):
@@ -220,7 +221,6 @@ if __name__ == "__main__":
             if (episode_no + 1) % 1 == 0:
                 torch.save(model.state_dict(), "./models/" + training_config + str(episode_no))
                 eval_on_test_set(training_config + str(episode_no), args)
-        time.sleep(600)
     finally:
         if cleanup_tmp_dir:
             tools.cleanup_tmp_dir(args.tmp_dir)

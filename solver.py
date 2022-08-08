@@ -331,9 +331,9 @@ if __name__ == "__main__":
             run_oracle(args, env)
         else:
             # run_rl_with_gnn(args, env)
-            # run_baseline(args, env)
+            run_baseline(args, env)
             # run_improved_heuristics(args, env)
-            run_learning_model(args, env)
+            # run_learning_model(args, env)
 
         if args.instance is not None:
             log(tools.json_dumps_np(env.final_solutions))
