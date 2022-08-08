@@ -135,8 +135,9 @@ def episode_train(model, args, training_instances, loss_func, optimizer):
         total_reward += reward
     if args.verbose:
         log(f"Cost of solution: {-total_reward}")
-    reward_tensor = torch.ones_like(torch.cat(pred_batch))
-    reward_tensor[:, :] = float(total_reward)
+    # reward_tensor = torch.ones_like(torch.cat(pred_batch))
+    # reward_tensor[:, :] = float(total_reward)
+    reward_tensor = torch.tensor(tools.get_accumulated_reward_gap(epoch_reward))
     loss = loss_func(torch.cat(pred_batch), reward_tensor)
     loss.backward()
     optimizer.step()

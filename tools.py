@@ -538,5 +538,14 @@ def get_assignment_results(probs, must_go_mask, args):
     return {"sampling": sample_assignment,
             "greedy": greedy_assignment}.get(args.policy)(probs, must_go_mask, args)
 
+
+def get_accumulated_reward_gap(epoch_rewards):
+    reward_list = []
+    reward_decay = 0.98
+    reward = 0
+    for epoch_reward in reversed(epoch_rewards):
+        reward = epoch_reward + reward_decay * reward
+        reward_list.insert(0, [reward])
+    return reward_list
 # results_process("./results/obj_results_raw.txt")
 # results_statistic_output("./results/dynamic_obj_detail.csv")
