@@ -19,7 +19,18 @@ import threading
 learning_rate = 1e-10
 
 
-def episode_eval(model, model_name, args, instance):
+def episode_eval(model_name, args, instance):
+    model = AttentionModel(encoder_class={"gnn": GNNEncoder}.get(args.encoder),
+                           embedding_dim=args.embedding_dim,
+                           n_encode_layers=args.n_encode_layers,
+                           aggregation=args.aggregation,
+                           normalization=args.normalization,
+                           learn_norm=args.learn_norm,
+                           track_norm=args.track_norm,
+                           gated=args.gated)
+    state_dict = torch.load("./models/" + model_name)
+    model.load_state_dict(state_dict)
+    model.eval()
     env = VRPEnvironment(instance=tools.read_vrplib("./dataset/test/" + instance),
                          epoch_tlim=60, is_static=False)
     total_reward = 0
@@ -58,13 +69,13 @@ def episode_eval(model, model_name, args, instance):
     file.close()
 
 
-def eval_on_test_set(model, model_name, args):
+def eval_on_test_set(model_name, args):
     test_instances = os.listdir("./dataset/test/")
     for instance in test_instances:
         print("evaluating " + model_name + " on " + instance + "...")
         thread_pool = []
         for no_episode in range(5):
-            t = threading.Thread(target=episode_eval, args=(model, model_name, args, instance))
+            t = threading.Thread(target=episode_eval, args=(model_name, args, instance))
             thread_pool.append(t)
             t.start()
 
@@ -208,7 +219,7 @@ if __name__ == "__main__":
             episode_train(model, args, training_instances, loss_func, optimizer)
             if (episode_no + 1) % 1 == 0:
                 torch.save(model.state_dict(), "./models/" + training_config + str(episode_no))
-                eval_on_test_set(model, training_config + str(episode_no), args)
+                eval_on_test_set(training_config + str(episode_no), args)
         time.sleep(600)
     finally:
         if cleanup_tmp_dir:

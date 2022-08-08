@@ -108,7 +108,7 @@ if __name__ == "__main__":
             env = VRPEnvironment(seed=args.instance_seed,
                                  instance=tools.read_vrplib("./dataset/training/" + random.choice(test_instances)),
                                  epoch_tlim=args.epoch_tlim, is_static=False)
-            episodes_train(model, env)
+            episode_train(model, env)
             if episode_no % 100 == 0:
                 torch.save(model.state_dict(), "./models/" + training_config + ".pth")
 
