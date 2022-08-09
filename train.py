@@ -60,7 +60,7 @@ def episode_eval(model_name, args, instance):
         epoch_solution = [epoch_instance_dispatch['request_idx'][route] for route in epoch_solution]
         # step to next state
         observation, reward, done, info = env.step(epoch_solution)
-        assert epoch_cost is None or reward == -epoch_cost, "Reward should be negative cost of solution"
+        # assert epoch_cost is None or reward == -epoch_cost, "Reward should be negative cost of solution"
         assert not info['error'], f"Environment error: {info['error']}"
 
         total_reward += reward
@@ -135,9 +135,11 @@ def episode_train(model, args, training_instances, loss_func, optimizer):
         total_reward += reward
     if args.verbose:
         log(f"Cost of solution: {-total_reward}")
-    # reward_tensor = torch.ones_like(torch.cat(pred_batch))
-    # reward_tensor[:, :] = float(total_reward)
-    reward_tensor = torch.tensor(tools.get_accumulated_reward_gap(epoch_reward))
+    if args.new_reward:
+        reward_tensor = torch.tensor(tools.get_accumulated_reward_gap(epoch_reward))
+    else:
+        reward_tensor = torch.ones_like(torch.cat(pred_batch))
+        reward_tensor[:, :] = float(total_reward)
     loss = loss_func(torch.cat(pred_batch), reward_tensor)
     loss.backward()
     optimizer.step()
@@ -190,6 +192,10 @@ if __name__ == "__main__":
                         help="Decode policy for evaluation")
     parser.add_argument('--eval_threshold', type=float, default=1.0,
                         help="Threshold for greedy policy")
+    parser.add_argument('--new_reward', action='store_true',
+                        help="Threshold for greedy policy")
+    parser.add_argument('--model_name', type=str, default=None,
+                        help="Threshold for greedy policy")
 
     args = parser.parse_args()
     training_config = args.encoder + "_" + str(args.embedding_dim) + "_" + str(
@@ -212,6 +218,10 @@ if __name__ == "__main__":
                            learn_norm=args.learn_norm,
                            track_norm=args.track_norm,
                            gated=args.gated)
+    if args.model_name is not None:
+        print("continue to train ", args.model_name)
+        state_dict = torch.load("./models/" + args.model_name)
+        model.load_state_dict(state_dict)
     model.train()
     loss_func = torch.nn.MSELoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)

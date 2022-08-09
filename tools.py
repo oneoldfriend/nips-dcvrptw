@@ -3,6 +3,8 @@ import os
 import numpy as np
 import pandas as pd
 import math
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 # https://stackoverflow.com/questions/26646362/numpy-array-is-not-json-serializable
 import torch
@@ -547,5 +549,34 @@ def get_accumulated_reward_gap(epoch_rewards):
         reward = epoch_reward + reward_decay * reward
         reward_list.insert(0, [reward])
     return reward_list
+
+
+def plot_convergence(file_path):
+    raw_df = pd.read_table(file_path, sep=",", names=["model", "obj"])
+
+    def last_add_one(x):
+        x = x.split("_")
+        x[-1] = str(int(x[-1]) + 1)
+        return "_".join(x)
+
+    raw_df["model"] = raw_df["model"].apply(last_add_one)
+    data_dict = {}
+    tmp = raw_df.groupby("model")
+    for data in raw_df.groupby("model"):
+        key = "_".join(data[0].split("_")[:-1])
+        if key in data_dict.keys():
+            data_dict[key].append(list(data[1]["obj"].values))
+        else:
+            data_dict[key] = [list(data[1]["obj"].values)]
+    df = []
+    for key, value in data_dict.items():
+        df.append(pd.DataFrame(np.array(value)).melt(var_name="episode", value_name="obj"))
+        df[-1]["model"] = key
+    df = pd.concat(df)
+    sns.lineplot(x="episode", y="obj", hue="model", data=df)
+    plt.show()
+
+
 # results_process("./results/obj_results_raw.txt")
 # results_statistic_output("./results/dynamic_obj_detail.csv")
+# plot_convergence("./results/obj_results_raw.txt")
