@@ -16,7 +16,7 @@ from learning_method.nets.encoders.our_model import AttentionModel
 from solver import solve_static_vrptw
 import threading
 
-learning_rate = 1e-10
+learning_rate = 1e-5
 
 
 def episode_eval(model_name, args, instance):
