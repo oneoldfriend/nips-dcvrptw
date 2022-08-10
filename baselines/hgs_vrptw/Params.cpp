@@ -13,10 +13,7 @@
 #include "commandline.h"
 #include "CircleSector.h"
 
-
-
-
-Params::Params(const CommandLine& cl)
+Params::Params(const CommandLine &cl)
 {
 	// Read and create some parameter values from the commandline
 	config = cl.config;
@@ -40,7 +37,7 @@ Params::Params(const CommandLine& cl)
 	durationLimit = INT_MAX;
 	vehicleCapacity = INT_MAX;
 	isDurationConstraint = false;
-	
+
 	// Read INPUT dataset
 	std::ifstream inputFile(config.pathInstance);
 	if (inputFile.is_open())
@@ -48,11 +45,11 @@ Params::Params(const CommandLine& cl)
 		// Read the instance name from the first line and remove \r
 		getline(inputFile, content);
 		instanceName = content;
-		instanceName.erase( std::remove(instanceName.begin(), instanceName.end(), '\r'), instanceName.end());
+		instanceName.erase(std::remove(instanceName.begin(), instanceName.end(), '\r'), instanceName.end());
 
 		// Read the next lines
-		getline(inputFile, content);	// "Empty line" or "NAME : {instance_name}"
-		getline(inputFile, content);	// VEHICLE or "COMMENT: {}"
+		getline(inputFile, content); // "Empty line" or "NAME : {instance_name}"
+		getline(inputFile, content); // VEHICLE or "COMMENT: {}"
 
 		// Check if the next line has "VEHICLE"
 		if (content.substr(0, 7) == "VEHICLE")
@@ -61,7 +58,7 @@ Params::Params(const CommandLine& cl)
 			isTimeWindowConstraint = true;
 
 			// Get the number of vehicles and the capacity of the vehicles
-			getline(inputFile, content);  // NUMBER    CAPACITY
+			getline(inputFile, content); // NUMBER    CAPACITY
 			inputFile >> nbVehicles >> vehicleCapacity;
 
 			// Skip the next four lines
@@ -78,7 +75,7 @@ Params::Params(const CommandLine& cl)
 				// Store all the information of the next client
 				cli[nbClients].custNum = node;
 				inputFile >> cli[nbClients].coordX >> cli[nbClients].coordY >> cli[nbClients].demand >> cli[nbClients].earliestArrival >> cli[nbClients].latestArrival >> cli[nbClients].serviceDuration;
-				
+
 				// Scale coordinates by factor 10, later the distances will be rounded so we optimize with 1 decimal distances
 				cli[nbClients].coordX *= 10;
 				cli[nbClients].coordY *= 10;
@@ -86,7 +83,7 @@ Params::Params(const CommandLine& cl)
 				cli[nbClients].latestArrival *= 10;
 				cli[nbClients].serviceDuration *= 10;
 				cli[nbClients].polarAngle = CircleSector::positive_mod(static_cast<int>(32768. * atan2(cli[nbClients].coordY - cli[0].coordY, cli[nbClients].coordX - cli[0].coordX) / PI));
-				
+
 				// Keep track of the max demand, the total demand, and the number of clients
 				if (cli[nbClients].demand > maxDemand)
 				{
@@ -156,7 +153,8 @@ Params::Params(const CommandLine& cl)
 				}
 				else if (content == "DISTANCE")
 				{
-					inputFile >> content2 >> durationLimit; isDurationConstraint = true;
+					inputFile >> content2 >> durationLimit;
+					isDurationConstraint = true;
 				}
 				// Read the data on the service time (used when the service time is constant for all clients)
 				else if (content == "SERVICE_TIME")
@@ -194,7 +192,7 @@ Params::Params(const CommandLine& cl)
 					for (int i = 0; i <= nbClients; i++)
 					{
 						inputFile >> cli[i].custNum >> cli[i].coordX >> cli[i].coordY;
-						
+
 						// Check if the clients are in order
 						if (cli[i].custNum != i + 1)
 						{
@@ -325,26 +323,29 @@ Params::Params(const CommandLine& cl)
 			}
 		}
 	}
-	else {
+	else
+	{
 		throw std::invalid_argument("Impossible to open instance file: " + config.pathInstance);
 	}
 
 	// Default initialization if the number of vehicles has not been provided by the user
-	if (nbVehicles == INT_MAX)
-	{
-		// Safety margin: 30% + 3 more vehicles than the trivial bin packing LB
-		nbVehicles = static_cast<int>(std::ceil(1.3 * totalDemand / vehicleCapacity) + 3.);
-		std::cout << "----- FLEET SIZE WAS NOT SPECIFIED: DEFAULT INITIALIZATION TO " << nbVehicles << " VEHICLES" << std::endl;
-	}
-	else if (nbVehicles == -1)
-	{
-		nbVehicles = nbClients;
-		std::cout << "----- FLEET SIZE UNLIMITED: SET TO UPPER BOUND OF " << nbVehicles << " VEHICLES" << std::endl;
-	}
-	else
-	{
-		std::cout << "----- FLEET SIZE SPECIFIED IN THE COMMANDLINE: SET TO " << nbVehicles << " VEHICLES" << std::endl;
-	}
+	// if (nbVehicles == INT_MAX)
+	// {
+	// 	// Safety margin: 30% + 3 more vehicles than the trivial bin packing LB
+	// 	nbVehicles = static_cast<int>(std::ceil(1.3 * totalDemand / vehicleCapacity) + 3.);
+	// 	std::cout << "----- FLEET SIZE WAS NOT SPECIFIED: DEFAULT INITIALIZATION TO " << nbVehicles << " VEHICLES" << std::endl;
+	// }
+	// else if (nbVehicles == -1)
+	// {
+	// 	nbVehicles = nbClients;
+	// 	std::cout << "----- FLEET SIZE UNLIMITED: SET TO UPPER BOUND OF " << nbVehicles << " VEHICLES" << std::endl;
+	// }
+	// else
+	// {
+	// 	std::cout << "----- FLEET SIZE SPECIFIED IN THE COMMANDLINE: SET TO " << nbVehicles << " VEHICLES" << std::endl;
+	// }
+	nbVehicles = nbClients;
+	std::cout << "----- FLEET SIZE UNLIMITED: SET TO UPPER BOUND OF " << nbVehicles << " VEHICLES" << std::endl;
 
 	// If the run is a DIMACS run, store the solution in the current folder
 	if (config.isDimacsRun)
@@ -376,7 +377,7 @@ Params::Params(const CommandLine& cl)
 		// Output if an instance has large routes and a large time window
 		bool hasLargeTW = nbLargeTW > 0;
 		std::cout << "----- HasLargeRoutes: " << hasLargeRoutes << ", HasLargeTW: " << hasLargeTW << std::endl;
-		
+
 		// Set the parameter values based on the characteristics of the instance
 		if (hasLargeRoutes)
 		{
@@ -412,7 +413,6 @@ Params::Params(const CommandLine& cl)
 		}
 	}
 
-	
 	if (!isExplicitDistanceMatrix)
 	{
 		// Calculation of the distance matrix
@@ -441,7 +441,6 @@ Params::Params(const CommandLine& cl)
 			}
 		}
 	}
-	
 
 	// Compute order proximities once
 	orderProximities = std::vector<std::vector<std::pair<double, int>>>(nbClients + 1);
@@ -449,7 +448,7 @@ Params::Params(const CommandLine& cl)
 	for (int i = 1; i <= nbClients; i++)
 	{
 		// Remove all elements from the vector
-		auto& orderProximity = orderProximities[i];
+		auto &orderProximity = orderProximities[i];
 		orderProximity.clear();
 
 		// Loop over all clients (excluding the depot and the specific client itself)
@@ -460,16 +459,13 @@ Params::Params(const CommandLine& cl)
 				// Compute proximity using Eq. 4 in Vidal 2012, and append at the end of orderProximity
 				const int timeIJ = timeCost.get(i, j);
 				orderProximity.emplace_back(
-					timeIJ
-					+ std::min(
-						proximityWeightWaitTime * std::max(cli[j].earliestArrival - timeIJ - cli[i].serviceDuration - cli[i].latestArrival, 0)
-						+ proximityWeightTimeWarp * std::max(cli[i].earliestArrival + cli[i].serviceDuration + timeIJ - cli[j].latestArrival, 0),
-						proximityWeightWaitTime * std::max(cli[i].earliestArrival - timeIJ - cli[j].serviceDuration - cli[j].latestArrival, 0)
-						+ proximityWeightTimeWarp * std::max(cli[j].earliestArrival + cli[j].serviceDuration + timeIJ - cli[i].latestArrival, 0)),
+					timeIJ + std::min(
+								 proximityWeightWaitTime * std::max(cli[j].earliestArrival - timeIJ - cli[i].serviceDuration - cli[i].latestArrival, 0) + proximityWeightTimeWarp * std::max(cli[i].earliestArrival + cli[i].serviceDuration + timeIJ - cli[j].latestArrival, 0),
+								 proximityWeightWaitTime * std::max(cli[i].earliestArrival - timeIJ - cli[j].serviceDuration - cli[j].latestArrival, 0) + proximityWeightTimeWarp * std::max(cli[j].earliestArrival + cli[j].serviceDuration + timeIJ - cli[i].latestArrival, 0)),
 					j);
 			}
 		}
-		
+
 		// Sort orderProximity (for the specific client)
 		std::sort(orderProximity.begin(), orderProximity.end());
 	}
@@ -503,7 +499,8 @@ Params::Params(const CommandLine& cl)
 	proximityWeightTimeWarp = 1;
 }
 
-double Params::getTimeElapsedSeconds(){
+double Params::getTimeElapsedSeconds()
+{
 	if (config.useWallClockTime)
 	{
 		std::chrono::duration<double> wctduration = (std::chrono::system_clock::now() - startWallClockTime);
@@ -512,11 +509,13 @@ double Params::getTimeElapsedSeconds(){
 	return (std::clock() - startCPUTime) / (double)CLOCKS_PER_SEC;
 }
 
-bool Params::isTimeLimitExceeded(){
+bool Params::isTimeLimitExceeded()
+{
 	return getTimeElapsedSeconds() >= config.timeLimit;
 }
 
-void Params::SetCorrelatedVertices(){
+void Params::SetCorrelatedVertices()
+{
 	// Calculation of the correlated vertices for each client (for the granular restriction)
 	correlatedVertices = std::vector<std::vector<int>>(nbClients + 1);
 
@@ -526,7 +525,7 @@ void Params::SetCorrelatedVertices(){
 	// Loop over all clients (excluding the depot)
 	for (int i = 1; i <= nbClients; i++)
 	{
-		auto& orderProximity = orderProximities[i];
+		auto &orderProximity = orderProximities[i];
 
 		// Loop over all clients (taking into account the max number of clients and the granular restriction)
 		for (int j = 0; j < std::min(config.nbGranular, nbClients - 1); j++)
@@ -534,7 +533,7 @@ void Params::SetCorrelatedVertices(){
 			// If i is correlated with j, then j should be correlated with i (unless we have asymmetric problem with time windows)
 			// Insert vertices in setCorrelatedVertices, in the order of orderProximity, where .second is used since the first index correponds to the depot
 			setCorrelatedVertices[i].insert(orderProximity[j].second);
-			
+
 			// For symmetric problems, set the other entry to the same value
 			if (config.useSymmetricCorrelatedVertices)
 			{

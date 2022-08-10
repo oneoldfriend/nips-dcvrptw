@@ -11,7 +11,7 @@
 
 // Main class of the algorithm. Used to read from the parameters from the command line,
 // create the structures and initial population, and run the hybrid genetic search
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
 	try
 	{
@@ -41,6 +41,7 @@ int main(int argc, char* argv[])
 		if (population.getBestFound() != nullptr)
 		{
 			population.getBestFound()->exportCVRPLibFormat(commandline.config.pathSolution);
+			std::string cost_str = std::to_string(population.getBestFound()->myCostSol.distance);
 			population.exportSearchProgress(commandline.config.pathSolution + ".PG.csv", commandline.config.pathInstance, commandline.config.seed);
 			if (commandline.config.pathBKS != "")
 			{
@@ -50,13 +51,13 @@ int main(int argc, char* argv[])
 	}
 
 	// Catch exceptions
-	catch (const std::string& e)
-	{ 
+	catch (const std::string &e)
+	{
 		std::cout << "EXCEPTION | " << e << std::endl;
 	}
-	catch (const std::exception& e)
-	{ 
-		std::cout << "EXCEPTION | " << e.what() << std::endl; 
+	catch (const std::exception &e)
+	{
+		std::cout << "EXCEPTION | " << e.what() << std::endl;
 	}
 
 	// Return 0 if the program execution was successfull
