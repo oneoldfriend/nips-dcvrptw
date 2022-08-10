@@ -529,16 +529,16 @@ def greedy_assignment(probs, must_go_mask, args):
     probs = probs.reshape(-1).detach().numpy()
     threshold = np.random.rand(len(probs))
     for idx in range(len(threshold)):
-        threshold[idx] = args.eval_threshold
+        threshold[idx] = args.greedy_threshold
     assignments = threshold <= probs
     assignments = assignments | must_go_mask
     assignments[0] = True
     return assignments
 
 
-def get_assignment_results(probs, must_go_mask, args):
+def get_assignment_results(probs, must_go_mask, policy, args):
     return {"sampling": sample_assignment,
-            "greedy": greedy_assignment}.get(args.policy)(probs, must_go_mask, args)
+            "greedy": greedy_assignment}.get(policy)(probs, must_go_mask, args)
 
 
 def get_accumulated_reward_gap(epoch_rewards):
@@ -553,28 +553,28 @@ def get_accumulated_reward_gap(epoch_rewards):
 
 def plot_convergence(file_path):
     raw_df = pd.read_table(file_path, sep=",", names=["model", "obj"])
-
-    def last_add_one(x):
-        x = x.split("_")
-        x[-1] = str(int(x[-1]) + 1)
-        return "_".join(x)
-
-    raw_df["model"] = raw_df["model"].apply(last_add_one)
     data_dict = {}
-    tmp = raw_df.groupby("model")
-    for data in raw_df.groupby("model"):
+    episode_dict = {}
+    tmp = raw_df.groupby("model", sort=False)
+    for data in tmp:
+        episode = int(data[0].split("_")[-1]) + 1
         key = "_".join(data[0].split("_")[:-1])
+        mid_value = data[1]["obj"].values
         if key in data_dict.keys():
-            data_dict[key].append(list(data[1]["obj"].values))
+            data_dict[key].append(np.mean(data[1]["obj"].values))
         else:
-            data_dict[key] = [list(data[1]["obj"].values)]
+            data_dict[key] = [np.mean(data[1]["obj"].values)]
+        if key in episode_dict.keys():
+            episode_dict[key].append(episode)
+        else:
+            episode_dict[key] = [episode]
+
     df = []
+    x = range(100, 1000, 100)
     for key, value in data_dict.items():
-        df.append(pd.DataFrame(np.array(value)).melt(var_name="episode", value_name="obj"))
-        df[-1]["model"] = key
-    df = pd.concat(df)
-    sns.lineplot(x="episode", y="obj", hue="model", data=df)
-    plt.show()
+        plt.plot(episode_dict[key], value, label=key)
+        plt.savefig("./results/fig/" + key + ".jpg")
+        plt.show()
 
 
 # results_process("./results/obj_results_raw.txt")

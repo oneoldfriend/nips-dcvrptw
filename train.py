@@ -50,7 +50,8 @@ def episode_eval(model_name, args, instance):
             pred_val, nodes_prob = model(nodes, graph)
         else:
             nodes_prob = []
-        assignments_results = tools.get_assignment_results(nodes_prob, epoch_instance['must_dispatch'], args)
+        assignments_results = tools.get_assignment_results(nodes_prob, epoch_instance['must_dispatch'],
+                                                           args.eval_policy, args)
         epoch_instance_dispatch = _filter_instance(epoch_instance, assignments_results)
         tmp_dir = os.path.join("tmp", str(uuid.uuid4()))
         epoch_solution, epoch_cost = list(solve_static_vrptw(epoch_instance_dispatch, time_limit=epoch_tlim,
@@ -114,7 +115,8 @@ def episode_train(model, args, training_instances, loss_func, optimizer):
             pred_batch.append(pred_val)
         else:
             nodes_prob = []
-        assignments_results = tools.sample_assignment(nodes_prob, epoch_instance['must_dispatch'], args)
+        assignments_results = tools.get_assignment_results(nodes_prob, epoch_instance['must_dispatch'],
+                                                           args.train_policy, args)
         epoch_instance_dispatch = _filter_instance(epoch_instance, assignments_results)
         epoch_solution, epoch_cost = list(
             solve_static_vrptw(epoch_instance_dispatch, time_limit=epoch_tlim, tmp_dir=args.tmp_dir))[-1]
@@ -188,9 +190,11 @@ if __name__ == "__main__":
                         help="Number of attention heads")
     parser.add_argument('--alias', default='',
                         help="Denote the model trained")
-    parser.add_argument('--policy', default='greedy',
+    parser.add_argument('--eval_policy', default='greedy',
                         help="Decode policy for evaluation")
-    parser.add_argument('--eval_threshold', type=float, default=1.0,
+    parser.add_argument('--train_policy', default='greedy',
+                        help="Decode policy for training")
+    parser.add_argument('--greedy_threshold', type=float, default=1.0,
                         help="Threshold for greedy policy")
     parser.add_argument('--new_reward', action='store_true',
                         help="Threshold for greedy policy")
@@ -199,9 +203,8 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     training_config = args.encoder + "_" + str(args.embedding_dim) + "_" + str(
-        args.n_encode_layers) + "_" + args.aggregation + "_" + args.normalization + "_" + str(
-        args.learn_norm) + "_" + str(args.track_norm) + "_" + str(args.gated) + "_" + args.policy + "_" + str(
-        args.eval_threshold) + "_" + args.alias + "_"
+        args.n_encode_layers) + "_" + args.aggregation + "_" + args.train_policy + "_" + args.eval_policy + "_" + str(
+        args.greedy_threshold) + "_" + args.alias + "_"
     if args.tmp_dir is None:
         # Generate random tmp directory
         args.tmp_dir = os.path.join("tmp", str(uuid.uuid4()))
