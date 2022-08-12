@@ -5,6 +5,7 @@ import pandas as pd
 import math
 import seaborn as sns
 import matplotlib.pyplot as plt
+from brokenaxes import brokenaxes
 
 # https://stackoverflow.com/questions/26646362/numpy-array-is-not-json-serializable
 import torch
@@ -569,14 +570,36 @@ def plot_convergence(file_path):
         else:
             episode_dict[key] = [episode]
 
-    df = []
-    x = range(100, 1000, 100)
-    for key, value in data_dict.items():
-        plt.plot(episode_dict[key], value, label=key)
-        plt.savefig("./results/fig/" + key + ".jpg")
-        plt.show()
+    plt.plot(episode_dict["gnn_128_3_mean_greedy_greedy_0.5_"], data_dict["gnn_128_3_mean_greedy_greedy_0.5_"],
+             label="gnn_128_3_mean_greedy_greedy_0.5_")
+    plt.plot(episode_dict["gnn_128_3_mean_sampling_greedy_0.5_"], data_dict["gnn_128_3_mean_sampling_greedy_0.5_"],
+             label="gnn_128_3_mean_sampling_greedy_0.5_")
+    # plt.plot(episode_dict["gnn_128_3_mean_sampling_greedy_0.5_new_reward"], data_dict["gnn_128_3_mean_sampling_greedy_0.5_new_reward"],
+    #          label="gnn_128_3_mean_sampling_greedy_0.5_new_reward")
+    plt.plot(episode_dict["gnn_128_3_mean_greedy_sampling_0.5_"], data_dict["gnn_128_3_mean_greedy_sampling_0.5_"],
+             label="gnn_128_3_mean_greedy_sampling_0.5_")
+    plt.plot(episode_dict["gnn_128_3_mean_sampling_sampling_0.5_"], data_dict["gnn_128_3_mean_sampling_sampling_0.5_"],
+             label="gnn_128_3_mean_sampling_sampling_0.5_")
+    # bax = brokenaxes(xlims=((50, 1100)), ylims=((300000, 400000), (800000, 850000)), despine=False)
+    # bax.plot(episode_dict["gnn_128_3_mean_batch_True_False_True_greedy_0.5_standard"],
+    #          data_dict["gnn_128_3_mean_batch_True_False_True_greedy_0.5_standard"],
+    #          label="prob>0.5")
+    # bax.plot(episode_dict["gnn_128_3_mean_batch_True_False_True_greedy_0.7_standard"],
+    #          data_dict["gnn_128_3_mean_batch_True_False_True_greedy_0.7_standard"],
+    #          label="prob>0.7")
+    # bax.plot(episode_dict["gnn_128_3_mean_batch_True_False_True_greedy_0.9_standard"],
+    #          data_dict["gnn_128_3_mean_batch_True_False_True_greedy_0.9_standard"],
+    #          label="prob>0.9")
+    plt.legend()
+    plt.savefig("./results/fig/" + "large_model" + ".jpg")
+    plt.show()
+    # for key, value in data_dict.items():
+    #     plt.plot(episode_dict[key], value, label=key)
+    #     plt.legend()
+    #     plt.savefig("./results/fig/" + key + ".jpg")
+    #     plt.show()
 
 
 # results_process("./results/obj_results_raw.txt")
 # results_statistic_output("./results/dynamic_obj_detail.csv")
-# plot_convergence("./results/obj_results_raw.txt")
+# plot_convergence("./results/second_round.txt")

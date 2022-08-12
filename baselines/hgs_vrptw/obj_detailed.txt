@@ -1,0 +1,7 @@
+./instances/ORTEC-VRPTW-ASYM-01829532-d1-n324-k22.txt,248676
+./instances/ORTEC-VRPTW-ASYM-00c5356f-d1-n258-k12.txt,113604
+./instances/ORTEC-VRPTW-ASYM-02182cf8-d1-n327-k20.txt,167097
+./instances/ORTEC-VRPTW-ASYM-04c694cd-d1-n254-k18.txt,90308
+./instances/ORTEC-VRPTW-ASYM-0797afaf-d1-n313-k20.txt,141583
+./instances/ORTEC-VRPTW-ASYM-0bdff870-d1-n458-k35.txt,264709
+./instances/ORTEC-VRPTW-ASYM-08d8e660-d1-n460-k42.txt,198684

@@ -91,11 +91,12 @@ if __name__ == "__main__":
     if args.static:
         is_static = 1
         route_res_file = open("results/static/" + args.instance.split("/")[-1], "a")
+        file = open("results/static_obj_results_raw.txt", "a")
     else:
         is_static = 0
         route_res_file = open("results/dynamic/" + args.instance.split("/")[-1], "a")
+        file = open("results/dynamic_obj_results_raw.txt", "a")
     # route_res_file.write(tools.solution_to_readable_str(env.final_solutions) + "\n")
-    file = open("results/obj_results_raw.txt", "a")
     file.write(args.instance.split("/")[-1] + "," + str(sum(env.final_costs.values())) + "," + str(is_static) + "\n")
     route_res_file.close()
     file.close()

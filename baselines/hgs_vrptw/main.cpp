@@ -1,5 +1,6 @@
 #include <time.h>
 #include <iostream>
+#include <fstream>
 
 #include "Genetic.h"
 #include "commandline.h"
@@ -40,13 +41,14 @@ int main(int argc, char *argv[])
 		// Export the best solution, if it exist
 		if (population.getBestFound() != nullptr)
 		{
-			population.getBestFound()->exportCVRPLibFormat(commandline.config.pathSolution);
-			std::string cost_str = std::to_string(population.getBestFound()->myCostSol.distance);
-			population.exportSearchProgress(commandline.config.pathSolution + ".PG.csv", commandline.config.pathInstance, commandline.config.seed);
-			if (commandline.config.pathBKS != "")
-			{
-				population.exportBKS(commandline.config.pathBKS);
-			}
+			// population.getBestFound()->exportCVRPLibFormat(commandline.config.pathSolution);
+			std::ofstream res_file("./obj_detailed.txt", std::ios::app);
+			res_file << commandline.config.pathInstance << "," << population.getBestFound()->myCostSol.penalizedCost << std::endl;
+			// population.exportSearchProgress(commandline.config.pathSolution + ".PG.csv", commandline.config.pathInstance, commandline.config.seed);
+			// if (commandline.config.pathBKS != "")
+			// {
+			// 	population.exportBKS(commandline.config.pathBKS);
+			// }
 		}
 	}
 
