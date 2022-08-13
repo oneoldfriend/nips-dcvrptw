@@ -216,14 +216,16 @@ def run_improved_heuristics(args, env):
 
 def run_learning_model(args, env):
     param = args.model.split('_')
+    args.eval_policy = param[5]
+    args.greedy_threshold = float(param[6])
     model = AttentionModel(encoder_class={"gnn": GNNEncoder}.get(param[0]),
                            embedding_dim=int(param[1]),
                            n_encode_layers=int(param[2]),
                            aggregation=param[3],
-                           normalization=param[4],
-                           learn_norm=bool(param[5]),
-                           track_norm=bool(param[6]),
-                           gated=bool(param[7]))
+                           normalization="batch",
+                           learn_norm=True,
+                           track_norm=False,
+                           gated=True)
     state_dict = torch.load("./models/" + args.model)
     model.load_state_dict(state_dict)
     model.eval()
@@ -231,7 +233,6 @@ def run_learning_model(args, env):
     done = False
     observation, static_info = env.reset()
     epoch_tlim = static_info['epoch_tlim']
-    num_requests_postponed = 0
     while not done:
         epoch_instance = observation['epoch_instance']
         if len(epoch_instance['request_idx']) - 1 > 0:
@@ -240,22 +241,18 @@ def run_learning_model(args, env):
             graph = torch.ones((len(epoch_instance['request_idx']), len(epoch_instance['request_idx'])))
             for idx in range(len(epoch_instance['request_idx'])):
                 graph[idx][idx] = 0
-            if args.verbose:
-                log(f"Epoch {static_info['start_epoch']} <= {observation['current_epoch']} <= {static_info['end_epoch']}",
-                    newline=False)
-                num_requests_open = len(epoch_instance['request_idx']) - 1
-                num_new_requests = num_requests_open - num_requests_postponed
-                log(f" | Requests: +{num_new_requests:3d} = {num_requests_open:3d}, {epoch_instance['must_dispatch'].sum():3d}/{num_requests_open:3d} must-go...",
-                    newline=False, flush=True)
             nodes = torch.unsqueeze(nodes, 0).to(torch.float32)
             graph = torch.unsqueeze(graph, 0).to(torch.long)
             pred_val, nodes_prob = model(nodes, graph)
         else:
             nodes_prob = []
-        assignments_results = tools.get_assignment_results(nodes_prob, epoch_instance['must_dispatch'])
+        assignments_results = tools.get_assignment_results(nodes_prob, epoch_instance['must_dispatch'],
+                                                           args.eval_policy, args)
         epoch_instance_dispatch = _filter_instance(epoch_instance, assignments_results)
-        epoch_solution, epoch_cost = list(
-            solve_static_vrptw(epoch_instance_dispatch, time_limit=epoch_tlim))[-1]
+        tmp_dir = os.path.join("tmp", str(uuid.uuid4()))
+        epoch_solution, epoch_cost = list(solve_static_vrptw(epoch_instance_dispatch, time_limit=epoch_tlim,
+                                                             tmp_dir=tmp_dir))[-1]
+        tools.cleanup_tmp_dir(tmp_dir)
         # Map solution to indices of corresponding requests
         epoch_solution = [epoch_instance_dispatch['request_idx'][route] for route in epoch_solution]
 
@@ -267,7 +264,7 @@ def run_learning_model(args, env):
 
         # step to next state
         observation, reward, done, info = env.step(epoch_solution)
-        assert epoch_cost is None or reward == -epoch_cost, "Reward should be negative cost of solution"
+        # assert epoch_cost is None or reward == -epoch_cost, "Reward should be negative cost of solution"
         assert not info['error'], f"Environment error: {info['error']}"
         total_reward += reward
     if args.verbose:
@@ -299,8 +296,13 @@ if __name__ == "__main__":
     parser.add_argument("--tmp_dir", type=str, default=None,
                         help="Provide a specific directory to use as tmp directory (useful for debugging)")
     parser.add_argument("--verbose", action='store_true', help="Show verbose output")
+
     parser.add_argument("--model", type=str, default=None,
                         help="Name of model file")
+    parser.add_argument("--eval_policy", type=str, default=None,
+                        help="policy for evaluation")
+    parser.add_argument('--greedy_threshold', type=float, default=0.5,
+                        help="Threshold for greedy policy")
 
     args = parser.parse_args()
 
@@ -331,9 +333,9 @@ if __name__ == "__main__":
             run_oracle(args, env)
         else:
             # run_rl_with_gnn(args, env)
-            run_baseline(args, env)
+            # run_baseline(args, env)
             # run_improved_heuristics(args, env)
-            # run_learning_model(args, env)
+            run_learning_model(args, env)
 
         if args.instance is not None:
             log(tools.json_dumps_np(env.final_solutions))

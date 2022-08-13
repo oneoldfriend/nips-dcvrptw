@@ -7,6 +7,7 @@ mkdir -p tmp
 cp -r ../baselines tmp
 rm tmp/baselines/hgs_vrptw/{*.o,genvrp}
 cp ../{solver.py,tools.py,environment.py,run.sh,install.sh,requirements.txt,metadata} tmp
+cp -r ../{models,learning_method} tmp
 cd tmp
 zip -o -r --exclude=*.git* --exclude=*__pycache__* --exclude=*.DS_Store* ../submission_$DATE.zip .;
 cd ../..
