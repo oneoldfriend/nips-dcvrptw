@@ -98,7 +98,7 @@ def run_oracle(args, env):
     return total_reward
 
 
-def run_baseline(args, env, oracle_solution=None):
+def run_baseline(args, env):
     rng = np.random.default_rng(args.solver_seed)
 
     total_reward = 0
@@ -118,24 +118,17 @@ def run_baseline(args, env, oracle_solution=None):
             log(f" | Requests: +{num_new_requests:3d} = {num_requests_open:3d}, {epoch_instance['must_dispatch'].sum():3d}/{num_requests_open:3d} must-go...",
                 newline=False, flush=True)
 
-        if oracle_solution is not None:
-            request_idx = set(epoch_instance['request_idx'])
-            epoch_solution = [route for route in oracle_solution if len(request_idx.intersection(route)) == len(route)]
-            cost = tools.validate_dynamic_epoch_solution(epoch_instance, epoch_solution)
-        else:
-            # Select the requests to dispatch using the strategy
-            # TODO improved better strategy (machine learning model?) to decide which non-must requests to dispatch
-            epoch_instance_dispatch = STRATEGIES[args.strategy](epoch_instance, rng)
-            # Run HGS with time limit and get last solution (= best solution found)
-            # Note we use the same solver_seed in each epoch: this is sufficient as for the static problem
-            # we will exactly use the solver_seed whereas in the dynamic problem randomness is in the instance
-            solutions = list(solve_static_vrptw(epoch_instance_dispatch, time_limit=epoch_tlim, tmp_dir=args.tmp_dir,
-                                                seed=args.solver_seed))
-            assert len(solutions) > 0, f"No solution found during epoch {observation['current_epoch']}"
-            epoch_solution, cost = solutions[-1]
+        epoch_instance_dispatch = STRATEGIES[args.strategy](epoch_instance, rng)
+        # Run HGS with time limit and get last solution (= best solution found)
+        # Note we use the same solver_seed in each epoch: this is sufficient as for the static problem
+        # we will exactly use the solver_seed whereas in the dynamic problem randomness is in the instance
+        solutions = list(solve_static_vrptw(epoch_instance_dispatch, time_limit=epoch_tlim, tmp_dir=args.tmp_dir,
+                                            seed=args.solver_seed))
+        assert len(solutions) > 0, f"No solution found during epoch {observation['current_epoch']}"
+        epoch_solution, cost = solutions[-1]
 
-            # Map HGS solution to indices of corresponding requests
-            epoch_solution = [epoch_instance_dispatch['request_idx'][route] for route in epoch_solution]
+        # Map HGS solution to indices of corresponding requests
+        epoch_solution = [epoch_instance_dispatch['request_idx'][route] for route in epoch_solution]
 
         if args.verbose:
             num_requests_dispatched = sum([len(route) for route in epoch_solution])
@@ -215,6 +208,7 @@ def run_improved_heuristics(args, env):
 
 
 def run_learning_model(args, env):
+    rng = np.random.default_rng(args.solver_seed)
     param = args.model.split('_')
     args.eval_policy = param[5]
     args.greedy_threshold = float(param[6])
@@ -235,20 +229,23 @@ def run_learning_model(args, env):
     epoch_tlim = static_info['epoch_tlim']
     while not done:
         epoch_instance = observation['epoch_instance']
-        if len(epoch_instance['request_idx']) - 1 > 0:
-            nodes_feature = tools.get_epoch_nodes_feature(epoch_instance, static_info)
-            nodes = torch.tensor(nodes_feature)
-            graph = torch.ones((len(epoch_instance['request_idx']), len(epoch_instance['request_idx'])))
-            for idx in range(len(epoch_instance['request_idx'])):
-                graph[idx][idx] = 0
-            nodes = torch.unsqueeze(nodes, 0).to(torch.float32)
-            graph = torch.unsqueeze(graph, 0).to(torch.long)
-            pred_val, nodes_prob = model(nodes, graph)
+        if static_info["is_static"] is True:
+            epoch_instance_dispatch = STRATEGIES['greedy'](epoch_instance, rng)
         else:
-            nodes_prob = []
-        assignments_results = tools.get_assignment_results(nodes_prob, epoch_instance['must_dispatch'],
-                                                           args.eval_policy, args)
-        epoch_instance_dispatch = _filter_instance(epoch_instance, assignments_results)
+            if len(epoch_instance['request_idx']) - 1 > 0:
+                nodes_feature = tools.get_epoch_nodes_feature(epoch_instance, static_info)
+                nodes = torch.tensor(nodes_feature)
+                graph = torch.ones((len(epoch_instance['request_idx']), len(epoch_instance['request_idx'])))
+                for idx in range(len(epoch_instance['request_idx'])):
+                    graph[idx][idx] = 0
+                nodes = torch.unsqueeze(nodes, 0).to(torch.float32)
+                graph = torch.unsqueeze(graph, 0).to(torch.long)
+                pred_val, nodes_prob = model(nodes, graph)
+            else:
+                nodes_prob = []
+            assignments_results = tools.get_assignment_results(nodes_prob, epoch_instance['must_dispatch'],
+                                                               args.eval_policy, args)
+            epoch_instance_dispatch = _filter_instance(epoch_instance, assignments_results)
         tmp_dir = os.path.join("tmp", str(uuid.uuid4()))
         epoch_solution, epoch_cost = list(solve_static_vrptw(epoch_instance_dispatch, time_limit=epoch_tlim,
                                                              tmp_dir=tmp_dir))[-1]
@@ -329,13 +326,10 @@ if __name__ == "__main__":
         args.static = None
         args.epoch_tlim = None
 
-        if args.strategy == 'oracle':
-            run_oracle(args, env)
-        else:
-            # run_rl_with_gnn(args, env)
-            # run_baseline(args, env)
-            # run_improved_heuristics(args, env)
-            run_learning_model(args, env)
+        # run_rl_with_gnn(args, env)
+        # run_baseline(args, env)
+        # run_improved_heuristics(args, env)
+        run_learning_model(args, env)
 
         if args.instance is not None:
             log(tools.json_dumps_np(env.final_solutions))

@@ -39,7 +39,7 @@ if __name__ == "__main__":
     done = False
 
     # Start subprocess and interact with it
-    with subprocess.Popen(solver_cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True) as p:
+    with subprocess.Popen(solver_cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, universal_newlines=True) as p:
 
         # Set global timeout, bit ugly but this will also interrupt waiting for input
         timeout_timer = threading.Timer(args.timeout, lambda: p.kill())

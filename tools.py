@@ -3,9 +3,7 @@ import os
 import numpy as np
 import pandas as pd
 import math
-import seaborn as sns
 import matplotlib.pyplot as plt
-from brokenaxes import brokenaxes
 
 # https://stackoverflow.com/questions/26646362/numpy-array-is-not-json-serializable
 import torch
