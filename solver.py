@@ -166,24 +166,26 @@ def run_improved_heuristics(args, env):
             num_new_requests = num_requests_open - num_requests_postponed
             log(f" | Requests: +{num_new_requests:3d} = {num_requests_open:3d}, {epoch_instance['must_dispatch'].sum():3d}/{num_requests_open:3d} must-go...",
                 newline=False, flush=True)
+        if static_info["is_static"] is False:
+            # accept all requests and get complete solution first
+            epoch_instance_dispatch = STRATEGIES['greedy'](epoch_instance, rng)
+            complete_solution_list = list(
+                solve_static_vrptw(epoch_instance_dispatch, time_limit=math.ceil(epoch_tlim / 2 - 2)))
 
-        # accept all requests and get complete solution first
-        epoch_instance_dispatch = STRATEGIES['greedy'](epoch_instance, rng)
-        complete_solution_list = list(
-            solve_static_vrptw(epoch_instance_dispatch, time_limit=math.ceil(epoch_tlim / 2 - 2)))
-
-        assert len(complete_solution_list) > 0, f"No solution found during epoch {observation['current_epoch']}"
-        # get postponed requests
-        complete_solution, complete_cost = complete_solution_list[-1]
-        postponed_requests = tools.get_postpone_requests(epoch_instance, complete_solution, (
-                observation['current_epoch'] + 1) * 3600 + 3600)
-        # get real solution from assigned requests
-        # 1) directly get sol from complete sol
-        # epoch_solution = tools.pick_out_requests_from_solution(complete_solution, postponed_requests)
-        # epoch_cost = tools.compute_solution_driving_time(epoch_instance, epoch_solution)
-        # 2) mask the instance then re-solve
-        mask = tools.get_instance_mask(epoch_instance, postponed_requests)
-        epoch_instance_dispatch = _filter_instance(epoch_instance, mask)
+            assert len(complete_solution_list) > 0, f"No solution found during epoch {observation['current_epoch']}"
+            # get postponed requests
+            complete_solution, complete_cost = complete_solution_list[-1]
+            postponed_requests = tools.get_postpone_requests(epoch_instance, complete_solution, (
+                    observation['current_epoch'] + 1) * 3600 + 3600)
+            # get real solution from assigned requests
+            # 1) directly get sol from complete sol
+            # epoch_solution = tools.pick_out_requests_from_solution(complete_solution, postponed_requests)
+            # epoch_cost = tools.compute_solution_driving_time(epoch_instance, epoch_solution)
+            # 2) mask the instance then re-solve
+            mask = tools.get_instance_mask(epoch_instance, postponed_requests)
+            epoch_instance_dispatch = _filter_instance(epoch_instance, mask)
+        else:
+            epoch_instance_dispatch = STRATEGIES['greedy'](epoch_instance, rng)
         epoch_solution, epoch_cost = list(
             solve_static_vrptw(epoch_instance_dispatch, time_limit=math.ceil(epoch_tlim * 1 / 2)))[-1]
         # Map solution to indices of corresponding requests
@@ -328,8 +330,8 @@ if __name__ == "__main__":
 
         # run_rl_with_gnn(args, env)
         # run_baseline(args, env)
-        # run_improved_heuristics(args, env)
-        run_learning_model(args, env)
+        run_improved_heuristics(args, env)
+        # run_learning_model(args, env)
 
         if args.instance is not None:
             log(tools.json_dumps_np(env.final_solutions))
