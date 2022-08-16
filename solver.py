@@ -170,7 +170,7 @@ def run_improved_heuristics(args, env):
             # accept all requests and get complete solution first
             epoch_instance_dispatch = STRATEGIES['greedy'](epoch_instance, rng)
             complete_solution_list = list(
-                solve_static_vrptw(epoch_instance_dispatch, time_limit=math.ceil(epoch_tlim / 2 - 2)))
+                solve_static_vrptw(epoch_instance_dispatch, time_limit=math.ceil(epoch_tlim / 3 - 2)))
 
             assert len(complete_solution_list) > 0, f"No solution found during epoch {observation['current_epoch']}"
             # get postponed requests
@@ -187,7 +187,7 @@ def run_improved_heuristics(args, env):
         else:
             epoch_instance_dispatch = STRATEGIES['greedy'](epoch_instance, rng)
         epoch_solution, epoch_cost = list(
-            solve_static_vrptw(epoch_instance_dispatch, time_limit=math.ceil(epoch_tlim * 1 / 2)))[-1]
+            solve_static_vrptw(epoch_instance_dispatch, time_limit=math.ceil(epoch_tlim * 2 / 3)))[-1]
         # Map solution to indices of corresponding requests
         epoch_solution = [epoch_instance_dispatch['request_idx'][route] for route in epoch_solution]
 
