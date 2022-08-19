@@ -25,7 +25,7 @@ void Genetic::run(int maxIterNonProd, int timeLimit)
 		// First select parents using getNonIdenticalParentsBinaryTournament
 		// Then use the selected parents to create new individuals using OX and SREX
 		// Finally select the best new individual based on bestOfSREXAndOXCrossovers
-		Individual* offspring = bestOfSREXAndOXCrossovers(population->getNonIdenticalParentsBinaryTournament());
+		Individual *offspring = bestOfSREXAndOXCrossovers(population->getNonIdenticalParentsBinaryTournament());
 
 		/* LOCAL SEARCH */
 		// Run the Local Search on the new individual
@@ -33,7 +33,7 @@ void Genetic::run(int maxIterNonProd, int timeLimit)
 		// Check if the new individual is the best feasible individual of the population, based on penalizedCost
 		bool isNewBest = population->addIndividual(offspring, true);
 		// In case of infeasibility, repair the individual with a certain probability
-		if (!offspring->isFeasible && params->rng() % 100 < (unsigned int) params->config.repairProbability)
+		if (!offspring->isFeasible && params->rng() % 100 < (unsigned int)params->config.repairProbability)
 		{
 			// Run the Local Search again, but with penalties for infeasibilities multiplied by 10
 			localSearch->run(offspring, params->penaltyCapacity * 10., params->penaltyTimeWarp * 10.);
@@ -50,7 +50,8 @@ void Genetic::run(int maxIterNonProd, int timeLimit)
 		{
 			nbIterNonProd = 1;
 		}
-		else nbIterNonProd++;
+		else
+			nbIterNonProd++;
 
 		/* DIVERSIFICATION, PENALTY MANAGEMENT AND TRACES */
 		// Update the penaltyTimeWarp and penaltyCapacity every 100 iterations
@@ -61,7 +62,7 @@ void Genetic::run(int maxIterNonProd, int timeLimit)
 		// Print the state of the population every 500 iterations
 		if (nbIter % 500 == 0)
 		{
-			population->printState(nbIter, nbIterNonProd);
+			// population->printState(nbIter, nbIterNonProd);
 		}
 		// Log the current population to a .csv file every logPoolInterval iterations (if logPoolInterval is not 0)
 		if (params->config.logPoolInterval > 0 && nbIter % params->config.logPoolInterval == 0)
@@ -78,10 +79,7 @@ void Genetic::run(int maxIterNonProd, int timeLimit)
 
 		/* OTHER PARAMETER CHANGES*/
 		// Increase the nbGranular by growNbGranularSize (and set the correlated vertices again) every certain number of iterations, if growNbGranularSize is greater than 0
-		if (nbIter > 0 && params->config.growNbGranularSize != 0 && (
-			(params->config.growNbGranularAfterIterations > 0 && nbIter % params->config.growNbGranularAfterIterations == 0) ||
-			(params->config.growNbGranularAfterNonImprovementIterations > 0 && nbIterNonProd % params->config.growNbGranularAfterNonImprovementIterations == 0)
-			))
+		if (nbIter > 0 && params->config.growNbGranularSize != 0 && ((params->config.growNbGranularAfterIterations > 0 && nbIter % params->config.growNbGranularAfterIterations == 0) || (params->config.growNbGranularAfterNonImprovementIterations > 0 && nbIterNonProd % params->config.growNbGranularAfterNonImprovementIterations == 0)))
 		{
 			// Note: changing nbGranular also changes how often the order is reshuffled
 			params->config.nbGranular += params->config.growNbGranularSize;
@@ -89,10 +87,7 @@ void Genetic::run(int maxIterNonProd, int timeLimit)
 		}
 
 		// Increase the minimumPopulationSize by growPopulationSize every certain number of iterations, if growPopulationSize is greater than 0
-		if (nbIter > 0 && params->config.growPopulationSize != 0 && (
-			(params->config.growPopulationAfterIterations > 0 && nbIter % params->config.growPopulationAfterIterations == 0) || 
-			(params->config.growPopulationAfterNonImprovementIterations > 0 && nbIterNonProd % params->config.growPopulationAfterNonImprovementIterations == 0)
-			))
+		if (nbIter > 0 && params->config.growPopulationSize != 0 && ((params->config.growPopulationAfterIterations > 0 && nbIter % params->config.growPopulationAfterIterations == 0) || (params->config.growPopulationAfterNonImprovementIterations > 0 && nbIterNonProd % params->config.growPopulationAfterNonImprovementIterations == 0)))
 		{
 			// This will automatically adjust after some iterations
 			params->config.minimumPopulationSize += params->config.growPopulationSize;
@@ -100,7 +95,7 @@ void Genetic::run(int maxIterNonProd, int timeLimit)
 	}
 }
 
-Individual* Genetic::crossoverOX(std::pair<const Individual*, const Individual*> parents)
+Individual *Genetic::crossoverOX(std::pair<const Individual *, const Individual *> parents)
 {
 	// Picking the start and end of the crossover zone
 	int start = params->rng() % params->nbClients;
@@ -118,11 +113,11 @@ Individual* Genetic::crossoverOX(std::pair<const Individual*, const Individual*>
 
 	// Return the best individual of the two, based on penalizedCost
 	return candidateOffsprings[2]->myCostSol.penalizedCost < candidateOffsprings[3]->myCostSol.penalizedCost
-		? candidateOffsprings[2]
-		: candidateOffsprings[3];
+			   ? candidateOffsprings[2]
+			   : candidateOffsprings[3];
 }
 
-void Genetic::doOXcrossover(Individual* result, std::pair<const Individual*, const Individual*> parents, int start, int end)
+void Genetic::doOXcrossover(Individual *result, std::pair<const Individual *, const Individual *> parents, int start, int end)
 {
 	// Frequency vector to track the clients which have been inserted already
 	std::vector<bool> freqClient = std::vector<bool>(params->nbClients + 1, false);
@@ -154,7 +149,7 @@ void Genetic::doOXcrossover(Individual* result, std::pair<const Individual*, con
 	split->generalSplit(result, params->nbVehicles);
 }
 
-Individual* Genetic::crossoverSREX(std::pair<const Individual*, const Individual*> parents)
+Individual *Genetic::crossoverSREX(std::pair<const Individual *, const Individual *> parents)
 {
 	// Get the number of routes of both parents
 	int nOfRoutesA = parents.first->myCostSol.nbRoutes;
@@ -169,16 +164,16 @@ Individual* Genetic::crossoverSREX(std::pair<const Individual*, const Individual
 	std::unordered_set<int> clientsInSelectedA;
 	for (int r = 0; r < nOfMovedRoutes; r++)
 	{
-		// Insert the first 
+		// Insert the first
 		clientsInSelectedA.insert(parents.first->chromR[(startA + r) % nOfRoutesA].begin(),
-			parents.first->chromR[(startA + r) % nOfRoutesA].end());
+								  parents.first->chromR[(startA + r) % nOfRoutesA].end());
 	}
 
 	std::unordered_set<int> clientsInSelectedB;
 	for (int r = 0; r < nOfMovedRoutes; r++)
 	{
 		clientsInSelectedB.insert(parents.second->chromR[(startB + r) % nOfRoutesB].begin(),
-			parents.second->chromR[(startB + r) % nOfRoutesB].end());
+								  parents.second->chromR[(startB + r) % nOfRoutesB].end());
 	}
 
 	bool improved = true;
@@ -186,37 +181,45 @@ Individual* Genetic::crossoverSREX(std::pair<const Individual*, const Individual
 	{
 		// Difference for moving 'left' in parent A
 		const int differenceALeft = static_cast<int>(std::count_if(parents.first->chromR[(startA - 1 + nOfRoutesA) % nOfRoutesA].begin(),
-			parents.first->chromR[(startA - 1 + nOfRoutesA) % nOfRoutesA].end(),
-			[&clientsInSelectedB](int c) { return clientsInSelectedB.find(c) == clientsInSelectedB.end(); }))
-			- static_cast<int>(std::count_if(parents.first->chromR[(startA + nOfMovedRoutes - 1) % nOfRoutesA].begin(),
-				parents.first->chromR[(startA + nOfMovedRoutes - 1) % nOfRoutesA].end(),
-				[&clientsInSelectedB](int c) { return clientsInSelectedB.find(c) == clientsInSelectedB.end(); }));
+																   parents.first->chromR[(startA - 1 + nOfRoutesA) % nOfRoutesA].end(),
+																   [&clientsInSelectedB](int c)
+																   { return clientsInSelectedB.find(c) == clientsInSelectedB.end(); })) -
+									static_cast<int>(std::count_if(parents.first->chromR[(startA + nOfMovedRoutes - 1) % nOfRoutesA].begin(),
+																   parents.first->chromR[(startA + nOfMovedRoutes - 1) % nOfRoutesA].end(),
+																   [&clientsInSelectedB](int c)
+																   { return clientsInSelectedB.find(c) == clientsInSelectedB.end(); }));
 
 		// Difference for moving 'right' in parent A
 		const int differenceARight = static_cast<int>(std::count_if(parents.first->chromR[(startA + nOfMovedRoutes) % nOfRoutesA].begin(),
-			parents.first->chromR[(startA + nOfMovedRoutes) % nOfRoutesA].end(),
-			[&clientsInSelectedB](int c) { return clientsInSelectedB.find(c) == clientsInSelectedB.end(); }))
-			- static_cast<int>(std::count_if(parents.first->chromR[startA].begin(),
-				parents.first->chromR[startA].end(),
-				[&clientsInSelectedB](int c) { return clientsInSelectedB.find(c) == clientsInSelectedB.end(); }));
+																	parents.first->chromR[(startA + nOfMovedRoutes) % nOfRoutesA].end(),
+																	[&clientsInSelectedB](int c)
+																	{ return clientsInSelectedB.find(c) == clientsInSelectedB.end(); })) -
+									 static_cast<int>(std::count_if(parents.first->chromR[startA].begin(),
+																	parents.first->chromR[startA].end(),
+																	[&clientsInSelectedB](int c)
+																	{ return clientsInSelectedB.find(c) == clientsInSelectedB.end(); }));
 
 		// Difference for moving 'left' in parent B
 		const int differenceBLeft = static_cast<int>(std::count_if(parents.second->chromR[(startB - 1 + nOfMovedRoutes) % nOfRoutesB].begin(),
-			parents.second->chromR[(startB - 1 + nOfMovedRoutes) % nOfRoutesB].end(),
-			[&clientsInSelectedA](int c) { return clientsInSelectedA.find(c) != clientsInSelectedA.end(); }))
-			- static_cast<int>(std::count_if(parents.second->chromR[(startB - 1 + nOfRoutesB) % nOfRoutesB].begin(),
-				parents.second->chromR[(startB - 1 + nOfRoutesB) % nOfRoutesB].end(),
-				[&clientsInSelectedA](int c) { return clientsInSelectedA.find(c) != clientsInSelectedA.end(); }));
+																   parents.second->chromR[(startB - 1 + nOfMovedRoutes) % nOfRoutesB].end(),
+																   [&clientsInSelectedA](int c)
+																   { return clientsInSelectedA.find(c) != clientsInSelectedA.end(); })) -
+									static_cast<int>(std::count_if(parents.second->chromR[(startB - 1 + nOfRoutesB) % nOfRoutesB].begin(),
+																   parents.second->chromR[(startB - 1 + nOfRoutesB) % nOfRoutesB].end(),
+																   [&clientsInSelectedA](int c)
+																   { return clientsInSelectedA.find(c) != clientsInSelectedA.end(); }));
 
 		// Difference for moving 'right' in parent B
 		const int differenceBRight = static_cast<int>(std::count_if(parents.second->chromR[startB].begin(),
-			parents.second->chromR[startB].end(),
-			[&clientsInSelectedA](int c) { return clientsInSelectedA.find(c) != clientsInSelectedA.end(); }))
-			- static_cast<int>(std::count_if(parents.second->chromR[(startB + nOfMovedRoutes) % nOfRoutesB].begin(),
-				parents.second->chromR[(startB + nOfMovedRoutes) % nOfRoutesB].end(),
-				[&clientsInSelectedA](int c) { return clientsInSelectedA.find(c) != clientsInSelectedA.end(); }));
+																	parents.second->chromR[startB].end(),
+																	[&clientsInSelectedA](int c)
+																	{ return clientsInSelectedA.find(c) != clientsInSelectedA.end(); })) -
+									 static_cast<int>(std::count_if(parents.second->chromR[(startB + nOfMovedRoutes) % nOfRoutesB].begin(),
+																	parents.second->chromR[(startB + nOfMovedRoutes) % nOfRoutesB].end(),
+																	[&clientsInSelectedA](int c)
+																	{ return clientsInSelectedA.find(c) != clientsInSelectedA.end(); }));
 
-		const int bestDifference = std::min({ differenceALeft, differenceARight, differenceBLeft, differenceBRight });
+		const int bestDifference = std::min({differenceALeft, differenceARight, differenceBLeft, differenceBRight});
 
 		if (bestDifference < 0)
 		{
@@ -278,13 +281,15 @@ Individual* Genetic::crossoverSREX(std::pair<const Individual*, const Individual
 	// Identify differences between route sets
 	std::unordered_set<int> clientsInSelectedANotB;
 	std::copy_if(clientsInSelectedA.begin(), clientsInSelectedA.end(),
-		std::inserter(clientsInSelectedANotB, clientsInSelectedANotB.end()),
-		[&clientsInSelectedB](int c) { return clientsInSelectedB.find(c) == clientsInSelectedB.end(); });
+				 std::inserter(clientsInSelectedANotB, clientsInSelectedANotB.end()),
+				 [&clientsInSelectedB](int c)
+				 { return clientsInSelectedB.find(c) == clientsInSelectedB.end(); });
 
 	std::unordered_set<int> clientsInSelectedBNotA;
 	std::copy_if(clientsInSelectedB.begin(), clientsInSelectedB.end(),
-		std::inserter(clientsInSelectedBNotA, clientsInSelectedBNotA.end()),
-		[&clientsInSelectedA](int c) { return clientsInSelectedA.find(c) == clientsInSelectedA.end(); });
+				 std::inserter(clientsInSelectedBNotA, clientsInSelectedBNotA.end()),
+				 [&clientsInSelectedA](int c)
+				 { return clientsInSelectedA.find(c) == clientsInSelectedA.end(); });
 
 	// Replace selected routes from parent A with routes from parent B
 	for (int r = 0; r < nOfMovedRoutes; r++)
@@ -336,16 +341,16 @@ Individual* Genetic::crossoverSREX(std::pair<const Individual*, const Individual
 	candidateOffsprings[1]->evaluateCompleteCost();
 
 	return candidateOffsprings[0]->myCostSol.penalizedCost < candidateOffsprings[1]->myCostSol.penalizedCost
-		? candidateOffsprings[0]
-		: candidateOffsprings[1];
+			   ? candidateOffsprings[0]
+			   : candidateOffsprings[1];
 }
 
-void Genetic::insertUnplannedTasks(Individual* offspring, std::unordered_set<int> unplannedTasks)
+void Genetic::insertUnplannedTasks(Individual *offspring, std::unordered_set<int> unplannedTasks)
 {
 	// Initialize some variables
-	int newDistanceToInsert = INT_MAX;		// TODO:
-	int newDistanceFromInsert = INT_MAX;	// TODO:
-	int distanceDelta = INT_MAX;			// TODO:
+	int newDistanceToInsert = INT_MAX;	 // TODO:
+	int newDistanceFromInsert = INT_MAX; // TODO:
+	int distanceDelta = INT_MAX;		 // TODO:
 
 	// Loop over all unplannedTasks
 	for (int c : unplannedTasks)
@@ -369,12 +374,11 @@ void Genetic::insertUnplannedTasks(Individual* offspring, std::unordered_set<int
 			newDistanceFromInsert = params->timeCost.get(c, offspring->chromR[r][0]);
 			if (earliestArrival + newDistanceFromInsert < params->cli[offspring->chromR[r][0]].latestArrival)
 			{
-				distanceDelta = params->timeCost.get(0, c) + newDistanceToInsert
-					- params->timeCost.get(0, offspring->chromR[r][0]);
+				distanceDelta = params->timeCost.get(0, c) + newDistanceToInsert - params->timeCost.get(0, offspring->chromR[r][0]);
 				if (distanceDelta < bestDistance)
 				{
 					bestDistance = distanceDelta;
-					bestLocation = { r, 0 };
+					bestLocation = {r, 0};
 				}
 			}
 
@@ -382,15 +386,13 @@ void Genetic::insertUnplannedTasks(Individual* offspring, std::unordered_set<int
 			{
 				newDistanceToInsert = params->timeCost.get(offspring->chromR[r][i - 1], c);
 				newDistanceFromInsert = params->timeCost.get(c, offspring->chromR[r][i]);
-				if (params->cli[offspring->chromR[r][i - 1]].earliestArrival + newDistanceToInsert < latestArrival
-					&& earliestArrival + newDistanceFromInsert < params->cli[offspring->chromR[r][i]].latestArrival)
+				if (params->cli[offspring->chromR[r][i - 1]].earliestArrival + newDistanceToInsert < latestArrival && earliestArrival + newDistanceFromInsert < params->cli[offspring->chromR[r][i]].latestArrival)
 				{
-					distanceDelta = newDistanceToInsert + newDistanceFromInsert
-						- params->timeCost.get(offspring->chromR[r][i - 1], offspring->chromR[r][i]);
+					distanceDelta = newDistanceToInsert + newDistanceFromInsert - params->timeCost.get(offspring->chromR[r][i - 1], offspring->chromR[r][i]);
 					if (distanceDelta < bestDistance)
 					{
 						bestDistance = distanceDelta;
-						bestLocation = { r, i };
+						bestLocation = {r, i};
 					}
 				}
 			}
@@ -398,12 +400,11 @@ void Genetic::insertUnplannedTasks(Individual* offspring, std::unordered_set<int
 			newDistanceToInsert = params->timeCost.get(offspring->chromR[r].back(), c);
 			if (params->cli[offspring->chromR[r].back()].earliestArrival + newDistanceToInsert < latestArrival)
 			{
-				distanceDelta = newDistanceToInsert + params->timeCost.get(c, 0)
-					- params->timeCost.get(offspring->chromR[r].back(), 0);
+				distanceDelta = newDistanceToInsert + params->timeCost.get(c, 0) - params->timeCost.get(offspring->chromR[r].back(), 0);
 				if (distanceDelta < bestDistance)
 				{
 					bestDistance = distanceDelta;
-					bestLocation = { r, static_cast<int>(offspring->chromR[r].size()) };
+					bestLocation = {r, static_cast<int>(offspring->chromR[r].size())};
 				}
 			}
 		}
@@ -413,28 +414,29 @@ void Genetic::insertUnplannedTasks(Individual* offspring, std::unordered_set<int
 	}
 }
 
-Individual* Genetic::bestOfSREXAndOXCrossovers(std::pair<const Individual*, const Individual*> parents)
+Individual *Genetic::bestOfSREXAndOXCrossovers(std::pair<const Individual *, const Individual *> parents)
 {
 	// Create two individuals, one with OX and one with SREX
-	Individual* offspringOX = crossoverOX(parents);
-	Individual* offspringSREX = crossoverSREX(parents);
+	Individual *offspringOX = crossoverOX(parents);
+	Individual *offspringSREX = crossoverSREX(parents);
 
-	//Return the best individual, based on penalizedCost
+	// Return the best individual, based on penalizedCost
 	return offspringOX->myCostSol.penalizedCost < offspringSREX->myCostSol.penalizedCost
-		? offspringOX
-		: offspringSREX;
+			   ? offspringOX
+			   : offspringSREX;
 }
 
-Genetic::Genetic(Params* params, Split* split, Population* population, LocalSearch* localSearch) : params(params), split(split), population(population), localSearch(localSearch)
+Genetic::Genetic(Params *params, Split *split, Population *population, LocalSearch *localSearch) : params(params), split(split), population(population), localSearch(localSearch)
 {
 	// After initializing the parameters of the Genetic object, also generate new individuals in the array candidateOffsprings
-	std::generate(candidateOffsprings.begin(), candidateOffsprings.end(), [&]{ return new Individual(params); });
+	std::generate(candidateOffsprings.begin(), candidateOffsprings.end(), [&]
+				  { return new Individual(params); });
 }
 
 Genetic::~Genetic(void)
 {
 	// Destruct the Genetic object by deleting all the individuals of the candidateOffsprings
-	for (Individual* candidateOffspring : candidateOffsprings)
+	for (Individual *candidateOffspring : candidateOffsprings)
 	{
 		delete candidateOffspring;
 	}
