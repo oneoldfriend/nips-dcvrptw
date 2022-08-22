@@ -67,7 +67,7 @@ void Genetic::run(int maxIterNonProd, int timeLimit)
 		// Log the current population to a .csv file every logPoolInterval iterations (if logPoolInterval is not 0)
 		if (params->config.logPoolInterval > 0 && nbIter % params->config.logPoolInterval == 0)
 		{
-			population->exportPopulation(nbIter, params->config.pathSolution + ".log.csv");
+			// population->exportPopulation(nbIter, params->config.pathSolution + ".log.csv");
 		}
 
 		/* FOR TESTS INVOLVING SUCCESSIVE RUNS UNTIL A TIME LIMIT: WE RESET THE ALGORITHM/POPULATION EACH TIME maxIterNonProd IS ATTAINED*/
