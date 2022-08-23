@@ -44,6 +44,7 @@ int main(int argc, char *argv[])
 			// population.getBestFound()->exportCVRPLibFormat(commandline.config.pathSolution);
 			std::ofstream res_file("./obj_detailed.txt", std::ios::app);
 			res_file << commandline.config.pathInstance << "," << population.getBestFound()->myCostSol.penalizedCost << std::endl;
+			std::cout << "obj: " << population.getBestFound()->myCostSol.penalizedCost << std::endl;
 			// population.exportSearchProgress(commandline.config.pathSolution + ".PG.csv", commandline.config.pathInstance, commandline.config.seed);
 			// if (commandline.config.pathBKS != "")
 			// {
