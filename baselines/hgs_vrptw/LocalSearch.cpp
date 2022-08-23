@@ -357,24 +357,56 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 					// Randomizing the order of the neighborhoods within this loop does not matter much as we are already randomizing the order of the node pairs (and it's not very common to find improving moves of different types for the same node pair)
 					setLocalVariablesRouteU();
 					setLocalVariablesRouteV();
-					// this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "MSC"] = nbMoves + kTabuLength;
-					if (MoveSingleClient())
-						continue; // RELOCATE
-					if (MoveTwoClients())
-						continue; // RELOCATE
-					if (MoveTwoClientsReversed())
-						continue; // RELOCATE
-					if (nodeUIndex < nodeVIndex && SwapTwoSingleClients())
-						continue; // SWAP
-					if (SwapTwoClientsForOne())
-						continue; // SWAP
-					if (nodeUIndex < nodeVIndex && SwapTwoClientPairs())
-						continue; // SWAP
-					if (routeU->cour < routeV->cour && TwoOptBetweenTrips())
-						continue; // 2-OPT*
-					if (routeU == routeV && TwoOptWithinTrip())
-						continue; // 2-OPT
-
+					std::string node_comb_str = std::to_string(nodeU->cour) + std::to_string(nodeV->cour);
+					std::string tabu_id = node_comb_str + "MSC";
+					if (this->nbMoves > this->_tabu_list[tabu_id] || kNoTabu)
+					{
+						this->_tabu_list[tabu_id] = nbMoves + kTabuLength;
+						if (MoveSingleClient())
+							continue; // RELOCATE
+					}
+					tabu_id = node_comb_str + "MTC";
+					if (this->nbMoves > this->_tabu_list[tabu_id] || kNoTabu)
+					{
+						if (MoveTwoClients())
+							continue; // RELOCATE
+					}
+					tabu_id = node_comb_str + "MTCR";
+					if (this->nbMoves > this->_tabu_list[tabu_id] || kNoTabu)
+					{
+						if (MoveTwoClientsReversed())
+							continue; // RELOCATE
+					}
+					tabu_id = node_comb_str + "STSC";
+					if (this->nbMoves > this->_tabu_list[tabu_id] || kNoTabu)
+					{
+						if (nodeUIndex < nodeVIndex && SwapTwoSingleClients())
+							continue; // SWAP
+					}
+					tabu_id = node_comb_str + "STSFO";
+					if (this->nbMoves > this->_tabu_list[tabu_id] || kNoTabu)
+					{
+						if (SwapTwoClientsForOne())
+							continue; // SWAP
+					}
+					tabu_id = node_comb_str + "STCP";
+					if (this->nbMoves > this->_tabu_list[tabu_id] || kNoTabu)
+					{
+						if (nodeUIndex < nodeVIndex && SwapTwoClientPairs())
+							continue; // SWAP
+					}
+					tabu_id = node_comb_str + "TOBT";
+					if (this->nbMoves > this->_tabu_list[tabu_id] || kNoTabu)
+					{
+						if (routeU->cour < routeV->cour && TwoOptBetweenTrips())
+							continue; // 2-OPT*
+					}
+					tabu_id = node_comb_str + "TOWT";
+					if (this->nbMoves > this->_tabu_list[tabu_id] || kNoTabu)
+					{
+						if (routeU == routeV && TwoOptWithinTrip())
+							continue; // 2-OPT
+					}
 					// Trying moves that insert nodeU directly after the depot
 					if (nodeV->prev->isDepot)
 					{
