@@ -9,7 +9,7 @@
 #include "Params.h"
 
 int kTabuLength = 30;
-bool kNoTabu = false;
+bool kNoTabu = true;
 
 bool operator==(const TimeWindowData &twData1, const TimeWindowData &twData2)
 {
@@ -357,86 +357,24 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 					// Randomizing the order of the neighborhoods within this loop does not matter much as we are already randomizing the order of the node pairs (and it's not very common to find improving moves of different types for the same node pair)
 					setLocalVariablesRouteU();
 					setLocalVariablesRouteV();
-					if (nbMoves >= this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "MSC"] || kNoTabu)
-					{
-						this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "MSC"] = nbMoves + kTabuLength;
-						if (MoveSingleClient())
-							continue; // RELOCATE
-					}
-					else
-					{
-						// std::cout << "MSC tabued!" << std::endl;
-					}
-					if (nbMoves >= this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "MTC"] || kNoTabu)
-					{
-						this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "MTC"] = nbMoves + kTabuLength;
-						if (MoveTwoClients())
-							continue; // RELOCATE
-					}
-					else
-					{
-						// std::cout << "MTC tabued!" << std::endl;
-					}
-					if (nbMoves >= this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "MTCR"] || kNoTabu)
-					{
-						this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "MTCR"] = nbMoves + kTabuLength;
-						if (MoveTwoClientsReversed())
-							continue; // RELOCATE
-					}
-					else
-					{
-						// std::cout << "MTCR tabued!" << std::endl;
-					}
-					if (nbMoves >= this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "STSC"] || kNoTabu)
-					{
-						this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "STSC"] = nbMoves + kTabuLength;
-						if (nodeUIndex < nodeVIndex && SwapTwoSingleClients())
-							continue; // SWAP
-					}
-					else
-					{
-						// std::cout << "STSC tabued!" << std::endl;
-					}
-					if (nbMoves >= this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "STSFO"] || kNoTabu)
-					{
-						this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "STSFO"] = nbMoves + kTabuLength;
-						if (SwapTwoClientsForOne())
-							continue; // SWAP
-					}
-					else
-					{
-						// std::cout << "STSFO tabued!" << std::endl;
-					}
-					if (nbMoves >= this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "STCP"] || kNoTabu)
-					{
-						this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "STCP"] = nbMoves + kTabuLength;
-						if (nodeUIndex < nodeVIndex && SwapTwoClientPairs())
-							continue; // SWAP
-					}
-					else
-					{
-						// std::cout << "STCP tabued!" << std::endl;
-					}
-					if (nbMoves >= this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "TOBT"] || kNoTabu)
-					{
-						this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "TOBT"] = nbMoves + kTabuLength;
-						if (routeU->cour < routeV->cour && TwoOptBetweenTrips())
-							continue; // 2-OPT*
-					}
-					else
-					{
-						// std::cout << "TOBT tabued!" << std::endl;
-					}
-					if (nbMoves >= this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "TOWT"] || kNoTabu)
-					{
-						this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "TOWT"] = nbMoves + kTabuLength;
-						if (routeU == routeV && TwoOptWithinTrip())
-							continue; // 2-OPT
-					}
-					else
-					{
-						// std::cout << "TOWT tabued!" << std::endl;
-					}
+					// this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "MSC"] = nbMoves + kTabuLength;
+					if (MoveSingleClient())
+						continue; // RELOCATE
+					if (MoveTwoClients())
+						continue; // RELOCATE
+					if (MoveTwoClientsReversed())
+						continue; // RELOCATE
+					if (nodeUIndex < nodeVIndex && SwapTwoSingleClients())
+						continue; // SWAP
+					if (SwapTwoClientsForOne())
+						continue; // SWAP
+					if (nodeUIndex < nodeVIndex && SwapTwoClientPairs())
+						continue; // SWAP
+					if (routeU->cour < routeV->cour && TwoOptBetweenTrips())
+						continue; // 2-OPT*
+					if (routeU == routeV && TwoOptWithinTrip())
+						continue; // 2-OPT
+
 					// Trying moves that insert nodeU directly after the depot
 					if (nodeV->prev->isDepot)
 					{
@@ -456,7 +394,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 
 			/* MOVES INVOLVING AN EMPTY ROUTE -- NOT TESTED IN THE FIRST LOOP TO AVOID INCREASING TOO MUCH THE FLEET SIZE */
 			if (loopID > 0 && !emptyRoutes.empty())
-			// if (!emptyRoutes.empty())
 			{
 				nodeV = routes[*emptyRoutes.begin()].depot;
 				setLocalVariablesRouteU();
