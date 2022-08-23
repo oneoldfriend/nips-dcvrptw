@@ -362,11 +362,19 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						if (MoveSingleClient())
 							continue; // RELOCATE
 					}
+					else
+					{
+						// std::cout << "MSC tabued!" << std::endl;
+					}
 					if (nbMoves >= this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "MTC"] || kNoTabu)
 					{
 						this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "MTC"] = nbMoves + kTabuLength;
 						if (MoveTwoClients())
 							continue; // RELOCATE
+					}
+					else
+					{
+						// std::cout << "MTC tabued!" << std::endl;
 					}
 					if (nbMoves >= this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "MTCR"] || kNoTabu)
 					{
@@ -374,11 +382,19 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						if (MoveTwoClientsReversed())
 							continue; // RELOCATE
 					}
+					else
+					{
+						// std::cout << "MTCR tabued!" << std::endl;
+					}
 					if (nbMoves >= this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "STSC"] || kNoTabu)
 					{
 						this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "STSC"] = nbMoves + kTabuLength;
 						if (nodeUIndex < nodeVIndex && SwapTwoSingleClients())
 							continue; // SWAP
+					}
+					else
+					{
+						// std::cout << "STSC tabued!" << std::endl;
 					}
 					if (nbMoves >= this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "STSFO"] || kNoTabu)
 					{
@@ -386,11 +402,19 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						if (SwapTwoClientsForOne())
 							continue; // SWAP
 					}
+					else
+					{
+						// std::cout << "STSFO tabued!" << std::endl;
+					}
 					if (nbMoves >= this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "STCP"] || kNoTabu)
 					{
 						this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "STCP"] = nbMoves + kTabuLength;
 						if (nodeUIndex < nodeVIndex && SwapTwoClientPairs())
 							continue; // SWAP
+					}
+					else
+					{
+						// std::cout << "STCP tabued!" << std::endl;
 					}
 					if (nbMoves >= this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "TOBT"] || kNoTabu)
 					{
@@ -398,11 +422,19 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						if (routeU->cour < routeV->cour && TwoOptBetweenTrips())
 							continue; // 2-OPT*
 					}
+					else
+					{
+						// std::cout << "TOBT tabued!" << std::endl;
+					}
 					if (nbMoves >= this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "TOWT"] || kNoTabu)
 					{
 						this->_tabu_list[std::to_string(nodeU->cour) + std::to_string(nodeV->cour) + "TOWT"] = nbMoves + kTabuLength;
 						if (routeU == routeV && TwoOptWithinTrip())
 							continue; // 2-OPT
+					}
+					else
+					{
+						// std::cout << "TOWT tabued!" << std::endl;
 					}
 					// Trying moves that insert nodeU directly after the depot
 					if (nodeV->prev->isDepot)
