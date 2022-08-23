@@ -8,7 +8,7 @@
 #include "CircleSector.h"
 #include "Params.h"
 
-int kTabuLength = 10;
+int kTabuLength = 30;
 bool kNoTabu = false;
 
 bool operator==(const TimeWindowData &twData1, const TimeWindowData &twData2)
@@ -331,6 +331,7 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 			std::shuffle(params->correlatedVertices[i].begin(), params->correlatedVertices[i].end(), params->rng);
 
 	searchCompleted = false;
+	this->_tabu_list.clear();
 	for (loopID = 0; !searchCompleted; loopID++)
 	{
 		if (loopID > 1)
