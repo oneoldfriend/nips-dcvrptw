@@ -9,7 +9,7 @@
 #include "Params.h"
 
 int kTabuLength = 30;
-bool kNoTabu = true;
+bool kNoTabu = false;
 
 bool operator==(const TimeWindowData &twData1, const TimeWindowData &twData2)
 {
