@@ -8,7 +8,7 @@
 #include "CircleSector.h"
 #include "Params.h"
 
-int kTabuLength = 500;
+int kTabuLength = 14;
 bool kNoTabu = false;
 
 bool operator==(const TimeWindowData &twData1, const TimeWindowData &twData2)

@@ -204,7 +204,7 @@ bool Population::addIndividual(const Individual *indiv, bool updateFeasible)
 
 				// Print solution for processing by the controller (after output is written since controller may terminate program!)
 				// Note: delay for writing is negligible
-				// bestSolutionOverall.printCVRPLibFormat();
+				bestSolutionOverall.printCVRPLibFormat();
 			}
 		}
 		return true;
