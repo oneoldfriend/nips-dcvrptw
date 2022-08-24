@@ -8,7 +8,7 @@
 #include "CircleSector.h"
 #include "Params.h"
 
-int kTabuLength = 30;
+int kTabuLength = 500;
 bool kNoTabu = false;
 
 bool operator==(const TimeWindowData &twData1, const TimeWindowData &twData2)
@@ -361,51 +361,73 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 					std::string tabu_id = node_comb_str + "MSC";
 					if (this->nbMoves > this->_tabu_list[tabu_id] || kNoTabu)
 					{
-						this->_tabu_list[tabu_id] = nbMoves + kTabuLength;
 						if (MoveSingleClient())
+						{
+							this->_tabu_list[tabu_id] = nbMoves + kTabuLength;
 							continue; // RELOCATE
+						}
 					}
 					tabu_id = node_comb_str + "MTC";
 					if (this->nbMoves > this->_tabu_list[tabu_id] || kNoTabu)
 					{
 						if (MoveTwoClients())
+						{
+							this->_tabu_list[tabu_id] = nbMoves + kTabuLength;
 							continue; // RELOCATE
+						}
 					}
 					tabu_id = node_comb_str + "MTCR";
 					if (this->nbMoves > this->_tabu_list[tabu_id] || kNoTabu)
 					{
 						if (MoveTwoClientsReversed())
+						{
+							this->_tabu_list[tabu_id] = nbMoves + kTabuLength;
 							continue; // RELOCATE
+						}
 					}
 					tabu_id = node_comb_str + "STSC";
 					if (this->nbMoves > this->_tabu_list[tabu_id] || kNoTabu)
 					{
 						if (nodeUIndex < nodeVIndex && SwapTwoSingleClients())
+						{
+							this->_tabu_list[tabu_id] = nbMoves + kTabuLength;
 							continue; // SWAP
+						}
 					}
 					tabu_id = node_comb_str + "STSFO";
 					if (this->nbMoves > this->_tabu_list[tabu_id] || kNoTabu)
 					{
 						if (SwapTwoClientsForOne())
+						{
+							this->_tabu_list[tabu_id] = nbMoves + kTabuLength;
 							continue; // SWAP
+						}
 					}
 					tabu_id = node_comb_str + "STCP";
 					if (this->nbMoves > this->_tabu_list[tabu_id] || kNoTabu)
 					{
 						if (nodeUIndex < nodeVIndex && SwapTwoClientPairs())
+						{
+							this->_tabu_list[tabu_id] = nbMoves + kTabuLength;
 							continue; // SWAP
+						}
 					}
 					tabu_id = node_comb_str + "TOBT";
 					if (this->nbMoves > this->_tabu_list[tabu_id] || kNoTabu)
 					{
 						if (routeU->cour < routeV->cour && TwoOptBetweenTrips())
+						{
 							continue; // 2-OPT*
+						}
 					}
 					tabu_id = node_comb_str + "TOWT";
 					if (this->nbMoves > this->_tabu_list[tabu_id] || kNoTabu)
 					{
 						if (routeU == routeV && TwoOptWithinTrip())
+						{
+							this->_tabu_list[tabu_id] = nbMoves + kTabuLength;
 							continue; // 2-OPT
+						}
 					}
 					// Trying moves that insert nodeU directly after the depot
 					if (nodeV->prev->isDepot)
