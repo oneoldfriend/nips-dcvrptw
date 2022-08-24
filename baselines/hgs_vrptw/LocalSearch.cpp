@@ -379,6 +379,7 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						{
 							this->score_sum += improve_score;
 							this->operator_scores[0] += improve_score;
+							continue;
 						}
 						break; // RELOCATE
 					}
@@ -389,6 +390,7 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 
 							this->score_sum += improve_score;
 							this->operator_scores[1] += improve_score;
+							continue;
 						}
 						break; // RELOCATE
 					}
@@ -398,6 +400,7 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						{
 							this->score_sum += improve_score;
 							this->operator_scores[2] += improve_score;
+							continue;
 						}
 						break; // RELOCATE
 					}
@@ -407,6 +410,7 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						{
 							this->score_sum += improve_score;
 							this->operator_scores[3] += improve_score;
+							continue;
 						}
 						break; // SWAP
 					}
@@ -416,6 +420,7 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						{
 							this->score_sum += improve_score;
 							this->operator_scores[4] += improve_score;
+							continue;
 						}
 						break; // SWAP
 					}
@@ -425,6 +430,7 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						{
 							this->score_sum += improve_score;
 							this->operator_scores[5] += improve_score;
+							continue;
 						}
 						break; // SWAP
 					}
@@ -434,6 +440,7 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						{
 							this->score_sum += improve_score;
 							this->operator_scores[6] += improve_score;
+							continue;
 						}
 						break; // 2-OPT*
 					}
@@ -443,6 +450,7 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						{
 							this->score_sum += improve_score;
 							this->operator_scores[7] += improve_score;
+							continue;
 						}
 						break; // 2-OPT
 					}

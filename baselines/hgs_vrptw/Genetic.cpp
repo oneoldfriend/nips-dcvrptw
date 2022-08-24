@@ -19,6 +19,7 @@ void Genetic::run(int maxIterNonProd, int timeLimit)
 	}
 	// Do iterations of the Genetic Algorithm, until more then maxIterNonProd consecutive iterations without improvement or a time limit (in seconds) is reached
 	int nbIterNonProd = 1;
+	std::cout << nbIterNonProd << " " << maxIterNonProd << " " << params->isTimeLimitExceeded() << std::endl;
 	for (int nbIter = 0; nbIterNonProd <= maxIterNonProd && !params->isTimeLimitExceeded(); nbIter++)
 	{
 		/* SELECTION AND CROSSOVER */
