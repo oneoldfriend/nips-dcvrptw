@@ -8,6 +8,8 @@
 #include "CircleSector.h"
 #include "Params.h"
 
+double improve_score = 3.0;
+
 bool operator==(const TimeWindowData &twData1, const TimeWindowData &twData2)
 {
 	return twData1.firstNodeIndex == twData2.firstNodeIndex &&
@@ -318,7 +320,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 	this->penaltyCapacityLS = penaltyCapacityLS;
 	this->penaltyTimeWarpLS = penaltyTimeWarpLS;
 	loadIndividual(indiv);
-
 	// Shuffling the order of the nodes explored by the LS to allow for more diversity in the search
 	std::shuffle(orderNodes.begin(), orderNodes.end(), params->rng);
 	std::shuffle(orderRoutes.begin(), orderRoutes.end(), params->rng);
@@ -352,22 +353,114 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 					// Randomizing the order of the neighborhoods within this loop does not matter much as we are already randomizing the order of the node pairs (and it's not very common to find improving moves of different types for the same node pair)
 					setLocalVariablesRouteU();
 					setLocalVariablesRouteV();
-					if (MoveSingleClient())
-						continue; // RELOCATE
-					if (MoveTwoClients())
-						continue; // RELOCATE
-					if (MoveTwoClientsReversed())
-						continue; // RELOCATE
-					if (nodeUIndex < nodeVIndex && SwapTwoSingleClients())
-						continue; // SWAP
-					if (SwapTwoClientsForOne())
-						continue; // SWAP
-					if (nodeUIndex < nodeVIndex && SwapTwoClientPairs())
-						continue; // SWAP
-					if (routeU->cour < routeV->cour && TwoOptBetweenTrips())
-						continue; // 2-OPT*
-					if (routeU == routeV && TwoOptWithinTrip())
-						continue; // 2-OPT
+					// prob calc
+					for (int idx = 0; idx < 8; idx++)
+					{
+						this->operator_prob[idx] = this->operator_scores[idx] / this->score_sum;
+					}
+					// sample operators
+					int sample_times = 0;
+					double sample = double(params->rng()) / double(params->rng.max());
+					double cur_prob = 0.0;
+					int selected_oprt = 7;
+					for (int i = 0; i < 8; i++)
+					{
+						cur_prob += this->operator_prob[i];
+						if (sample <= cur_prob)
+						{
+							selected_oprt = i;
+							break;
+						}
+					}
+					switch (selected_oprt)
+					{
+					case 0:
+					{
+						if (MoveSingleClient())
+						{
+							this->score_sum += improve_score;
+							this->operator_scores[0] += improve_score;
+							sample_times = 8; // move on to next node
+						}
+						break; // RELOCATE
+					}
+					case 1:
+					{
+						if (MoveTwoClients())
+						{
+
+							this->score_sum += improve_score;
+							this->operator_scores[1] += improve_score;
+							sample_times = 8; // move on to next node
+						}
+						break; // RELOCATE
+					}
+					case 2:
+					{
+						if (MoveTwoClientsReversed())
+						{
+							this->score_sum += improve_score;
+							this->operator_scores[2] += improve_score;
+							sample_times = 8; // move on to next node
+						}
+						break; // RELOCATE
+					}
+					case 3:
+					{
+						if (nodeUIndex < nodeVIndex && SwapTwoSingleClients())
+						{
+							this->score_sum += improve_score;
+							this->operator_scores[3] += improve_score;
+							sample_times = 8; // move on to next node
+						}
+						break; // SWAP
+					}
+					case 4:
+					{
+						if (SwapTwoClientsForOne())
+						{
+							this->score_sum += improve_score;
+							this->operator_scores[4] += improve_score;
+							sample_times = 8; // move on to next node
+						}
+						break; // SWAP
+					}
+					case 5:
+					{
+						if (nodeUIndex < nodeVIndex && SwapTwoClientPairs())
+						{
+							this->score_sum += improve_score;
+							this->operator_scores[5] += improve_score;
+							sample_times = 8; // move on to next node
+						}
+						break; // SWAP
+					}
+					case 6:
+					{
+						if (routeU->cour < routeV->cour && TwoOptBetweenTrips())
+						{
+							this->score_sum += improve_score;
+							this->operator_scores[6] += improve_score;
+							sample_times = 8; // move on to next node
+						}
+						break; // 2-OPT*
+					}
+					case 7:
+					{
+						if (routeU == routeV && TwoOptWithinTrip())
+						{
+							this->score_sum += improve_score;
+							this->operator_scores[7] += improve_score;
+							sample_times = 8; // move on to next node
+						}
+						break; // 2-OPT
+					}
+					default:
+					{
+						std::cout << "Unknown selected operator " << selected_oprt << std::endl;
+						break;
+					}
+					}
 
 					// Trying moves that insert nodeU directly after the depot
 					if (nodeV->prev->isDepot)
