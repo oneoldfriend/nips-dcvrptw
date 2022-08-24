@@ -359,7 +359,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						this->operator_prob[idx] = this->operator_scores[idx] / this->score_sum;
 					}
 					// sample operators
-					int sample_times = 0;
 					double sample = double(params->rng()) / double(params->rng.max());
 					double cur_prob = 0.0;
 					int selected_oprt = 7;
@@ -380,7 +379,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						{
 							this->score_sum += improve_score;
 							this->operator_scores[0] += improve_score;
-							sample_times = 8; // move on to next node
 						}
 						break; // RELOCATE
 					}
@@ -391,7 +389,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 
 							this->score_sum += improve_score;
 							this->operator_scores[1] += improve_score;
-							sample_times = 8; // move on to next node
 						}
 						break; // RELOCATE
 					}
@@ -401,7 +398,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						{
 							this->score_sum += improve_score;
 							this->operator_scores[2] += improve_score;
-							sample_times = 8; // move on to next node
 						}
 						break; // RELOCATE
 					}
@@ -411,7 +407,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						{
 							this->score_sum += improve_score;
 							this->operator_scores[3] += improve_score;
-							sample_times = 8; // move on to next node
 						}
 						break; // SWAP
 					}
@@ -421,7 +416,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						{
 							this->score_sum += improve_score;
 							this->operator_scores[4] += improve_score;
-							sample_times = 8; // move on to next node
 						}
 						break; // SWAP
 					}
@@ -431,7 +425,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						{
 							this->score_sum += improve_score;
 							this->operator_scores[5] += improve_score;
-							sample_times = 8; // move on to next node
 						}
 						break; // SWAP
 					}
@@ -441,7 +434,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						{
 							this->score_sum += improve_score;
 							this->operator_scores[6] += improve_score;
-							sample_times = 8; // move on to next node
 						}
 						break; // 2-OPT*
 					}
@@ -451,7 +443,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						{
 							this->score_sum += improve_score;
 							this->operator_scores[7] += improve_score;
-							sample_times = 8; // move on to next node
 						}
 						break; // 2-OPT
 					}
