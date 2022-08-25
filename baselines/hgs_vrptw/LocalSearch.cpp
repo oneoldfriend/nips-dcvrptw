@@ -387,7 +387,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 					{
 						if (MoveTwoClients())
 						{
-
 							this->score_sum += improve_score;
 							this->operator_scores[1] += improve_score;
 							continue;
