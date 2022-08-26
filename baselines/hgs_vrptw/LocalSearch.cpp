@@ -327,6 +327,12 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 		if (params->rng() % params->config.nbGranular == 0) // Designed to use O(nbGranular x n) time overall to avoid possible bottlenecks
 			std::shuffle(params->correlatedVertices[i].begin(), params->correlatedVertices[i].end(), params->rng);
 
+	this->score_sum = 80.0;
+	for (int idx = 0; idx < 8; idx++)
+	{
+		this->operator_scores[idx] = 10.0;
+		this->operator_prob[idx] = 1.0 / 8.0;
+	}
 	searchCompleted = false;
 	for (loopID = 0; !searchCompleted; loopID++)
 	{
