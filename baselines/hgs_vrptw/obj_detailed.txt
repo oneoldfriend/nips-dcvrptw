@@ -4,3 +4,12 @@
 ../../instances/ORTEC-VRPTW-ASYM-0bdff870-d1-n458-k35.txt,281477
 ../../instances/ORTEC-VRPTW-ASYM-0bdff870-d1-n458-k35.txt,281477
 ../../instances/ORTEC-VRPTW-ASYM-0bdff870-d1-n458-k35.txt,281477
+../../instances/ORTEC-VRPTW-ASYM-0bdff870-d1-n458-k35.txt,297422
+../../instances/ORTEC-VRPTW-ASYM-0bdff870-d1-n458-k35.txt,297422
+../../instances/ORTEC-VRPTW-ASYM-0bdff870-d1-n458-k35.txt,295742
+../../instances/ORTEC-VRPTW-ASYM-0bdff870-d1-n458-k35.txt,295742
+../../instances/ORTEC-VRPTW-ASYM-0bdff870-d1-n458-k35.txt,295742
+../../instances/ORTEC-VRPTW-ASYM-0bdff870-d1-n458-k35.txt,303580
+../../instances/ORTEC-VRPTW-ASYM-0bdff870-d1-n458-k35.txt,303580
+../../instances/ORTEC-VRPTW-ASYM-0bdff870-d1-n458-k35.txt,319494
+../../instances/ORTEC-VRPTW-ASYM-0bdff870-d1-n458-k35.txt,303580

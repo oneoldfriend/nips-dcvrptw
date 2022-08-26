@@ -185,6 +185,9 @@ private:
 	double operator_scores[8] = {10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0};
 	double operator_prob[8] = {10.0 / 80.0, 10.0 / 80.0, 10.0 / 80.0, 10.0 / 80.0, 10.0 / 80.0, 10.0 / 80.0, 10.0 / 80.0, 10.0 / 80.0};
 
+	double temperature = 1e10;
+	double cooling_rate = 0.99;
+
 	/* TEMPORARY VARIABLES USED IN THE LOCAL SEARCH LOOPS */
 	// nodeUPrev -> nodeU -> nodeX -> nodeXNext
 	// nodeVPrev -> nodeV -> nodeY -> nodeYNext

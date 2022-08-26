@@ -8,7 +8,9 @@
 #include "CircleSector.h"
 #include "Params.h"
 
-double improve_score = 3.0;
+double selected_score = 1.0;
+double improve_score = 4.0;
+double sa_accept_scores = 2.0;
 
 bool operator==(const TimeWindowData &twData1, const TimeWindowData &twData2)
 {
@@ -327,12 +329,14 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 		if (params->rng() % params->config.nbGranular == 0) // Designed to use O(nbGranular x n) time overall to avoid possible bottlenecks
 			std::shuffle(params->correlatedVertices[i].begin(), params->correlatedVertices[i].end(), params->rng);
 
+	// initialize roulette wheel
 	this->score_sum = 80.0;
 	for (int idx = 0; idx < 8; idx++)
 	{
 		this->operator_scores[idx] = 10.0;
 		this->operator_prob[idx] = 1.0 / 8.0;
 	}
+	this->temperature = indiv->myCostSol.penalizedCost;
 	searchCompleted = false;
 	for (loopID = 0; !searchCompleted; loopID++)
 	{
@@ -377,14 +381,14 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 							break;
 						}
 					}
+					this->operator_scores[selected_oprt] += selected_score;
+					this->score_sum += selected_score;
 					switch (selected_oprt)
 					{
 					case 0:
 					{
 						if (MoveSingleClient())
 						{
-							this->score_sum += improve_score;
-							this->operator_scores[0] += improve_score;
 							continue;
 						}
 						break; // RELOCATE
@@ -393,8 +397,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 					{
 						if (MoveTwoClients())
 						{
-							this->score_sum += improve_score;
-							this->operator_scores[1] += improve_score;
 							continue;
 						}
 						break; // RELOCATE
@@ -403,8 +405,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 					{
 						if (MoveTwoClientsReversed())
 						{
-							this->score_sum += improve_score;
-							this->operator_scores[2] += improve_score;
 							continue;
 						}
 						break; // RELOCATE
@@ -413,8 +413,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 					{
 						if (nodeUIndex < nodeVIndex && SwapTwoSingleClients())
 						{
-							this->score_sum += improve_score;
-							this->operator_scores[3] += improve_score;
 							continue;
 						}
 						break; // SWAP
@@ -423,8 +421,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 					{
 						if (SwapTwoClientsForOne())
 						{
-							this->score_sum += improve_score;
-							this->operator_scores[4] += improve_score;
 							continue;
 						}
 						break; // SWAP
@@ -433,8 +429,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 					{
 						if (nodeUIndex < nodeVIndex && SwapTwoClientPairs())
 						{
-							this->score_sum += improve_score;
-							this->operator_scores[5] += improve_score;
 							continue;
 						}
 						break; // SWAP
@@ -443,8 +437,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 					{
 						if (routeU->cour < routeV->cour && TwoOptBetweenTrips())
 						{
-							this->score_sum += improve_score;
-							this->operator_scores[6] += improve_score;
 							continue;
 						}
 						break; // 2-OPT*
@@ -453,8 +445,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 					{
 						if (routeU == routeV && TwoOptWithinTrip())
 						{
-							this->score_sum += improve_score;
-							this->operator_scores[7] += improve_score;
 							continue;
 						}
 						break; // 2-OPT
@@ -545,7 +535,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 			}
 		}
 	}
-
 	// Register the solution produced by the LS in the individual
 	exportIndividual(indiv);
 }
@@ -631,12 +620,31 @@ bool LocalSearch::MoveSingleClient()
 		costSuppU += penaltyExcessLoad(routeU->load) + penaltyTimeWindows(routeUTwData) - routeU->penalty;
 	}
 
-	if (costSuppU + costSuppV > -MY_EPSILON)
-		return false;
+	double delta = costSuppU + costSuppV;
+	this->temperature *= this->cooling_rate;
+
+	if (delta > -MY_EPSILON)
+	{
+		double sample = double(params->rng()) / double(params->rng.max());
+		if (exp(-delta / this->temperature) <= sample)
+		{
+			return false;
+		}
+		else
+		{
+			this->score_sum += sa_accept_scores;
+			this->operator_scores[0] = sa_accept_scores;
+		}
+	}
+	else
+	{
+		searchCompleted = false;
+		nbMoves++; // Increment move counter before updating route data
+		this->score_sum += improve_score;
+		this->operator_scores[0] = improve_score;
+	}
 
 	insertNode(nodeU, nodeV);
-	nbMoves++; // Increment move counter before updating route data
-	searchCompleted = false;
 	updateRouteData(routeU);
 	if (routeU != routeV)
 		updateRouteData(routeV);
@@ -692,13 +700,32 @@ bool LocalSearch::MoveTwoClients()
 		costSuppU += penaltyExcessLoad(routeU->load) + penaltyTimeWindows(routeUTwData) - routeU->penalty;
 	}
 
-	if (costSuppU + costSuppV > -MY_EPSILON)
-		return false;
+	double delta = costSuppU + costSuppV;
+	this->temperature *= this->cooling_rate;
+
+	if (delta > -MY_EPSILON)
+	{
+		double sample = double(params->rng()) / double(params->rng.max());
+		if (exp(-delta / this->temperature) <= sample)
+		{
+			return false;
+		}
+		else
+		{
+			this->score_sum += sa_accept_scores;
+			this->operator_scores[0] = sa_accept_scores;
+		}
+	}
+	else
+	{
+		searchCompleted = false;
+		nbMoves++; // Increment move counter before updating route data
+		this->score_sum += improve_score;
+		this->operator_scores[0] = improve_score;
+	}
 
 	insertNode(nodeU, nodeV);
 	insertNode(nodeX, nodeU);
-	nbMoves++; // Increment move counter before updating route data
-	searchCompleted = false;
 	updateRouteData(routeU);
 	if (routeU != routeV)
 		updateRouteData(routeV);
@@ -754,13 +781,32 @@ bool LocalSearch::MoveTwoClientsReversed()
 		costSuppU += penaltyExcessLoad(routeU->load) + penaltyTimeWindows(routeUTwData) - routeU->penalty;
 	}
 
-	if (costSuppU + costSuppV > -MY_EPSILON)
-		return false;
+	double delta = costSuppU + costSuppV;
+	this->temperature *= this->cooling_rate;
+
+	if (delta > -MY_EPSILON)
+	{
+		double sample = double(params->rng()) / double(params->rng.max());
+		if (exp(-delta / this->temperature) <= sample)
+		{
+			return false;
+		}
+		else
+		{
+			this->score_sum += sa_accept_scores;
+			this->operator_scores[0] = sa_accept_scores;
+		}
+	}
+	else
+	{
+		searchCompleted = false;
+		nbMoves++; // Increment move counter before updating route data
+		this->score_sum += improve_score;
+		this->operator_scores[0] = improve_score;
+	}
 
 	insertNode(nodeX, nodeV);
 	insertNode(nodeU, nodeX);
-	nbMoves++; // Increment move counter before updating route data
-	searchCompleted = false;
 	updateRouteData(routeU);
 	if (routeU != routeV)
 		updateRouteData(routeV);
@@ -816,12 +862,31 @@ bool LocalSearch::SwapTwoSingleClients()
 		costSuppU += penaltyExcessLoad(routeU->load) + penaltyTimeWindows(routeUTwData) - routeU->penalty;
 	}
 
-	if (costSuppU + costSuppV > -MY_EPSILON)
-		return false;
+	double delta = costSuppU + costSuppV;
+	this->temperature *= this->cooling_rate;
+
+	if (delta > -MY_EPSILON)
+	{
+		double sample = double(params->rng()) / double(params->rng.max());
+		if (exp(-delta / this->temperature) <= sample)
+		{
+			return false;
+		}
+		else
+		{
+			this->score_sum += sa_accept_scores;
+			this->operator_scores[0] = sa_accept_scores;
+		}
+	}
+	else
+	{
+		searchCompleted = false;
+		nbMoves++; // Increment move counter before updating route data
+		this->score_sum += improve_score;
+		this->operator_scores[0] = improve_score;
+	}
 
 	swapNode(nodeU, nodeV);
-	nbMoves++; // Increment move counter before updating route data
-	searchCompleted = false;
 	updateRouteData(routeU);
 	if (routeU != routeV)
 		updateRouteData(routeV);
@@ -875,14 +940,33 @@ bool LocalSearch::SwapTwoClientsForOne()
 		costSuppU += penaltyExcessLoad(routeU->load) + penaltyTimeWindows(routeUTwData) - routeU->penalty;
 	}
 
-	if (costSuppU + costSuppV > -MY_EPSILON)
-		return false;
+	double delta = costSuppU + costSuppV;
+	this->temperature *= this->cooling_rate;
+
+	if (delta > -MY_EPSILON)
+	{
+		double sample = double(params->rng()) / double(params->rng.max());
+		if (exp(-delta / this->temperature) <= sample)
+		{
+			return false;
+		}
+		else
+		{
+			this->score_sum += sa_accept_scores;
+			this->operator_scores[0] = sa_accept_scores;
+		}
+	}
+	else
+	{
+		searchCompleted = false;
+		nbMoves++; // Increment move counter before updating route data
+		this->score_sum += improve_score;
+		this->operator_scores[0] = improve_score;
+	}
 
 	// Note: next two lines are a bit inefficient but we only update occasionally and updateRouteData is much more costly anyway, efficient checks are more important
 	swapNode(nodeU, nodeV);
 	insertNode(nodeX, nodeU);
-	nbMoves++; // Increment move counter before updating route data
-	searchCompleted = false;
 	updateRouteData(routeU);
 	if (routeU != routeV)
 		updateRouteData(routeV);
@@ -936,13 +1020,32 @@ bool LocalSearch::SwapTwoClientPairs()
 		costSuppU += penaltyExcessLoad(routeU->load) + penaltyTimeWindows(routeUTwData) - routeU->penalty;
 	}
 
-	if (costSuppU + costSuppV > -MY_EPSILON)
-		return false;
+	double delta = costSuppU + costSuppV;
+	this->temperature *= this->cooling_rate;
+
+	if (delta > -MY_EPSILON)
+	{
+		double sample = double(params->rng()) / double(params->rng.max());
+		if (exp(-delta / this->temperature) <= sample)
+		{
+			return false;
+		}
+		else
+		{
+			this->score_sum += sa_accept_scores;
+			this->operator_scores[0] = sa_accept_scores;
+		}
+	}
+	else
+	{
+		searchCompleted = false;
+		nbMoves++; // Increment move counter before updating route data
+		this->score_sum += improve_score;
+		this->operator_scores[0] = improve_score;
+	}
 
 	swapNode(nodeU, nodeV);
 	swapNode(nodeX, nodeY);
-	nbMoves++; // Increment move counter before updating route data
-	searchCompleted = false;
 	updateRouteData(routeU);
 	if (routeU != routeV)
 		updateRouteData(routeV);
@@ -974,9 +1077,28 @@ bool LocalSearch::TwoOptWithinTrip()
 	// Compute new total penalty
 	cost += penaltyExcessLoad(routeU->load) + penaltyTimeWindows(routeTwData) - routeU->penalty;
 
-	if (cost > -MY_EPSILON)
+	double delta = cost;
+	this->temperature *= this->cooling_rate;
+
+	if (delta > -MY_EPSILON)
 	{
-		return false;
+		double sample = double(params->rng()) / double(params->rng.max());
+		if (exp(-delta / this->temperature) <= sample)
+		{
+			return false;
+		}
+		else
+		{
+			this->score_sum += sa_accept_scores;
+			this->operator_scores[0] = sa_accept_scores;
+		}
+	}
+	else
+	{
+		searchCompleted = false;
+		nbMoves++; // Increment move counter before updating route data
+		this->score_sum += improve_score;
+		this->operator_scores[0] = improve_score;
 	}
 
 	itRoute = nodeV;
@@ -989,8 +1111,6 @@ bool LocalSearch::TwoOptWithinTrip()
 		insertionPoint = current;
 	}
 
-	nbMoves++; // Increment move counter before updating route data
-	searchCompleted = false;
 	updateRouteData(routeU);
 
 	return true;
@@ -1015,8 +1135,29 @@ bool LocalSearch::TwoOptBetweenTrips()
 
 	costSuppV += penaltyExcessLoad(nodeV->cumulatedLoad + routeU->load - nodeU->cumulatedLoad) + penaltyTimeWindows(routeVTwData) - routeV->penalty;
 
-	if (costSuppU + costSuppV > -MY_EPSILON)
-		return false;
+	double delta = costSuppU + costSuppV;
+	this->temperature *= this->cooling_rate;
+
+	if (delta > -MY_EPSILON)
+	{
+		double sample = double(params->rng()) / double(params->rng.max());
+		if (exp(-delta / this->temperature) <= sample)
+		{
+			return false;
+		}
+		else
+		{
+			this->score_sum += sa_accept_scores;
+			this->operator_scores[0] = sa_accept_scores;
+		}
+	}
+	else
+	{
+		nbMoves++; // Increment move counter before updating route data
+		searchCompleted = false;
+		this->score_sum += improve_score;
+		this->operator_scores[0] = improve_score;
+	}
 
 	Node *itRouteV = nodeY;
 	Node *insertLocation = nodeU;
@@ -1038,8 +1179,6 @@ bool LocalSearch::TwoOptBetweenTrips()
 		insertLocation = current;
 	}
 
-	nbMoves++; // Increment move counter before updating route data
-	searchCompleted = false;
 	updateRouteData(routeU);
 	updateRouteData(routeV);
 

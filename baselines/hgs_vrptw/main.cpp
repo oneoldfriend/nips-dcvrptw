@@ -31,10 +31,10 @@ int main(int argc, char *argv[])
 		std::cout << "----- INSTANCE LOADED WITH " << params.nbClients << " CLIENTS AND " << params.nbVehicles << " VEHICLES" << std::endl;
 		std::cout << "----- BUILDING INITIAL POPULATION" << std::endl;
 		Population population(&params, &split, &localSearch);
-
 		// Genetic algorithm
 		std::cout << "----- STARTING GENETIC ALGORITHM" << std::endl;
 		Genetic solver(&params, &split, &population, &localSearch);
+		std::cout << "timeLimit: " << params.config.timeLimit << std::endl;
 		solver.run(commandline.config.nbIter, commandline.config.timeLimit);
 		std::cout << "----- GENETIC ALGORITHM FINISHED, TIME SPENT: " << params.getTimeElapsedSeconds() << std::endl;
 
