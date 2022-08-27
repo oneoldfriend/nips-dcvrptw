@@ -21,6 +21,7 @@ void Genetic::run(int maxIterNonProd, int timeLimit)
 	int nbIterNonProd = 1;
 	for (int nbIter = 0; nbIterNonProd <= maxIterNonProd && !params->isTimeLimitExceeded(); nbIter++)
 	{
+		std::cout << "ga: " << nbIterNonProd << std::endl;
 		/* SELECTION AND CROSSOVER */
 		// First select parents using getNonIdenticalParentsBinaryTournament
 		// Then use the selected parents to create new individuals using OX and SREX

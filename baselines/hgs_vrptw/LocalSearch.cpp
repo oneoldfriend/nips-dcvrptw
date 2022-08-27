@@ -9,8 +9,8 @@
 #include "Params.h"
 
 double selected_score = 1.0;
-double improve_score = 4.0;
-double sa_accept_scores = 2.0;
+double improve_score = 2.0;
+double sa_accept_scores = 1.0;
 
 bool operator==(const TimeWindowData &twData1, const TimeWindowData &twData2)
 {
@@ -338,8 +338,9 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 	}
 	this->temperature = indiv->myCostSol.penalizedCost;
 	searchCompleted = false;
-	for (loopID = 0; !searchCompleted; loopID++)
+	for (loopID = 0; !searchCompleted && loopID < 50; loopID++)
 	{
+		std::cout << "ls: " << loopID << std::endl;
 		if (loopID > 1)
 		{
 			// Allows at least two loops since some moves involving empty routes are not checked at the first loop
@@ -371,7 +372,7 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 					// sample operators
 					double sample = double(params->rng()) / double(params->rng.max());
 					double cur_prob = 0.0;
-					int selected_oprt = 7;
+					int selected_oprt = 0;
 					for (int i = 0; i < 8; i++)
 					{
 						cur_prob += this->operator_prob[i];
@@ -383,6 +384,7 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 					}
 					this->operator_scores[selected_oprt] += selected_score;
 					this->score_sum += selected_score;
+					std::cout << "selected_oprt: " << selected_oprt << std::endl;
 					switch (selected_oprt)
 					{
 					case 0:
@@ -391,7 +393,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						{
 							continue;
 						}
-						break; // RELOCATE
 					}
 					case 1:
 					{
@@ -399,7 +400,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						{
 							continue;
 						}
-						break; // RELOCATE
 					}
 					case 2:
 					{
@@ -407,7 +407,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						{
 							continue;
 						}
-						break; // RELOCATE
 					}
 					case 3:
 					{
@@ -415,7 +414,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						{
 							continue;
 						}
-						break; // SWAP
 					}
 					case 4:
 					{
@@ -423,7 +421,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						{
 							continue;
 						}
-						break; // SWAP
 					}
 					case 5:
 					{
@@ -431,7 +428,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						{
 							continue;
 						}
-						break; // SWAP
 					}
 					case 6:
 					{
@@ -439,7 +435,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						{
 							continue;
 						}
-						break; // 2-OPT*
 					}
 					case 7:
 					{
@@ -447,7 +442,6 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						{
 							continue;
 						}
-						break; // 2-OPT
 					}
 					default:
 					{
@@ -455,7 +449,7 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 						break;
 					}
 					}
-
+					std::cout << "no improve, try depot move" << std::endl;
 					// Trying moves that insert nodeU directly after the depot
 					if (nodeV->prev->isDepot)
 					{
@@ -472,6 +466,7 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 					}
 				}
 			}
+			std::cout << "finish current route move, try empty route" << std::endl;
 
 			/* MOVES INVOLVING AN EMPTY ROUTE -- NOT TESTED IN THE FIRST LOOP TO AVOID INCREASING TOO MUCH THE FLEET SIZE */
 			if (loopID > 0 && !emptyRoutes.empty())
@@ -489,6 +484,7 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 					continue; // 2-OPT*
 			}
 		}
+		std::cout << "finish node move, try swap*" << std::endl;
 
 		/* (SWAP*) MOVES LIMITED TO ROUTE PAIRS WHOSE CIRCLE SECTORS OVERLAP */
 		if (!neverIntensify && searchCompleted && (alwaysIntensify || runLS_INT))
@@ -534,6 +530,7 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 				}
 			}
 		}
+		std::cout << "finish swap*" << std::endl;
 	}
 	// Register the solution produced by the LS in the individual
 	exportIndividual(indiv);
