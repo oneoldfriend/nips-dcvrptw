@@ -484,7 +484,8 @@ void LocalSearch::run(Individual *indiv, double penaltyCapacityLS, double penalt
 			}
 
 			/* MOVES INVOLVING AN EMPTY ROUTE -- NOT TESTED IN THE FIRST LOOP TO AVOID INCREASING TOO MUCH THE FLEET SIZE */
-			if (loopID > 0 && !emptyRoutes.empty())
+			if (!emptyRoutes.empty())
+			// if (loopID > 0 && !emptyRoutes.empty())
 			{
 				nodeV = routes[*emptyRoutes.begin()].depot;
 				setLocalVariablesRouteU();
