@@ -540,6 +540,14 @@ def get_assignment_results(probs, must_go_mask, policy, args):
             "greedy": greedy_assignment}.get(policy)(probs, must_go_mask, args)
 
 
+def rush_delivery_filter(assignments, instance, next_veh_start_time):
+    for id in range(1, len(assignments)):
+        next_arrive_time = next_veh_start_time + instance['duration_matrix'][0, id]
+        latest_arrive_time = instance['time_windows'][id][1]
+        if next_arrive_time > latest_arrive_time:  # or value_dict[str(request)] < avg_avg_seg_dis:
+            assignments[id] = True
+
+
 def get_accumulated_reward_gap(epoch_rewards):
     reward_list = []
     reward_decay = 0.98
@@ -598,6 +606,5 @@ def plot_convergence(file_path):
 
     # results_process("./results/obj_results_raw.txt")
     # results_statistic_output("./results/dynamic_obj_detail.csv")
-
 
 # plot_convergence("./results/third_round.txt")

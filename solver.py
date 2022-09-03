@@ -250,6 +250,8 @@ def run_learning_model(args, env):
                 nodes_prob = []
             assignments_results = tools.get_assignment_results(nodes_prob, epoch_instance['must_dispatch'],
                                                                args.eval_policy, args)
+            tools.rush_delivery_filter(assignments_results, epoch_instance,
+                                       (observation['current_epoch'] + 1) * 3600 + 3600)
             epoch_instance_dispatch = _filter_instance(epoch_instance, assignments_results)
         tmp_dir = os.path.join("tmp", str(uuid.uuid4()))
         epoch_solution, epoch_cost = list(solve_static_vrptw(epoch_instance_dispatch, time_limit=epoch_tlim,
@@ -333,8 +335,8 @@ if __name__ == "__main__":
 
         # run_rl_with_gnn(args, env)
         # run_baseline(args, env)
-        run_improved_heuristics(args, env)
-        # run_learning_model(args, env)
+        # run_improved_heuristics(args, env)
+        run_learning_model(args, env)
 
         if args.instance is not None:
             log(tools.json_dumps_np(env.final_solutions))
